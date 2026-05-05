@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hamza Khadri — Product Designer & Builder</title>
+  <link rel="preconnect" href="https://api.fontshare.com" />
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.lineicons.com/4.0/lineicons.css" />
+  <style>
+    :root {
+      --bg: #0A0A0A;
+      --surface: #0D0D0D;
+      --border: #1F1F1F;
+      --text: #F5F5F0;
+      --muted: #888880;
+      --accent: #FF8C42;
+      --green: #4ade80;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Satoshi', 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    ::-webkit-scrollbar { width: 2px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: #333; }
+
+    /* ── Custom Cursor ── */
+    #custom-cursor {
+      pointer-events: none;
+      position: fixed;
+      z-index: 9999;
+      border-radius: 50%;
+      background: var(--text);
+      mix-blend-mode: difference;
+      will-change: transform, width, height;
+      transition:
+        width 0.22s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        height 0.22s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        margin 0.22s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        opacity 0.2s;
+    }
+
+    /* ── Scroll Reveal ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .delay-1 { transition-delay: 0.08s; }
+    .delay-2 { transition-delay: 0.16s; }
+    .delay-3 { transition-delay: 0.24s; }
+    .delay-4 { transition-delay: 0.32s; }
+
+    /* ── Section fade-out (active section sharp; others blur+dim) ── */
+    .section-fade {
+      transition: opacity 0.6s ease, filter 0.6s ease;
+      will-change: opacity, filter;
+    }
+    .section-fade.section-dim {
+      opacity: 0.18;
+      filter: blur(6px);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .section-fade.section-dim { opacity: 1; filter: none; }
+    }
+
+    /* ── Availability pulse ── */
+    @keyframes avail-pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(74,222,128,0.55); }
+      60%       { box-shadow: 0 0 0 7px rgba(74,222,128,0); }
+    }
+    .avail-dot { animation: avail-pulse 2.6s ease-in-out infinite; }
+
+    /* ── Typewriter caret ── */
+    @keyframes caret-blink {
+      0%, 49%   { opacity: 1; }
+      50%, 100% { opacity: 0; }
+    }
+    .type-caret {
+      display: inline-block;
+      margin-left: 0.04em;
+      color: var(--accent);
+      animation: caret-blink 0.85s step-end infinite;
+      font-weight: 300;
+    }
+
+    /* ── Scroll bounce ── */
+    @keyframes scroll-bounce {
+      0%, 100% { transform: translateY(0); opacity: 0.5; }
+      50%       { transform: translateY(9px); opacity: 1; }
+    }
+    .scroll-bounce { animation: scroll-bounce 1.9s ease-in-out infinite; }
+
+    /* ── Marquee ── */
+    @keyframes marquee-scroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    .marquee-track {
+      animation: marquee-scroll 38s linear infinite;
+      display: flex;
+      width: max-content;
+    }
+    .marquee-track:hover { animation-play-state: paused; }
+
+    /* ── Nav glitch ── */
+    .nav-link { position: relative; display: inline-block; text-decoration: none; }
+    .nav-link .ghost {
+      position: absolute; top: 0; left: 2px;
+      color: var(--accent); opacity: 0;
+      pointer-events: none; white-space: nowrap;
+      transition: opacity 0.15s;
+    }
+    .nav-link:hover .ghost { opacity: 0.55; }
+
+    /* ── Typography helpers ── */
+    .section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .hero-title {
+      font-size: clamp(3.4rem, 8.6vw, 9rem);
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 0.92;
+    }
+    .big-title {
+      font-size: clamp(1.9rem, 4.2vw, 4rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.08;
+    }
+
+    /* ── Striped placeholder ── */
+    .stripe-bg {
+      background: repeating-linear-gradient(
+        45deg,
+        #161616, #161616 11px,
+        #121212 11px, #121212 22px
+      );
+    }
+
+    /* ── Project rows ── */
+    .project-row {
+      border-top: 1px solid var(--border);
+      transition: background 0.3s;
+      position: relative;
+    }
+    .project-row:last-child { border-bottom: 1px solid var(--border); }
+    .project-row:hover { background: rgba(var(--accent-rgb, 255,140,66), 0.025); }
+    .proj-num  { transition: color 0.3s; }
+    .proj-name { transition: color 0.3s; }
+    .project-row:hover .proj-num  { color: var(--accent); }
+    .project-row:hover .proj-name { color: var(--accent); }
+
+    /* ── Services card hover ── */
+    .svc-card {
+      border: 1px solid var(--border);
+      transition: border-color 0.3s, background 0.3s, transform 0.3s;
+      border-radius: 2px;
+    }
+    .svc-card:hover { border-color: var(--accent); }
+
+    /* ── Contact email ── */
+    .contact-email { transition: color 0.2s; }
+    .contact-email:hover { color: var(--accent) !important; }
+
+    /* ── Social links ── */
+    .social-link {
+      color: var(--muted); text-decoration: none;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
+      border-bottom: 1px solid transparent;
+      padding-bottom: 2px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .social-link:hover { color: var(--text); border-color: var(--text); }
+
+    /* ── Grain texture overlay (global background; behind everything) ── */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      opacity: var(--grain-opacity, 0);
+      background-image: var(--grain-image, none);
+      background-size: var(--grain-size, 180px) var(--grain-size, 180px);
+      mix-blend-mode: overlay;
+    }
+    /* Hero photo sits above the grain */
+    .hero-photo-wrap { z-index: 2; }
+    /* Real content above the grain */
+    nav, section, footer, #root > div { position: relative; }
+
+    /* ── Liquid Glass — applied to specific blocks when body.lg-on ── */
+    body.lg-on .svc-card,
+    body.lg-on #stack > div:nth-child(2),
+    body.lg-on .nav-inner {
+      background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 50%, rgba(255,255,255,0.04) 100%) !important;
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border-color: rgba(255,255,255,0.1) !important;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.12),
+        inset 0 -1px 0 rgba(0,0,0,0.2),
+        0 8px 32px rgba(0,0,0,0.35) !important;
+    }
+
+    /* ── Liquid Glass effect (legacy class, still available) ── */
+    .liquid-glass {
+      background: linear-gradient(
+        135deg,
+        rgba(255,255,255,0.06) 0%,
+        rgba(255,255,255,0.02) 50%,
+        rgba(255,255,255,0.04) 100%
+      ) !important;
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border: 1px solid rgba(255,255,255,0.08) !important;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.12),
+        inset 0 -1px 0 rgba(0,0,0,0.2),
+        0 8px 32px rgba(0,0,0,0.35) !important;
+      position: relative;
+      overflow: hidden;
+    }
+    .liquid-glass::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(
+        120% 100% at 0% 0%,
+        rgba(var(--accent-rgb, 255,140,66), 0.08) 0%,
+        transparent 60%
+      );
+      pointer-events: none;
+      mix-blend-mode: screen;
+    }
+
+    /* ── Lineicons sizing helper ── */
+    .li-icon {
+      font-size: 1.1rem;
+      vertical-align: middle;
+      line-height: 1;
+    }
+
+    /* ── Touch / coarse pointer: disable custom cursor ── */
+    @media (pointer: coarse) {
+      body { cursor: auto !important; }
+      #custom-cursor { display: none !important; }
+    }
+
+    /* ── Splash / Intro overlay ── */
+    #splash {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      background: #0A0A0A;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    #splash.fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+    #lottie-container {
+      width: min(420px, 70vw);
+      aspect-ratio: 784 / 466;
+    }
+    #lottie-container svg {
+      width: 100% !important;
+      height: 100% !important;
+    }
+    #lottie-container svg path,
+    #lottie-container svg rect,
+    #lottie-container svg circle,
+    #lottie-container svg ellipse,
+    #lottie-container svg polygon,
+    #lottie-container svg polyline {
+      fill: white !important;
+      stroke: white !important;
+    }
+    @media (max-width: 640px) {
+      #lottie-container { width: min(88vw, 340px); }
+    }
+
+    /* ── Modal ── */
+    @media (max-width: 640px) {
+      .modal-grid { grid-template-columns: 1fr !important; gap: 2rem !important; }
+    }
+
+    /* ═══════════════════════════════════════════════
+       RESPONSIVE — Tablet (≤1024px) & Mobile (≤640px)
+    ═══════════════════════════════════════════════ */
+
+    /* Tablet */
+    @media (max-width: 1024px) {
+      .hero-title { font-size: clamp(3rem, 8vw, 6rem) !important; }
+      .big-title  { font-size: clamp(1.6rem, 4vw, 3rem) !important; }
+    }
+
+    /* Mobile */
+    @media (max-width: 640px) {
+      .hide-mobile  { display: none !important; }
+      .mobile-col   { flex-direction: column !important; gap: 1rem !important; }
+      .mobile-single { grid-template-columns: 1fr !important; gap: 2rem !important; }
+      .mobile-pad   { padding-left: 1.5rem !important; padding-right: 1.5rem !important; }
+      .mobile-section { padding-top: 5rem !important; padding-bottom: 5rem !important; }
+
+      /* Hero: stack vertically — photo on top, text below */
+      .hero-cols { min-height: 0 !important; }
+      .hero-cols .hero-photo-wrap {
+        position: relative !important;
+        width: 100% !important;
+        height: 90vw !important;
+        max-height: 520px !important;
+        min-height: 320px !important;
+      }
+      .hero-cols .hero-photo-wrap > img {
+        object-fit: cover !important;
+        object-position: center 25% !important;
+        width: 130% !important;
+        height: 100% !important;
+        margin-left: -15% !important;
+      }
+      .hero-inner {
+        flex-direction: column !important;
+        min-height: 0 !important;
+        padding: 0 1.5rem !important;
+        align-items: stretch !important;
+      }
+      .hero-text {
+        flex: unset !important;
+        width: 100% !important;
+        padding: 0 !important;
+      }
+      .hero-text > div:first-child { margin-top: 1.5rem !important; }
+      .hero-title { font-size: clamp(2.6rem, 11vw, 5rem) !important; }
+      .hero-cols .portrait-zone { display: none !important; }
+
+      /* Work rows */
+      .work-row-inner { padding-right: 0 !important; }
+
+      /* Nav */
+      .nav-inner { padding: 1.2rem 1.5rem !important; }
+
+      /* Grids → 1 col */
+      .approach-grid { grid-template-columns: 1fr !important; }
+      .stack-cat-grid { grid-template-columns: 1fr !important; }
+      .services-grid { grid-template-columns: 1fr !important; }
+      .testi-grid { grid-template-columns: 1fr !important; gap: 3rem !important; }
+    }
+
+    /* Tablet only */
+    @media (min-width: 641px) and (max-width: 1024px) {
+      .services-grid  { grid-template-columns: 1fr 1fr !important; }
+      .approach-grid  { grid-template-columns: 1fr 1fr !important; }
+      .hero-title { font-size: clamp(3rem, 7vw, 6rem) !important; }
+      .nav-inner  { padding-left: 2rem !important; padding-right: 2rem !important; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Splash intro -->
+  <div id="splash">
+    <div id="lottie-container"></div>
+  </div>
+
+  <div id="root"></div>
+  <div id="custom-cursor" style="width:12px;height:12px;margin:-6px 0 0 -6px;top:0;left:0;position:fixed;"></div>
+
+  <!-- Lottie player (loaded synchronously so it's ready before DOMContentLoaded) -->
+  <script src="https://unpkg.com/lottie-web@5.12.2/build/player/lottie.min.js"></script>
+
+  <script>
+    (function () {
+      var animDone = false;
+      var siteDone = false;
+      var anim = null;
+
+      function tryReveal() {
+        if (!animDone || !siteDone) return;
+        var splash = document.getElementById('splash');
+        splash.addEventListener('transitionend', function () {
+          splash.style.display = 'none';
+        }, { once: true });
+        splash.classList.add('fade-out');
+      }
+
+      // Flag: site fully loaded (all resources)
+      window.addEventListener('load', function () {
+        siteDone = true;
+        // If animation already finished and is frozen on last frame → reveal now
+        tryReveal();
+      });
+
+      // Start Lottie once DOM is ready
+      document.addEventListener('DOMContentLoaded', function () {
+        anim = lottie.loadAnimation({
+          container: document.getElementById('lottie-container'),
+          renderer: 'svg',
+          loop: false,
+          autoplay: true,
+          path: 'assets/logo-intro.json'
+        });
+
+        anim.addEventListener('complete', function () {
+          animDone = true;
+          // Freeze on last frame automatically (loop:false keeps it there)
+          tryReveal();
+        });
+      });
+    })();
+  </script>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <script src="translations.js?v=4"></script>
+  <script src="content.js?v=3"></script>
+  <script type="text/babel" src="components/project-modal.jsx"></script>
+  <script type="text/babel" src="components/nav.jsx"></script>
+  <script type="text/babel" src="components/hero.jsx"></script>
+  <script type="text/babel" src="components/about.jsx"></script>
+  <script type="text/babel" src="components/work.jsx"></script>
+  <script type="text/babel" src="components/approach.jsx"></script>
+  <script type="text/babel" src="components/stack.jsx"></script>
+  <script type="text/babel" src="components/services.jsx"></script>
+  <script type="text/babel" src="components/testimonials.jsx"></script>
+  <script type="text/babel" src="components/contact.jsx"></script>
+  <script type="text/babel" src="app.jsx"></script>
+</body>
+</html>
