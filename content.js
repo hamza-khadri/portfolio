@@ -281,7 +281,7 @@ window.CONTENT = {
    *  SOCIAL LINKS — replace '#' with real URLs
    * ══════════════════════════════════════════════════════════ */
   socials: [
-    { label: 'LinkedIn',  href: '#',                                        icon: 'lni-linkedin-original' },
+    { label: 'LinkedIn',  href: 'https://www.linkedin.com/in/hamzakhadri',  icon: 'lni-linkedin-original' },
     { label: 'GitHub',    href: 'https://github.com/hamza-k',               icon: 'lni-github-original'   },
     { label: 'Dribbble',  href: 'https://dribbble.com/hamza-k',             icon: 'lni-dribbble'          },
     { label: 'Uxcel',     href: 'https://app.uxcel.com/ux/FGXWC3Z7OP22',    icon: 'lni-link'              },
