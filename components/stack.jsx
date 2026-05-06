@@ -5,7 +5,7 @@ function Stack({ t }) {
 
   return (
     <section id="stack" style={{ padding: '9rem 0', background: '#0D0D0D' }} className="mobile-section section-fade">
-      <div style={{ padding: '0 3rem', maxWidth: '1400px', margin: '0 auto 4rem' }} className="mobile-pad">
+      <div style={{ padding: '0 3rem', maxWidth: 'calc(1400px + 6rem)', margin: '0 auto 4rem' }} className="mobile-pad">
         <div className="reveal">
           <div className="section-label" style={{ marginBottom: '1.2rem' }}>{t.s04}</div>
           <h2 className="big-title">{t.stackTitle}</h2>
@@ -31,7 +31,7 @@ function Stack({ t }) {
         </div>
       </div>
 
-      <div style={{ padding: '0 3rem', maxWidth: '1400px', margin: '0 auto' }} className="mobile-pad">
+      <div style={{ padding: '0 3rem', maxWidth: 'calc(1400px + 6rem)', margin: '0 auto' }} className="mobile-pad">
         <div
           className="reveal stack-cat-grid"
           style={{
