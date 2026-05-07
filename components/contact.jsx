@@ -45,7 +45,7 @@ function Contact({ t }) {
 
           <div className="reveal" style={{ display: 'flex', gap: '2rem', marginBottom: '3rem', flexWrap: 'wrap' }}>
             {socials.map(s => (
-              <a key={s.label} href={s.href} className="social-link" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
+              <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" className="social-link" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
                 <i className={`lni ${s.icon || iconFor(s.label)}`} style={{ fontSize: '1rem' }} aria-hidden="true"></i>
                 {s.label}
               </a>

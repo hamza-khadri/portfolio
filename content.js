@@ -219,7 +219,7 @@ window.CONTENT = {
   marqueeItems: [
     'Figma', 'Bubble', 'Lovable', 'Supabase', 'OpenAI',
     'Airtable', 'Notion', 'Framer', 'Webflow', 'Maze', 'Claude',
-    'Make', 'N8N', 'Jitter', 'Spline',
+    'Make', 'N8N', 'Jitter', 'Spline', 'Wordpress'
   ],
 
   /* ══════════════════════════════════════════════════════════
