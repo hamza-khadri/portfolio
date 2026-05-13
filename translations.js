@@ -9,7 +9,7 @@
 window.TRANSLATIONS = {
   en: {
     nav: { work: 'Work', about: 'About', services: 'Services', contact: 'Contact' },
-    availability: 'Available for Q3 2026 — open to full-time opportunities',
+    availability: 'Available for Q3 2026 — Open to full-time opportunities',
     heroPrefix: 'I',
     heroWords: ['ship', 'design', 'build'],
     heroSuffix: 'products.',
