@@ -72,7 +72,7 @@ window.TRANSLATIONS = {
   },
   fr: {
     nav: { work: 'Projets', about: 'À propos', services: 'Services', contact: 'Contact' },
-    availability: 'Disponible pour Q3 2026 — ouvert aux opportunités CDI',
+    availability: 'Disponible pour Q3 2026 — Ouvert aux opportunités CDI',
     heroPrefix: 'Je',
     heroWords: ['design', 'build', 'livre'],
     heroSuffix: 'des produits.',
