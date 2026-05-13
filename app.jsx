@@ -170,17 +170,19 @@ function App() {
     return () => clearTimeout(timer);
   }, [lang]);
 
+  const s = window.CONTENT.sections;
+
   return (
     <div>
       <window.Nav          t={t} lang={lang} setLang={setLang} />
       <window.Hero         t={t} />
-      <window.About        t={t} />
-      <window.Work         t={t} lang={lang} openProject={setActiveProject} />
-      <window.Approach     t={t} />
-      <window.Stack        t={t} />
-      <window.Services     t={t} lang={lang} />
-      <window.Testimonials t={t} lang={lang} />
-      <window.Contact      t={t} />
+      {s.about.isDisplay        && <window.About        t={t} />}
+      {s.work.isDisplay         && <window.Work         t={t} lang={lang} openProject={setActiveProject} />}
+      {s.approach.isDisplay     && <window.Approach     t={t} />}
+      {s.stack.isDisplay        && <window.Stack        t={t} />}
+      {s.services.isDisplay     && <window.Services     t={t} lang={lang} />}
+      {s.testimonials.isDisplay && <window.Testimonials t={t} lang={lang} />}
+      {s.contact.isDisplay      && <window.Contact      t={t} />}
       <window.ProjectModal project={activeProject} lang={lang} t={t} onClose={() => setActiveProject(null)} />
     </div>
   );

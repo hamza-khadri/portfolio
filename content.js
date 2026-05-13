@@ -189,6 +189,37 @@ window.CONTENT = {
       heroImage:   '/assets/projects/ai4b-detail.png',
       detailImage: '',
     },
+    {
+      num: '06',
+      name: 'Velox',
+      category: 'Logistics Tech / Transport Marketplace',
+      stack: ['Lovable', 'Supabase'],
+      role: { en: 'Data Architect & Builder', fr: 'Architecte de données & Builder' },
+      year: '2025',
+      liveUrl: 'https://myvelox.eu',
+      desc: {
+        en: 'Built a PWA marketplace connecting shippers and carriers for end-to-end freight management.',
+        fr: "Production d'une PWA marketplace connectant expéditeurs et transporteurs pour une gestion de fret de bout en bout.",
+      },
+      overview: {
+        en: "Velox is a Progressive Web App designed for both desktop and mobile, built for a Belgian logistics client. It connects shippers and carriers on a single platform: publish freight, access a verified carrier network, assign drivers, validate deliveries via QR code, and manage invoicing and payments — all in one place.",
+        fr: "Velox est une Progressive Web App pensée pour desktop et mobile, produite pour un client belge dans la logistique. Elle connecte expéditeurs et transporteurs sur une seule plateforme : publier du fret, accéder à un réseau de transporteurs vérifiés, assigner des chauffeurs, valider les livraisons via QR code, et gérer la facturation et les paiements — en un seul endroit.",
+      },
+      challenge: {
+        en: "Freight management involves multiple actors (shippers, carriers, drivers, admins) with very different needs and workflows. The challenge was designing a data model and UX logic that serves all four roles without fragmenting the experience.",
+        fr: "La gestion de fret implique plusieurs acteurs (expéditeurs, transporteurs, chauffeurs, admins) avec des besoins et workflows très différents. Le défi était de concevoir un modèle de données et une logique UX qui serve les quatre rôles sans fragmenter l'expérience.",
+      },
+      approach: {
+        en: "I designed the full data architecture to support a 6-step workflow — from freight publication and carrier booking, through driver assignment and QR-based delivery validation, to automatic invoice generation and payment closure. I then built the entire platform in Lovable with Supabase as the data layer.",
+        fr: "J'ai conçu l'architecture de données complète pour supporter un workflow en 6 étapes — de la publication du fret et la réservation transporteur, jusqu'à l'assignation des chauffeurs, la validation de livraison par QR code, la génération automatique de factures et la clôture des paiements. J'ai ensuite builté l'intégralité de la plateforme sur Lovable avec Supabase comme couche de données.",
+      },
+      results: {
+        en: "Full PWA delivered and live. Client is currently in prospecting phase to onboard their first customers.",
+        fr: "PWA complète livrée et en ligne. Le client est actuellement en phase de prospection pour onboarder ses premiers clients.",
+      },
+      heroImage:   '/assets/projects/myvelox-details.png',
+      detailImage: '',
+    },
   ],
 
   /* ══════════════════════════════════════════════════════════
@@ -197,19 +228,19 @@ window.CONTENT = {
   testimonials: [
     {
       quote: {
-        en: '"Replace this with a real testimonial from a recruiter or collaborator. Specific and genuine."',
-        fr: '"Remplacez ceci par un vrai témoignage d\'un recruteur ou collaborateur. Précis et authentique."',
+        en: '"Working with Hamza is a pleasure! Always in good spirits and with a great work ethic, Hamza successfully brings his creativity and ability to view problems from multiple angles to the table."',
+        fr: '"Bosser avec Hamza est un plaisir ! Toujours de bonne humeur et avec une bonne attitude de travail, Hamza amène avec réussite sa créativité et sa capacité à voir les problèmes sous des angles multiples."',
       },
-      name: 'First Last',
-      role: 'Role — Company',
+      name: 'Nicolas Streel',
+      role: 'CMO & Co-founder @TheMaul',
     },
     {
       quote: {
-        en: '"Replace this with a second real testimonial. Keep it grounded and honest."',
-        fr: '"Remplacez ceci par un second témoignage. Gardez-le ancré dans les faits."',
+        en: '"Hamza is the magician of the story. Or the rocket. Take your pick. Once he takes on a project, he understands the user’s needs and turns an idea into a beautiful product."',
+        fr: `"Hamza c'est le magicien de l'histoire. Ou la fusée. Au choix. Une fois qu'il prend un projet en main, il comprend les besoins de l'utilisateur et il transforme une idée en un beau produit."`,
       },
-      name: 'First Last',
-      role: 'Role — Company',
+      name: 'Simon Moreau',
+      role: 'PM @Line-out',
     },
   ],
 
@@ -232,7 +263,7 @@ window.CONTENT = {
     },
     {
       label: 'No-Code & Vibe-Code',
-      items: ['Lovable', 'Bubble.io', 'Webflow', 'Framer', 'Notion', 'Airtable'],
+      items: ['Lovable', 'Bubble.io', 'Webflow', 'Framer', 'Notion', 'Airtable', 'Wordpress'],
     },
     {
       label: 'Backend & Data',
@@ -286,4 +317,17 @@ window.CONTENT = {
     { label: 'Dribbble',  href: 'https://dribbble.com/hamza-k',             icon: 'lni-dribbble'          },
     { label: 'Uxcel',     href: 'https://app.uxcel.com/ux/FGXWC3Z7OP22',    icon: 'lni-link'              },
   ],
+
+  /* ══════════════════════════════════════════════════════════
+   *  SECTIONS VISIBILITY — set isDisplay: false to hide a section
+   * ══════════════════════════════════════════════════════════ */
+  sections: {
+    about:        { isDisplay: true  },
+    work:         { isDisplay: true  },
+    approach:     { isDisplay: true  },
+    stack:        { isDisplay: true  },
+    services:     { isDisplay: true  },
+    testimonials: { isDisplay: true  },
+    contact:      { isDisplay: true  },
+  },
 };
