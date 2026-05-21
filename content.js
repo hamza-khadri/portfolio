@@ -91,6 +91,8 @@ window.CONTENT = {
           en: "Product currently in active design and development. User research ongoing.",
           fr: "Produit actuellement en conception et développement actif. Recherche utilisateur en cours.",
         },
+      heroImage:   'assets/projects/veleo-detail.png',
+      detailImage: '',
       },
     {
       num: '03',
