@@ -67,7 +67,7 @@ window.CONTENT = {
         num: '02',
         name: 'Veleo',
         category: 'FamilyTech / Silver Economy',
-        stack: ['Lovable', 'Supabase'],
+        stack: ['Lovable', 'Supabase', 'Claude', 'Tally', 'Notion'],
         role: { en: 'Founder, Designer & Builder', fr: 'Fondateur, Designer & Builder' },
         year: '2026',
         liveUrl: 'https://veleo.be',
