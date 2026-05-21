@@ -63,8 +63,37 @@ window.CONTENT = {
       heroImage:   'assets/projects/partena-detail.png',
       detailImage: '',
     },
+      {
+        num: '02',
+        name: 'Veleo',
+        category: 'FamilyTech / Silver Economy',
+        stack: ['Lovable', 'Supabase'],
+        role: { en: 'Founder, Designer & Builder', fr: 'Fondateur, Designer & Builder' },
+        year: '2026',
+        liveUrl: 'https://veleo.be',
+        desc: {
+          en: 'Designing and building a shared family dashboard to coordinate elderly parent care in Belgium.',
+          fr: "Conception et production d'un tableau de bord familial partagé pour coordonner le suivi des parents âgés en Belgique.",
+        },
+        overview: {
+          en: "Veleo is a Belgian startup I'm founding, designing, and building. It's a shared family dashboard that helps families coordinate the care of an elderly parent — centralizing information, tasks, appointments, and communication in one place, with native FR/NL bilingual support and Belgian administrative localization (AVIQ, Iriscare, mutualities).",
+          fr: "Veleo est une startup belge que je fonde, conçois et développe. C'est un tableau de bord familial partagé qui aide les familles à coordonner le suivi d'un parent âgé — centralisant informations, tâches, rendez-vous et communication en un seul endroit, avec un support bilingue FR/NL natif et une localisation administrative belge (AVIQ, Iriscare, mutuelles).",
+        },
+        challenge: {
+          en: "Caring for an elderly parent in Belgium involves fragmented information, multiple family members with different levels of involvement, and a complex administrative landscape that varies by region. No existing tool addresses all three at once.",
+          fr: "S'occuper d'un parent âgé en Belgique implique des informations fragmentées, plusieurs membres de la famille avec des niveaux d'implication différents, et un paysage administratif complexe qui varie selon la région. Aucun outil existant n'adresse les trois à la fois.",
+        },
+        approach: {
+          en: "I'm leading the full product lifecycle — from user research and strategic positioning to UX design and no-code build. The Belgian administrative localization (AVIQ, Iriscare, mutualities) is the core product moat, built in from day one.",
+          fr: "Je pilote l'ensemble du cycle produit — de la recherche utilisateur et du positionnement stratégique jusqu'à la conception UX et le build no-code. La localisation administrative belge (AVIQ, Iriscare, mutuelles) est le différenciateur central du produit, intégré dès le départ.",
+        },
+        results: {
+          en: "Product currently in active design and development. User research ongoing.",
+          fr: "Produit actuellement en conception et développement actif. Recherche utilisateur en cours.",
+        },
+      },
     {
-      num: '02',
+      num: '03',
       name: 'Greasily.be',
       category: 'Restaurant Tech / Web as a Service',
       stack: ['Lovable', 'Supabase'],
@@ -95,7 +124,7 @@ window.CONTENT = {
       detailImage: '',
     },
     {
-      num: '03',
+      num: '04',
       name: 'LAM-MotionLabs',
       category: 'Sports Science / Research Tool',
       stack: ['Lovable', 'Supabase'],
@@ -126,7 +155,7 @@ window.CONTENT = {
       detailImage: '',
     },
     {
-      num: '04',
+      num: '05',
       name: 'Réseau Entreprendre Bruxelles',
       category: 'Community Platform',
       stack: ['Bubble.io', 'Notion', 'APIs'],
@@ -158,7 +187,7 @@ window.CONTENT = {
       detailImage: '',
     },
     {
-      num: '05',
+      num: '06',
       name: 'AI For Brokers',
       category: 'InsurTech / AI Tooling',
       stack: ['Lovable', 'Supabase', 'OpenAI'],
@@ -190,7 +219,7 @@ window.CONTENT = {
       detailImage: '',
     },
     {
-      num: '06',
+      num: '07',
       name: 'Velox',
       category: 'Logistics Tech / Transport Marketplace',
       stack: ['Lovable', 'Supabase'],
