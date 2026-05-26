@@ -50,6 +50,17 @@ function Work({ t, lang, openProject }) {
                       fontSize: '0.6rem', color: '#888880',
                       letterSpacing: '0.12em', textTransform: 'uppercase',
                     }}>{proj.category}</span>
+                    {proj.productOwner && (
+                      <span style={{
+                        fontFamily: 'JetBrains Mono, monospace',
+                        fontSize: '0.55rem', letterSpacing: '0.14em',
+                        textTransform: 'uppercase', color: 'var(--accent)',
+                        padding: '0.2rem 0.5rem',
+                        border: '1px solid var(--accent)',
+                        borderRadius: '2px',
+                        background: 'rgba(var(--accent-rgb,255,140,66),0.08)',
+                      }}>{t.poTag}</span>
+                    )}
                   </div>
                   <p style={{ color: '#888880', fontSize: '0.88rem', lineHeight: 1.65, marginBottom: '0.9rem' }}>
                     {proj.desc[lang] || proj.desc.en}

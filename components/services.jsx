@@ -1,6 +1,6 @@
 function Services({ t, lang }) {
   const cards = window.CONTENT.services;
-  const icons = ['lni-pencil-alt', 'lni-layout', 'lni-bolt'];
+  const icons = ['lni-target-customer', 'lni-pencil-alt', 'lni-bolt'];
 
   return (
     <section id="services" style={{ padding: '9rem 3rem' }} className="mobile-pad mobile-section section-fade">
