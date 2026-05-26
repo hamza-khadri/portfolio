@@ -14,9 +14,9 @@ function Hero({ t }) {
   }, [t]);
 
   useHeroEffect(() => {
-    const HOLD = 2400;
-    const ERASE_TOTAL = 500;
-    const TYPE_TOTAL = 1000;
+    const HOLD = 1400;
+    const ERASE_TOTAL = 250;
+    const TYPE_TOTAL = 500;
     let timeouts = [];
 
     const eraseThenType = () => {

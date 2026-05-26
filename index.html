@@ -421,17 +421,28 @@
 
   <script>
     (function () {
+      var VISIT_KEY = 'hk_visited';
+      var splash = document.getElementById('splash');
+
+      // Returning visitor → skip the intro entirely
+      var hasVisited = false;
+      try { hasVisited = localStorage.getItem(VISIT_KEY) === '1'; } catch (e) {}
+      if (hasVisited) {
+        if (splash) splash.style.display = 'none';
+        return;
+      }
+
       var animDone = false;
       var siteDone = false;
       var anim = null;
 
       function tryReveal() {
         if (!animDone || !siteDone) return;
-        var splash = document.getElementById('splash');
         splash.addEventListener('transitionend', function () {
           splash.style.display = 'none';
         }, { once: true });
         splash.classList.add('fade-out');
+        try { localStorage.setItem(VISIT_KEY, '1'); } catch (e) {}
       }
 
       // Flag: site fully loaded (all resources)
