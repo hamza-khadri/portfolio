@@ -99,6 +99,17 @@ function ProjectModal({ project, lang, onClose, t }) {
             <span style={labelStyle}>{p.num}</span>
             <span style={{ ...labelStyle, color: '#444' }}>—</span>
             <span style={labelStyle}>{p.category}</span>
+            {p.productOwner && (
+              <span style={{
+                fontFamily: 'JetBrains Mono, monospace',
+                fontSize: '0.6rem', letterSpacing: '0.18em',
+                textTransform: 'uppercase', color: 'var(--accent)',
+                padding: '0.25rem 0.6rem',
+                border: '1px solid var(--accent)',
+                borderRadius: '2px',
+                background: 'rgba(var(--accent-rgb,255,140,66),0.08)',
+              }}>{t.poTag}</span>
+            )}
           </div>
           <h2 style={{
             fontSize: 'clamp(2rem, 5vw, 3.8rem)',
