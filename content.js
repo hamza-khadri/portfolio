@@ -33,7 +33,6 @@ window.CONTENT = {
    * ══════════════════════════════════════════════════════════ */
   projects: [
     {
-      num: '01',
       name: 'Partenamut Prevention',
       category: 'Health Tech / Mutual Insurance',
       stack: ['Lovable', 'Supabase', 'UX Research', 'User Test Monitoring'],
@@ -65,7 +64,6 @@ window.CONTENT = {
       detailImage: '',
     },
       {
-        num: '02',
         name: 'Veleo',
         category: 'FamilyTech / Silver Economy',
         stack: ['Lovable', 'Supabase', 'Claude ecosystem', 'User searching'],
@@ -97,7 +95,6 @@ window.CONTENT = {
       detailImage: '',
       },
     {
-      num: '03',
       name: 'Greasily.be',
       category: 'Restaurant Tech / Web as a Service',
       stack: ['Lovable', 'Supabase'],
@@ -129,7 +126,6 @@ window.CONTENT = {
       detailImage: '',
     },
     {
-      num: '04',
       name: 'LAM-MotionLabs',
       category: 'Sports Science / Research Tool',
       stack: ['Lovable', 'Supabase'],
@@ -161,7 +157,6 @@ window.CONTENT = {
       detailImage: '',
     },
     {
-      num: '05',
       name: 'Réseau Entreprendre Bruxelles',
       category: 'Community Platform',
       stack: ['Bubble.io', 'Notion', 'APIs'],
@@ -194,7 +189,6 @@ window.CONTENT = {
       detailImage: '',
     },
     {
-      num: '06',
       name: 'AI For Brokers',
       category: 'InsurTech / AI Tooling',
       stack: ['Lovable', 'Supabase', 'OpenAI'],
@@ -227,7 +221,6 @@ window.CONTENT = {
       detailImage: '',
     },
     {
-      num: '07',
       name: 'Velox',
       category: 'Logistics Tech / Transport Marketplace',
       stack: ['Lovable', 'Supabase'],
@@ -369,3 +362,7 @@ window.CONTENT = {
     contact:      { isDisplay: true  },
   },
 };
+
+window.CONTENT.projects.forEach((p, i) => {
+  p.num = String(i + 1).padStart(2, '0');
+});
