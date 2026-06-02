@@ -39,7 +39,7 @@ window.CONTENT = {
       productOwner: true,
       role: { en: 'Product Owner, Lead Designer & Builder', fr: 'Product Owner, Designer Lead & Builder' },
       year: '2026',
-      liveUrl: '',
+      liveUrl: 'https://prevention-mvp.partenamut.be',
       desc: {
         en: "Owned, designed and built a preventive health space for one of Belgium's largest health insurers.",
         fr: "Pilotage produit, conception et production d'un espace de santé préventive de premier degré pour l'une des plus grandes mutuelles belges.",
@@ -101,7 +101,7 @@ window.CONTENT = {
         productOwner: true,
         role: { en: 'Product Owner & No-code Builder', fr: 'Product Owner & Builder no-code' },
         year: '2026',
-        liveUrl: '',
+        liveUrl: 'https://gravaubel-offer-craft.lovable.app/demo',
         desc: {
           en: 'Designing and building an AI-powered platform that automates commercial offer generation for a road works company.',
           fr: "Conception et production d'une plateforme propulsée par IA qui automatise la génération d'offres commerciales pour une entreprise de travaux routiers.",
@@ -163,7 +163,7 @@ window.CONTENT = {
       productOwner: false,
       role: { en: 'Data Architect & Builder', fr: 'Architecte de données & Builder' },
       year: '2026',
-      liveUrl: '',
+      liveUrl: 'https://uliege-caps.lovable.app/demo',
       desc: {
         en: 'Designed and built a biomechanical data management platform for the sports performance research center at ULiège.',
         fr: "Conception et production d'une plateforme de gestion de données biomécaniques pour le centre de recherche en performance sportive de l'ULiège.",
