@@ -94,6 +94,37 @@ window.CONTENT = {
       heroImage:   'assets/projects/veleo-details.png',
       detailImage: '',
       },
+      {
+        name: 'Gravaubel',
+        category: 'ConstructionTech / Sales Automation',
+        stack: ['Lovable', 'Supabase', 'AI extraction'],
+        productOwner: true,
+        role: { en: 'Product Owner & No-code Builder', fr: 'Product Owner & Builder no-code' },
+        year: '2026',
+        liveUrl: '',
+        desc: {
+          en: 'Designing and building an AI-powered platform that automates commercial offer generation for a road works company.',
+          fr: "Conception et production d'une plateforme propulsée par IA qui automatise la génération d'offres commerciales pour une entreprise de travaux routiers.",
+        },
+        overview: {
+          en: "Gravaubel (Groupe Joly) is a Belgian road works company. I designed and built a platform that turns incoming client requests into structured commercial offers. An AI layer reads the request (often an email), extracts the relevant information, and pre-fills the offer form, while Excel bordereaux handle the pricing logic.",
+          fr: "Gravaubel (Groupe Joly) est une entreprise belge de travaux routiers. J'ai conçu et construit une plateforme qui transforme les demandes clients entrantes en offres commerciales structurées. Une couche IA lit la demande (souvent un email), en extrait les informations pertinentes et pré-remplit le formulaire d'offre, tandis que des bordereaux Excel gèrent la logique de chiffrage.",
+        },
+        challenge: {
+          en: "Producing commercial offers was slow and manual. Each request meant re-reading emails, copying details by hand into the offer, and rebuilding the pricing from scratch, which created delays and inconsistencies.",
+          fr: "La production des offres commerciales était lente et manuelle. Chaque demande impliquait de relire les emails, de recopier les détails à la main dans l'offre et de reconstruire le chiffrage à partir de zéro, ce qui générait des délais et des incohérences.",
+        },
+        approach: {
+          en: "I owned the design and the no-code build end to end. The key move was the email-to-form-field automation: an AI pipeline that parses an incoming request and maps it onto the offer structure, with a human validation step before anything is sent, keeping the salesperson in control.",
+          fr: "J'ai piloté la conception et le build no-code de bout en bout. Le point clé était l'automatisation email-vers-champs-de-formulaire : un pipeline IA qui analyse une demande entrante et la mappe sur la structure de l'offre, avec une étape de validation humaine avant tout envoi, gardant le commercial aux commandes.",
+        },
+        results: {
+          en: "Offer creation time significantly reduced, with a consistent, repeatable structure across requests. Platform delivered and in use.",
+          fr: "Temps de création des offres fortement réduit, avec une structure cohérente et reproductible d'une demande à l'autre. Plateforme livrée et en usage.",
+        },
+        heroImage:   'assets/projects/gravaubel-details.png',
+        detailImage: '',
+      },
     {
       name: 'Greasily.be',
       category: 'Restaurant Tech / Web as a Service',
