@@ -226,7 +226,7 @@ window.CONTENT = {
       productOwner: false,
       role: { en: 'Lead Builder', fr: 'Builder Principal' },
       year: '2026',
-      liveUrl: '',
+      liveUrl: 'https://ai-for-brokers.themaul.be/',
       desc: {
         en: 'Migrated and rebuilt an AI-powered insurance broker platform from mobile to desktop.',
         fr: "Migration et refonte d'une plateforme IA pour courtiers en assurance, du mobile vers le desktop.",
