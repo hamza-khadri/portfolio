@@ -35,7 +35,7 @@ window.CONTENT = {
     {
       name: 'Partenamut Prevention',
       category: 'Health Tech / Mutual Insurance',
-      stack: ['Lovable', 'Supabase', 'UX Research', 'User Test Monitoring'],
+      stack: ['Lovable', 'Supabase', 'UX Research', 'User Test Monitoring', 'AI Integrations'],
       productOwner: true,
       role: { en: 'Product Owner, Lead Designer & Builder', fr: 'Product Owner, Designer Lead & Builder' },
       year: '2026',
@@ -66,7 +66,7 @@ window.CONTENT = {
       {
         name: 'Veleo',
         category: 'FamilyTech / Silver Economy',
-        stack: ['Lovable', 'Supabase', 'Claude ecosystem', 'User searching'],
+        stack: ['Lovable', 'Supabase', 'Claude ecosystem', 'User searching', 'AI Integrations'],
         productOwner: true,
         role: { en: 'Founder, Product Owner, Designer & Builder', fr: 'Fondateur, Product Owner, Designer & Builder' },
         year: '2026',
@@ -97,7 +97,7 @@ window.CONTENT = {
       {
         name: 'Gravaubel',
         category: 'ConstructionTech / Sales Automation',
-        stack: ['Lovable', 'Supabase', 'AI extraction'],
+        stack: ['Lovable', 'Supabase', 'AI extraction', 'AI Integrations'],
         productOwner: true,
         role: { en: 'Product Owner & No-code Builder', fr: 'Product Owner & Builder no-code' },
         year: '2026',
@@ -222,7 +222,7 @@ window.CONTENT = {
     {
       name: 'AI For Brokers',
       category: 'InsurTech / AI Tooling',
-      stack: ['Lovable', 'Supabase', 'OpenAI'],
+      stack: ['Lovable', 'Supabase', 'AI Integrations'],
       productOwner: false,
       role: { en: 'Lead Builder', fr: 'Builder Principal' },
       year: '2026',
@@ -254,7 +254,7 @@ window.CONTENT = {
     {
       name: 'Velox',
       category: 'Logistics Tech / Transport Marketplace',
-      stack: ['Lovable', 'Supabase'],
+      stack: ['Lovable', 'Supabase', 'AI Integrations'],
       productOwner: false,
       role: { en: 'Data Architect & Builder', fr: 'Architecte de données & Builder' },
       year: '2025',
