@@ -1,10 +1,10 @@
-const { useEffect: useModalEffect, useState: useModalState } = React;
+import { useEffect, useState } from 'react';
 
-function ProjectModal({ project, lang, onClose, t }) {
-  const [visible, setVisible] = useModalState(false);
-  const [mounted, setMounted] = useModalState(false);
+export default function ProjectModal({ project, lang, onClose, t }) {
+  const [visible, setVisible] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
-  useModalEffect(() => {
+  useEffect(() => {
     if (project) {
       setMounted(true);
       requestAnimationFrame(() => requestAnimationFrame(() => setVisible(true)));
@@ -79,7 +79,6 @@ function ProjectModal({ project, lang, onClose, t }) {
         paddingBottom: '1.5rem',
       }}>
 
-        {/* Close button */}
         <button
           onClick={handleClose}
           aria-label={t.modalClose}
@@ -93,7 +92,6 @@ function ProjectModal({ project, lang, onClose, t }) {
           }}
         >✕</button>
 
-        {/* Header */}
         <div style={{ paddingTop: '1rem', marginBottom: '1.5rem', maxWidth: 'calc(100% - 70px)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
             <span style={labelStyle}>{p.num}</span>
@@ -128,7 +126,6 @@ function ProjectModal({ project, lang, onClose, t }) {
           )}
         </div>
 
-        {/* Hero image */}
         {p.heroImage ? (
           <div style={{ marginBottom: '3rem' }}>
             <img src={p.heroImage} alt={p.name}
@@ -148,7 +145,6 @@ function ProjectModal({ project, lang, onClose, t }) {
           </div>
         )}
 
-        {/* Overview */}
         {has(p.overview) && (
           <div style={{ marginBottom: '3rem', paddingBottom: '3rem', borderBottom: '1px solid #1F1F1F' }}>
             <div style={sectionTitleStyle}>{t.modalOverview}</div>
@@ -156,7 +152,6 @@ function ProjectModal({ project, lang, onClose, t }) {
           </div>
         )}
 
-        {/* Challenge / Approach */}
         {(has(p.challenge) || has(p.approach)) && (
           <div className="modal-grid" style={{
             display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3rem',
@@ -184,7 +179,6 @@ function ProjectModal({ project, lang, onClose, t }) {
           </div>
         )}
 
-        {/* Results */}
         {has(p.results) && (
           <div style={{ marginBottom: '3rem' }}>
             <div style={sectionTitleStyle}>{t.modalResults}</div>
@@ -192,7 +186,6 @@ function ProjectModal({ project, lang, onClose, t }) {
           </div>
         )}
 
-        {/* Live link */}
         {p.liveUrl && (
           <a href={p.liveUrl} target="_blank" rel="noopener noreferrer"
             style={{
@@ -207,5 +200,3 @@ function ProjectModal({ project, lang, onClose, t }) {
     </div>
   );
 }
-
-Object.assign(window, { ProjectModal });

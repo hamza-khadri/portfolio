@@ -1,4 +1,4 @@
-function Approach({ t }) {
+export default function Approach({ t }) {
   const pillars = [
     { title: t.approach1Title, body: t.approach1Body, icon: 'lni-cog' },
     { title: t.approach2Title, body: t.approach2Body, icon: 'lni-rocket' },
@@ -60,5 +60,3 @@ function Approach({ t }) {
     </section>
   );
 }
-
-Object.assign(window, { Approach });

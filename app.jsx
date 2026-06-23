@@ -1,16 +1,26 @@
-const { useState, useEffect, useRef } = React;
+import { useState, useEffect, useRef } from 'react';
+import { createRoot } from 'react-dom/client';
 
-/**
- * ─────────────────────────────────────────────────────
- *  SITE CONFIG — edit values here
- * ─────────────────────────────────────────────────────
- */
-const ACCENT_COLOR = '#6552F4';   // ← edit me to change accent everywhere
+import TRANSLATIONS from './translations.js';
+import CONTENT from './content.js';
+
+import Nav from './components/nav.jsx';
+import Hero from './components/hero.jsx';
+import About from './components/about.jsx';
+import Work from './components/work.jsx';
+import Approach from './components/approach.jsx';
+import Stack from './components/stack.jsx';
+import Services from './components/services.jsx';
+import Testimonials from './components/testimonials.jsx';
+import Contact from './components/contact.jsx';
+import ProjectModal from './components/project-modal.jsx';
+
+const ACCENT_COLOR = '#6552F4';
 const GRAIN_ENABLED   = true;
-const GRAIN_INTENSITY = 70;       // 0–100
-const GRAIN_SIZE      = 120;      // px
-const GRAIN_CONTRAST  = 75;       // 0–100
-const PORTRAIT_HOVER_SIZE = 260;  // px
+const GRAIN_INTENSITY = 70;
+const GRAIN_SIZE      = 120;
+const GRAIN_CONTRAST  = 75;
+const PORTRAIT_HOVER_SIZE = 260;
 
 function hexToRgb(hex) {
   const h = hex.replace('#', '');
@@ -22,7 +32,12 @@ function hexToRgb(hex) {
 function App() {
   const [lang, setLang] = useState('en');
   const [activeProject, setActiveProject] = useState(null);
-  const t = window.TRANSLATIONS[lang];
+  const t = TRANSLATIONS[lang];
+
+  /* ── P1: sync <html lang> with active language ── */
+  useEffect(() => {
+    document.documentElement.lang = lang;
+  }, [lang]);
 
   /* ── Apply accent color globally ── */
   useEffect(() => {
@@ -77,12 +92,11 @@ function App() {
       raf = requestAnimationFrame(tick);
     };
 
-    const portraitSize = PORTRAIT_HOVER_SIZE;
-    const half = portraitSize / 2;
+    const half = PORTRAIT_HOVER_SIZE / 2;
 
-    const grow    = () => { cursor.style.width = '58px';                cursor.style.height = '58px';                cursor.style.margin = '-29px 0 0 -29px'; };
-    const growBig = () => { cursor.style.width = portraitSize + 'px';    cursor.style.height = portraitSize + 'px';    cursor.style.margin = `-${half}px 0 0 -${half}px`; };
-    const shrink  = () => { cursor.style.width = '12px';                 cursor.style.height = '12px';                 cursor.style.margin = '-6px 0 0 -6px'; };
+    const grow    = () => { cursor.style.width = '58px';                      cursor.style.height = '58px';                      cursor.style.margin = '-29px 0 0 -29px'; };
+    const growBig = () => { cursor.style.width = PORTRAIT_HOVER_SIZE + 'px';  cursor.style.height = PORTRAIT_HOVER_SIZE + 'px';  cursor.style.margin = `-${half}px 0 0 -${half}px`; };
+    const shrink  = () => { cursor.style.width = '12px';                      cursor.style.height = '12px';                      cursor.style.margin = '-6px 0 0 -6px'; };
 
     const attachHovers = () => {
       document.querySelectorAll('a, button, .hoverable').forEach(el => {
@@ -140,7 +154,7 @@ function App() {
     return () => clearTimeout(timer);
   }, [lang]);
 
-  /* ── Section fade: previous sections blur + dim, current is sharp ── */
+  /* ── Section fade ── */
   useEffect(() => {
     const timer = setTimeout(() => {
       const sections = Array.from(document.querySelectorAll('.section-fade'));
@@ -170,23 +184,22 @@ function App() {
     return () => clearTimeout(timer);
   }, [lang]);
 
-  const s = window.CONTENT.sections;
+  const s = CONTENT.sections;
 
   return (
     <div>
-      <window.Nav          t={t} lang={lang} setLang={setLang} />
-      <window.Hero         t={t} />
-      {s.about.isDisplay        && <window.About        t={t} />}
-      {s.work.isDisplay         && <window.Work         t={t} lang={lang} openProject={setActiveProject} />}
-      {s.approach.isDisplay     && <window.Approach     t={t} />}
-      {s.stack.isDisplay        && <window.Stack        t={t} />}
-      {s.services.isDisplay     && <window.Services     t={t} lang={lang} />}
-      {s.testimonials.isDisplay && <window.Testimonials t={t} lang={lang} />}
-      {s.contact.isDisplay      && <window.Contact      t={t} />}
-      <window.ProjectModal project={activeProject} lang={lang} t={t} onClose={() => setActiveProject(null)} />
+      <Nav          t={t} lang={lang} setLang={setLang} />
+      <Hero         t={t} />
+      {s.about.isDisplay        && <About        t={t} />}
+      {s.work.isDisplay         && <Work         t={t} lang={lang} openProject={setActiveProject} />}
+      {s.approach.isDisplay     && <Approach     t={t} />}
+      {s.stack.isDisplay        && <Stack        t={t} />}
+      {s.services.isDisplay     && <Services     t={t} lang={lang} />}
+      {s.testimonials.isDisplay && <Testimonials t={t} lang={lang} />}
+      {s.contact.isDisplay      && <Contact      t={t} />}
+      <ProjectModal project={activeProject} lang={lang} t={t} onClose={() => setActiveProject(null)} />
     </div>
   );
 }
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<App />);
+createRoot(document.getElementById('root')).render(<App />);

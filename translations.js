@@ -1,25 +1,17 @@
-/**
- * ─────────────────────────────────────────────────────────────
- *  TRANSLATIONS.JS — All static UI copy
- *  ─────────────────────────────────────────────────────────────
- *  Edit any text below. The site reads from window.TRANSLATIONS.
- *  Dynamic content (projects, testimonials, services) lives in content.js.
- * ─────────────────────────────────────────────────────────────
- */
-window.TRANSLATIONS = {
+const TRANSLATIONS = {
   en: {
     nav: { work: 'Work', about: 'About', services: 'Services', contact: 'Contact' },
     availability: 'Available for Q3 2026 — Open to Product Owner roles & freelance product missions',
     heroPrefix: 'I',
     heroWords: ['lead', 'design', 'build', 'ship', 'dream'],
     heroSuffix: 'products.',
-    heroBio: 'Product Owner, Designer & Builder based in Belgium. I own the product end-to-end — from discovery and prioritisation to design, build, and ship — with no-code, code, and AI.',
+    heroBio: 'Product Owner, Designer & Builder based in Belgium. 5+ years building digital products — 15+ shipped across HealthTech, FamilyTech, Logistics, Sports Science and Community platforms, using no-code, code, and AI.',
     scrollLabel: 'Scroll',
     s01: '01 — ABOUT',
     aboutTitle: ['From content to product.', 'From discovery to shipped.'],
     aboutP1: "I started as a content creator — building audiences, telling stories, understanding what makes people pay attention. Then I realised: the most interesting challenge isn't the message. It's the product.",
-    aboutP2: "Over the past 5 years, I've moved from pixels to products. I scope the problem, prioritise the roadmap, design in Figma, and build in Bubble, Lovable, and Supabase. I own the chain — discovery, delivery, and everything between.",
-    aboutP3: 'Currently at The Maul in Mont-Saint-Guibert. Looking for my next product team — as Product Owner, or full end-to-end.',
+    aboutP2: "Over 5 years, I've moved from pixels to products. I scope, prioritise, design in Figma, and build with Bubble, Lovable, and Supabase — having delivered 15+ products including Partenamut Prevention, Veleo, Velox, and LAM-MotionLabs (ULiège).",
+    aboutP3: 'Currently Product Owner at The Maul in Mont-Saint-Guibert, Belgium. Available for full-time PO roles and freelance missions in Q3 2026, in Belgium or EU remote.',
     stat1: ['5+',  'Years in product'],
     stat2: ['15+', 'Products shipped'],
     stat3: ['10+', 'Stack mastered'],
@@ -50,7 +42,6 @@ window.TRANSLATIONS = {
     currentlyOpen: 'Currently open to: full-time Product Owner roles in Belgium / EU remote, freelance end-to-end product missions, AI product builds.',
     footer: 'Designed and built by Hamza Khadri — 2026',
     footerNote: 'This portfolio has been entirely prompted. Of course it is.',
-    // ── Modal ──
     modalOverview: 'Overview',
     modalChallenge: 'The Challenge',
     modalApproach: 'The Approach',
@@ -60,7 +51,6 @@ window.TRANSLATIONS = {
     modalStack: 'Stack',
     modalLive: 'View live project →',
     modalClose: 'Close',
-    // ── Tweaks ──
     tweakCursor: 'Cursor',
     tweakPortraitSize: 'Portrait hover size',
     tweakAccent: 'Accent color',
@@ -77,13 +67,13 @@ window.TRANSLATIONS = {
     heroPrefix: 'Je',
     heroWords: ['pilote', 'design', 'build', 'livre', 'rêve'],
     heroSuffix: 'des produits.',
-    heroBio: "Product Owner, Designer & Builder basé en Belgique. Je pilote le produit de bout en bout — de la discovery et la priorisation jusqu'au design, au build et à la livraison — avec le no-code, le code et l'IA.",
+    heroBio: "Product Owner, Designer & Builder basé en Belgique (Mont-Saint-Guibert). 5+ ans à construire des produits digitaux — 15+ livrés dans la HealthTech, FamilyTech, Logistique, Sciences du sport et les plateformes communautaires, avec le no-code, le code et l'IA.",
     scrollLabel: 'Défiler',
     s01: '01 — À PROPOS',
     aboutTitle: ['Du contenu au produit.', 'De la discovery au livré.'],
     aboutP1: "J'ai commencé comme créateur de contenu — construire des audiences, raconter des histoires, comprendre ce qui retient l'attention. Puis j'ai réalisé : le défi le plus intéressant n'est pas le message. C'est le produit.",
-    aboutP2: "Depuis 5 ans, je suis passé des pixels aux produits. Je cadre le problème, je priorise la roadmap, je design dans Figma et je build avec Bubble, Lovable et Supabase. Je pilote la chaîne — discovery, delivery, et tout ce qu'il y a entre.",
-    aboutP3: 'Actuellement chez The Maul à Mont-Saint-Guibert. À la recherche de ma prochaine équipe produit — en tant que Product Owner, ou en bout-en-bout.',
+    aboutP2: "Depuis 5 ans, je suis passé des pixels aux produits. Je cadre, priorise, design dans Figma et build avec Bubble, Lovable et Supabase — ayant livré 15+ produits dont Partenamut Prevention, Veleo, Velox et LAM-MotionLabs (ULiège).",
+    aboutP3: 'Actuellement Product Owner chez The Maul à Mont-Saint-Guibert, Belgique. Disponible pour des postes PO temps plein et missions freelance en Q3 2026, en Belgique ou remote EU.',
     stat1: ['5+',  'Ans en produit'],
     stat2: ['15+', 'Produits livrés'],
     stat3: ['10+', 'Outils maîtrisés'],
@@ -134,3 +124,5 @@ window.TRANSLATIONS = {
     tweakGrainContrast: 'Contraste',
   },
 };
+
+export default TRANSLATIONS;

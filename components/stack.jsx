@@ -1,7 +1,9 @@
-function Stack({ t }) {
-  const items   = window.CONTENT.marqueeItems;
+import CONTENT from '../content.js';
+
+export default function Stack({ t }) {
+  const items   = CONTENT.marqueeItems;
   const doubled = [...items, ...items];
-  const cats    = window.CONTENT.stackCategories;
+  const cats    = CONTENT.stackCategories;
 
   return (
     <section id="stack" style={{ padding: '9rem 0', background: '#0D0D0D' }} className="mobile-section section-fade">
@@ -59,5 +61,3 @@ function Stack({ t }) {
     </section>
   );
 }
-
-Object.assign(window, { Stack });

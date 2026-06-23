@@ -1,4 +1,4 @@
-function About({ t }) {
+export default function About({ t }) {
   const stats = [t.stat1, t.stat2, t.stat3, t.stat4];
   const icons = ['lni-calendar', 'lni-rocket', 'lni-layers', 'lni-world'];
 
@@ -59,5 +59,3 @@ function About({ t }) {
     </section>
   );
 }
-
-Object.assign(window, { About });

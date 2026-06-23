@@ -1,36 +1,5 @@
-/**
- * ─────────────────────────────────────────────────────────────
- *  CONTENT.JS — Hamza Khadri Portfolio
- *  Edit everything here. No component code to touch.
- * ─────────────────────────────────────────────────────────────
- *
- *  HOW TO ADD IMAGES
- *  ─────────────────
- *  1. Drop your image files into the `assets/projects/` folder.
- *  2. Set the `heroImage` and `detailImage` fields in each project below.
- *     Example:
- *       heroImage:   'assets/projects/partenamut-hero.png',   // 16:10 ratio
- *       detailImage: 'assets/projects/partenamut-detail.png', // optional
- *  3. Leave the field as '' (empty string) to keep the striped placeholder.
- *
- *  YOUR PROFILE PHOTO
- *  ──────────────────
- *  Current file: assets/hamza-photo.png
- *  To replace: drop a new file in assets/ and update the src in
- *  components/hero.jsx → <img src="assets/your-new-photo.png" />
- *
- *  LOGO
- *  ────
- *  SVG logo is inlined in components/nav.jsx.
- *  To replace: swap the <path> elements in the <svg> block.
- * ─────────────────────────────────────────────────────────────
- */
+const CONTENT = {
 
-window.CONTENT = {
-
-  /* ══════════════════════════════════════════════════════════
-   *  PROJECTS
-   * ══════════════════════════════════════════════════════════ */
   projects: [
     {
       name: 'Partenamut Prevention',
@@ -53,78 +22,78 @@ window.CONTENT = {
         fr: "Le défi central était de rendre la prévention personnelle et actionnable — pas comme un catalogue de contenus. Les membres devaient se sentir guidés, pas seulement informés.",
       },
       approach: {
-        en: "I scoped 5 key journeys to test and prioritised them around the app's core architecture: onboarding and goal selection, the Explorer (search by health state and life situation), the Goals and tools section, the Partenum AI chatbot, and women's health prevention. I then ran 17 moderated user testing sessions across 4 user profiles, using Maze for scenario-based flows. Results were synthesized into 4 UX insights and 5 prioritised product opportunities.",
-        fr: "J'ai cadré 5 parcours clés à tester et les ai priorisés autour de l'architecture de l'app : onboarding et sélection d'objectif, l'Explorer (recherche par état de santé et situation de vie), la section Objectifs et outils, le chatbot IA Partenum, et la prévention féminine. J'ai ensuite mené 17 sessions de tests utilisateurs modérés sur 4 profils distincts, avec des scénarios Maze. Les résultats ont été synthétisés en 4 insights UX et 5 opportunités produit priorisées.",
+        en: "I scoped 5 key journeys and ran 17 moderated user testing sessions across 4 user profiles using Maze for scenario-based flows. Results were synthesized into 4 UX insights and 5 prioritised product opportunities.",
+        fr: "J'ai cadré 5 parcours clés et mené 17 sessions de tests utilisateurs modérés sur 4 profils distincts avec des scénarios Maze. Les résultats ont été synthétisés en 4 insights UX et 5 opportunités produit priorisées.",
       },
       results: {
-        en: "Delivered a full UX research report, a prioritised product roadmap and a working prototype. The product was validated as credible (17/17 completed onboarding) but revealed a clear gap between information and action — directly informing Partenamut's next product direction. The project has since been taken over internally by Partenamut.",
-        fr: "Livraison d'un rapport UX complet, d'une roadmap produit priorisée et d'un prototype fonctionnel. Le produit a été validé comme crédible (17/17 ont complété l'onboarding) mais a révélé un écart clair entre information et passage à l'action — orientant directement la prochaine direction produit de Partenamut. Le projet a ensuite été repris en interne.",
+        en: "Delivered a full UX research report, a prioritised product roadmap and a working prototype. 17/17 participants completed onboarding, validating product credibility. The project has since been taken over internally by Partenamut.",
+        fr: "Livraison d'un rapport UX complet, d'une roadmap produit priorisée et d'un prototype fonctionnel. 17/17 participants ont complété l'onboarding, validant la crédibilité du produit. Le projet a ensuite été repris en interne par Partenamut.",
       },
       heroImage:   'assets/projects/partena-detail.png',
       detailImage: '',
     },
-      {
-        name: 'Veleo',
-        category: 'FamilyTech / Silver Economy',
-        stack: ['Lovable', 'Supabase', 'Claude ecosystem', 'User searching', 'AI Integrations'],
-        productOwner: true,
-        role: { en: 'Founder, Product Owner, Designer & Builder', fr: 'Fondateur, Product Owner, Designer & Builder' },
-        year: '2026',
-        liveUrl: 'https://veleo.be',
-        desc: {
-          en: 'Owning, designing and building a shared family dashboard to coordinate elderly parent care in Belgium.',
-          fr: "Pilotage produit, conception et production d'un tableau de bord familial partagé pour coordonner le suivi des parents âgés en Belgique.",
-        },
-        overview: {
-          en: "Veleo is a Belgian startup I'm founding and running as solo Product Owner. It's a shared family dashboard that helps families coordinate the care of an elderly parent — centralizing information, tasks, appointments, and communication in one place, with native FR/NL bilingual support and Belgian administrative localization (AVIQ, Iriscare, mutualities).",
-          fr: "Veleo est une startup belge que je fonde et que je pilote en solo Product Owner. C'est un tableau de bord familial partagé qui aide les familles à coordonner le suivi d'un parent âgé — centralisant informations, tâches, rendez-vous et communication en un seul endroit, avec un support bilingue FR/NL natif et une localisation administrative belge (AVIQ, Iriscare, mutuelles).",
-        },
-        challenge: {
-          en: "Caring for an elderly parent in Belgium involves fragmented information, multiple family members with different levels of involvement, and a complex administrative landscape that varies by region. No existing tool addresses all three at once.",
-          fr: "S'occuper d'un parent âgé en Belgique implique des informations fragmentées, plusieurs membres de la famille avec des niveaux d'implication différents, et un paysage administratif complexe qui varie selon la région. Aucun outil existant n'adresse les trois à la fois.",
-        },
-        approach: {
-          en: "I own the full product lifecycle — discovery, strategic positioning, roadmap prioritisation, UX design, and no-code build. The Belgian administrative localization (AVIQ, Iriscare, mutualities) is the core product moat, prioritised in from day one.",
-          fr: "Je pilote l'ensemble du cycle produit — discovery, positionnement stratégique, priorisation de la roadmap, conception UX et build no-code. La localisation administrative belge (AVIQ, Iriscare, mutuelles) est le différenciateur central du produit, priorisée dès le départ.",
-        },
-        results: {
-          en: "Product currently in active discovery and development. User research and roadmap iteration ongoing.",
-          fr: "Produit actuellement en discovery et développement actif. Recherche utilisateur et itération de roadmap en cours.",
-        },
+    {
+      name: 'Veleo',
+      category: 'FamilyTech / Silver Economy',
+      stack: ['Lovable', 'Supabase', 'Claude ecosystem', 'User searching', 'AI Integrations'],
+      productOwner: true,
+      role: { en: 'Founder, Product Owner, Designer & Builder', fr: 'Fondateur, Product Owner, Designer & Builder' },
+      year: '2026',
+      liveUrl: 'https://veleo.be',
+      desc: {
+        en: 'Owning, designing and building a shared family dashboard to coordinate elderly parent care in Belgium.',
+        fr: "Pilotage produit, conception et production d'un tableau de bord familial partagé pour coordonner le suivi des parents âgés en Belgique.",
+      },
+      overview: {
+        en: "Veleo is a Belgian startup I'm founding and running as solo Product Owner. It's a shared family dashboard that helps families coordinate the care of an elderly parent — centralizing information, tasks, appointments, and communication in one place, with native FR/NL bilingual support and Belgian administrative localization (AVIQ, Iriscare, mutualities).",
+        fr: "Veleo est une startup belge que je fonde et que je pilote en solo Product Owner. C'est un tableau de bord familial partagé qui aide les familles à coordonner le suivi d'un parent âgé — centralisant informations, tâches, rendez-vous et communication en un seul endroit, avec un support bilingue FR/NL natif et une localisation administrative belge (AVIQ, Iriscare, mutuelles).",
+      },
+      challenge: {
+        en: "Caring for an elderly parent in Belgium involves fragmented information, multiple family members with different levels of involvement, and a complex administrative landscape that varies by region. No existing tool addresses all three at once.",
+        fr: "S'occuper d'un parent âgé en Belgique implique des informations fragmentées, plusieurs membres de la famille avec des niveaux d'implication différents, et un paysage administratif complexe qui varie selon la région. Aucun outil existant n'adresse les trois à la fois.",
+      },
+      approach: {
+        en: "I own the full product lifecycle — discovery, strategic positioning, roadmap prioritisation, UX design, and no-code build. The Belgian administrative localization (AVIQ, Iriscare, mutualities) is the core product moat, prioritised in from day one.",
+        fr: "Je pilote l'ensemble du cycle produit — discovery, positionnement stratégique, priorisation de la roadmap, conception UX et build no-code. La localisation administrative belge (AVIQ, Iriscare, mutuelles) est le différenciateur central du produit, priorisée dès le départ.",
+      },
+      results: {
+        en: "Product currently in active discovery and development. User research and roadmap iteration ongoing.",
+        fr: "Produit actuellement en discovery et développement actif. Recherche utilisateur et itération de roadmap en cours.",
+      },
       heroImage:   'assets/projects/veleo-details.png',
       detailImage: '',
+    },
+    {
+      name: 'Gravaubel',
+      category: 'ConstructionTech / Sales Automation',
+      stack: ['Lovable', 'Supabase', 'AI extraction', 'AI Integrations'],
+      productOwner: true,
+      role: { en: 'Product Owner & No-code Builder', fr: 'Product Owner & Builder no-code' },
+      year: '2026',
+      liveUrl: 'https://gravaubel-offer-craft.lovable.app/demo',
+      desc: {
+        en: 'Designing and building an AI-powered platform that automates commercial offer generation for a road works company.',
+        fr: "Conception et production d'une plateforme propulsée par IA qui automatise la génération d'offres commerciales pour une entreprise de travaux routiers.",
       },
-      {
-        name: 'Gravaubel',
-        category: 'ConstructionTech / Sales Automation',
-        stack: ['Lovable', 'Supabase', 'AI extraction', 'AI Integrations'],
-        productOwner: true,
-        role: { en: 'Product Owner & No-code Builder', fr: 'Product Owner & Builder no-code' },
-        year: '2026',
-        liveUrl: 'https://gravaubel-offer-craft.lovable.app/demo',
-        desc: {
-          en: 'Designing and building an AI-powered platform that automates commercial offer generation for a road works company.',
-          fr: "Conception et production d'une plateforme propulsée par IA qui automatise la génération d'offres commerciales pour une entreprise de travaux routiers.",
-        },
-        overview: {
-          en: "Gravaubel (Groupe Joly) is a Belgian road works company. I designed and built a platform that turns incoming client requests into structured commercial offers. An AI layer reads the request (often an email), extracts the relevant information, and pre-fills the offer form, while Excel bordereaux handle the pricing logic.",
-          fr: "Gravaubel (Groupe Joly) est une entreprise belge de travaux routiers. J'ai conçu et construit une plateforme qui transforme les demandes clients entrantes en offres commerciales structurées. Une couche IA lit la demande (souvent un email), en extrait les informations pertinentes et pré-remplit le formulaire d'offre, tandis que des bordereaux Excel gèrent la logique de chiffrage.",
-        },
-        challenge: {
-          en: "Producing commercial offers was slow and manual. Each request meant re-reading emails, copying details by hand into the offer, and rebuilding the pricing from scratch, which created delays and inconsistencies.",
-          fr: "La production des offres commerciales était lente et manuelle. Chaque demande impliquait de relire les emails, de recopier les détails à la main dans l'offre et de reconstruire le chiffrage à partir de zéro, ce qui générait des délais et des incohérences.",
-        },
-        approach: {
-          en: "I owned the design and the no-code build end to end. The key move was the email-to-form-field automation: an AI pipeline that parses an incoming request and maps it onto the offer structure, with a human validation step before anything is sent, keeping the salesperson in control.",
-          fr: "J'ai piloté la conception et le build no-code de bout en bout. Le point clé était l'automatisation email-vers-champs-de-formulaire : un pipeline IA qui analyse une demande entrante et la mappe sur la structure de l'offre, avec une étape de validation humaine avant tout envoi, gardant le commercial aux commandes.",
-        },
-        results: {
-          en: "Offer creation time significantly reduced, with a consistent, repeatable structure across requests. Platform delivered and in use.",
-          fr: "Temps de création des offres fortement réduit, avec une structure cohérente et reproductible d'une demande à l'autre. Plateforme livrée et en usage.",
-        },
-        heroImage:   'assets/projects/gravaubel-details.png',
-        detailImage: '',
+      overview: {
+        en: "Gravaubel (Groupe Joly) is a Belgian road works company. I designed and built a platform that turns incoming client requests into structured commercial offers. An AI layer reads the request (often an email), extracts the relevant information, and pre-fills the offer form, while Excel bordereaux handle the pricing logic.",
+        fr: "Gravaubel (Groupe Joly) est une entreprise belge de travaux routiers. J'ai conçu et construit une plateforme qui transforme les demandes clients entrantes en offres commerciales structurées. Une couche IA lit la demande (souvent un email), en extrait les informations pertinentes et pré-remplit le formulaire d'offre, tandis que des bordereaux Excel gèrent la logique de chiffrage.",
       },
+      challenge: {
+        en: "Producing commercial offers was slow and manual. Each request meant re-reading emails, copying details by hand into the offer, and rebuilding the pricing from scratch, which created delays and inconsistencies.",
+        fr: "La production des offres commerciales était lente et manuelle. Chaque demande impliquait de relire les emails, de recopier les détails à la main dans l'offre et de reconstruire le chiffrage à partir de zéro, ce qui générait des délais et des incohérences.",
+      },
+      approach: {
+        en: "I owned the design and the no-code build end to end. The key move was the email-to-form-field automation: an AI pipeline that parses an incoming request and maps it onto the offer structure, with a human validation step before anything is sent, keeping the salesperson in control.",
+        fr: "J'ai piloté la conception et le build no-code de bout en bout. Le point clé était l'automatisation email-vers-champs-de-formulaire : un pipeline IA qui analyse une demande entrante et la mappe sur la structure de l'offre, avec une étape de validation humaine avant tout envoi, gardant le commercial aux commandes.",
+      },
+      results: {
+        en: "Offer creation time significantly reduced, with a consistent, repeatable structure across requests. Platform delivered and in use.",
+        fr: "Temps de création des offres fortement réduit, avec une structure cohérente et reproductible d'une demande à l'autre. Plateforme livrée et en usage.",
+      },
+      heroImage:   'assets/projects/gravaubel-details.png',
+      detailImage: '',
+    },
     {
       name: 'Greasily.be',
       category: 'Restaurant Tech / Web as a Service',
@@ -211,10 +180,6 @@ window.CONTENT = {
         en: "I built the full platform in Bubble.io, integrating Notion APIs and automations to keep member and event data in sync. After the initial launch, I handled ongoing maintenance and iterative improvements over the course of a year, occasionally contributing UX suggestions alongside the build.",
         fr: "J'ai construit la plateforme complète sur Bubble.io, en intégrant les APIs Notion et des automations pour maintenir la synchronisation des données membres et événements. Après le lancement initial, j'ai assuré la maintenance et les itérations sur une durée d'un an, en apportant ponctuellement des suggestions UX.",
       },
-      results: {
-        en: "Platform shipped and available on App Store and Play Store. 218 members onboarded out of 768 active members. Data remains confidential to REB.",
-        fr: "Plateforme livrée et disponible sur l'App Store et le Play Store. 218 membres inscrits sur 768 membres actifs. Données confidentielles à REB.",
-      },
       results: { en: '', fr: '' },
       heroImage:   '/assets/projects/reb-detail.png',
       detailImage: '',
@@ -242,10 +207,6 @@ window.CONTENT = {
       approach: {
         en: "I handled the full migration from Bubble to Lovable, rebuilding the platform for desktop and integrating the three AI tools via OpenAI Assistants API, with Supabase as the data layer.",
         fr: "J'ai pris en charge la migration complète de Bubble vers Lovable, en reconstruisant la plateforme pour desktop et en intégrant les trois outils IA via l'API OpenAI Assistants, avec Supabase comme couche de données.",
-      },
-      results: {
-        en: "Full migration completed. Platform operational in French for internal broker use.",
-        fr: "Migration complète effectuée. Plateforme opérationnelle en français pour un usage interne par les courtiers.",
       },
       results: { en: '', fr: '' },
       heroImage:   '/assets/projects/ai4b-detail.png',
@@ -279,14 +240,11 @@ window.CONTENT = {
         en: "Full PWA delivered and live. Client is currently in prospecting phase to onboard their first customers.",
         fr: "PWA complète livrée et en ligne. Le client est actuellement en phase de prospection pour onboarder ses premiers clients.",
       },
-      heroImage:   '/assets/projects/myvelox-details.png',
+      heroImage:   'assets/projects/myvelox-details.png',
       detailImage: '',
     },
   ],
 
-  /* ══════════════════════════════════════════════════════════
-   *  TESTIMONIALS
-   * ══════════════════════════════════════════════════════════ */
   testimonials: [
     {
       quote: {
@@ -298,7 +256,7 @@ window.CONTENT = {
     },
     {
       quote: {
-        en: '"Hamza is the magician of the story. Or the rocket. Take your pick. Once he takes on a project, he understands the user’s needs and turns an idea into a beautiful product."',
+        en: '"Hamza is the magician of the story. Or the rocket. Take your pick. Once he takes on a project, he understands the user\'s needs and turns an idea into a beautiful product."',
         fr: `"Hamza c'est le magicien de l'histoire. Ou la fusée. Au choix. Une fois qu'il prend un projet en main, il comprend les besoins de l'utilisateur et il transforme une idée en un beau produit."`,
       },
       name: 'Simon Moreau',
@@ -306,18 +264,12 @@ window.CONTENT = {
     },
   ],
 
-  /* ══════════════════════════════════════════════════════════
-   *  STACK MARQUEE
-   * ══════════════════════════════════════════════════════════ */
   marqueeItems: [
     'Figma', 'Bubble', 'Lovable', 'Supabase', 'OpenAI',
     'Airtable', 'Notion', 'Framer', 'Webflow', 'Maze', 'Claude',
     'Make', 'N8N', 'Jitter', 'Spline', 'Wordpress'
   ],
 
-  /* ══════════════════════════════════════════════════════════
-   *  STACK CATEGORIES
-   * ══════════════════════════════════════════════════════════ */
   stackCategories: [
     {
       label: 'Design & UX',
@@ -337,9 +289,6 @@ window.CONTENT = {
     },
   ],
 
-  /* ══════════════════════════════════════════════════════════
-   *  SERVICES
-   * ══════════════════════════════════════════════════════════ */
   services: [
     {
       num: '01',
@@ -370,9 +319,6 @@ window.CONTENT = {
     },
   ],
 
-  /* ══════════════════════════════════════════════════════════
-   *  SOCIAL LINKS — replace '#' with real URLs
-   * ══════════════════════════════════════════════════════════ */
   socials: [
     { label: 'LinkedIn',  href: 'https://www.linkedin.com/in/hamzakhadri',  icon: 'lni-linkedin-original' },
     { label: 'GitHub',    href: 'https://github.com/hamza-k',               icon: 'lni-github-original'   },
@@ -380,9 +326,6 @@ window.CONTENT = {
     { label: 'Uxcel',     href: 'https://app.uxcel.com/ux/FGXWC3Z7OP22',    icon: 'lni-link'              },
   ],
 
-  /* ══════════════════════════════════════════════════════════
-   *  SECTIONS VISIBILITY — set isDisplay: false to hide a section
-   * ══════════════════════════════════════════════════════════ */
   sections: {
     about:        { isDisplay: true  },
     work:         { isDisplay: true  },
@@ -394,6 +337,8 @@ window.CONTENT = {
   },
 };
 
-window.CONTENT.projects.forEach((p, i) => {
+CONTENT.projects.forEach((p, i) => {
   p.num = String(i + 1).padStart(2, '0');
 });
+
+export default CONTENT;

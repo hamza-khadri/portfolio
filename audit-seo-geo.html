@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Audit SEO & GEO — hamzakhadri.com</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+    :root {
+      --bg: #ffffff;
+      --surface: #f8f8f8;
+      --border: #e5e5e5;
+      --text: #0a0a0a;
+      --muted: #666666;
+      --accent: #FF8C42;
+      --green: #16a34a;
+      --red: #dc2626;
+      --orange: #ea580c;
+      --yellow: #ca8a04;
+      --blue: #2563eb;
+      --purple: #7c3aed;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 10pt;
+      line-height: 1.6;
+    }
+
+    /* ── Cover page ── */
+    .cover {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 60px;
+      background: #0a0a0a;
+      color: #f5f5f0;
+      page-break-after: always;
+    }
+
+    .cover-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .cover-logo {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11pt;
+      color: #888880;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    .cover-date {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9pt;
+      color: #888880;
+      letter-spacing: 0.1em;
+    }
+
+    .cover-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px 0 40px;
+    }
+
+    .cover-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8pt;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
+    }
+
+    .cover-title {
+      font-size: 42pt;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      margin-bottom: 12px;
+    }
+
+    .cover-title span { color: var(--accent); }
+
+    .cover-subtitle {
+      font-size: 16pt;
+      font-weight: 300;
+      color: #888880;
+      margin-top: 8px;
+    }
+
+    .cover-divider {
+      width: 60px;
+      height: 2px;
+      background: var(--accent);
+      margin: 36px 0;
+    }
+
+    .cover-desc {
+      font-size: 11pt;
+      color: #aaaaaa;
+      max-width: 560px;
+      line-height: 1.75;
+    }
+
+    .cover-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      border-top: 1px solid #1f1f1f;
+      padding-top: 24px;
+    }
+
+    .cover-meta {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8pt;
+      color: #555550;
+      letter-spacing: 0.08em;
+    }
+
+    .cover-score-block {
+      display: flex;
+      gap: 32px;
+    }
+
+    .score-item {
+      text-align: right;
+    }
+
+    .score-num {
+      font-size: 22pt;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .score-num.red { color: var(--red); }
+    .score-num.orange { color: var(--orange); }
+    .score-num.yellow { color: #f59e0b; }
+    .score-num.green { color: var(--green); }
+
+    .score-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 7pt;
+      color: #555550;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    /* ── Content pages ── */
+    .page {
+      padding: 52px 60px;
+      page-break-inside: avoid;
+    }
+
+    .page + .page {
+      border-top: 3px solid var(--border);
+    }
+
+    /* ── Section headers ── */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 32px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .section-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8pt;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      background: #fff5ee;
+      border: 1px solid #ffd4b0;
+      padding: 3px 8px;
+      border-radius: 3px;
+    }
+
+    .section-title {
+      font-size: 18pt;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    /* ── Sub-section ── */
+    .subsection {
+      margin-bottom: 36px;
+    }
+
+    .subsection-title {
+      font-size: 12pt;
+      font-weight: 600;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 7pt;
+      padding: 2px 7px;
+      border-radius: 3px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .badge-ok    { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
+    .badge-error { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
+    .badge-warn  { background: #fff7ed; color: #c2410c; border: 1px solid #fdba74; }
+    .badge-info  { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+
+    /* ── Check table ── */
+    .check-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+
+    .check-table th {
+      text-align: left;
+      font-size: 7.5pt;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 8px 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+    }
+
+    .check-table td {
+      padding: 9px 12px;
+      border: 1px solid var(--border);
+      font-size: 9.5pt;
+      vertical-align: top;
+    }
+
+    .check-table tr:nth-child(even) td { background: #fafafa; }
+
+    .check-ok    { color: var(--green); font-weight: 600; }
+    .check-error { color: var(--red);   font-weight: 600; }
+    .check-warn  { color: var(--orange);font-weight: 600; }
+
+    /* ── Issue cards ── */
+    .issue-list { display: flex; flex-direction: column; gap: 16px; }
+
+    .issue-card {
+      border-left: 4px solid var(--border);
+      padding: 16px 20px;
+      background: var(--surface);
+      border-radius: 0 4px 4px 0;
+    }
+
+    .issue-card.critical { border-left-color: var(--red); }
+    .issue-card.warning  { border-left-color: var(--orange); }
+    .issue-card.info     { border-left-color: var(--blue); }
+
+    .issue-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .issue-icon {
+      font-size: 13pt;
+      line-height: 1;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .issue-title {
+      font-size: 10.5pt;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    .issue-body {
+      font-size: 9pt;
+      color: #444;
+      line-height: 1.65;
+      margin-left: 23px;
+    }
+
+    .issue-body p { margin-bottom: 6px; }
+    .issue-body p:last-child { margin-bottom: 0; }
+
+    /* ── Code block ── */
+    .code-block {
+      background: #0a0a0a;
+      color: #f5f5f0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 7.5pt;
+      line-height: 1.7;
+      padding: 14px 16px;
+      border-radius: 4px;
+      margin: 10px 0;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    .code-block .c-key   { color: #FF8C42; }
+    .code-block .c-str   { color: #4ade80; }
+    .code-block .c-val   { color: #60a5fa; }
+    .code-block .c-muted { color: #888880; }
+
+    /* ── Priority table ── */
+    .priority-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .priority-table th {
+      text-align: left;
+      font-size: 7.5pt;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 10px 14px;
+      background: #0a0a0a;
+      color: #888880;
+      border: 1px solid #1f1f1f;
+    }
+
+    .priority-table td {
+      padding: 11px 14px;
+      border: 1px solid var(--border);
+      font-size: 9.5pt;
+      vertical-align: middle;
+    }
+
+    .priority-table tr:nth-child(even) td { background: #fafafa; }
+
+    .pill {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 7pt;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 20px;
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+    }
+
+    .pill-p0 { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
+    .pill-p1 { background: #fff7ed; color: #c2410c; border: 1px solid #fdba74; }
+    .pill-p2 { background: #fefce8; color: #a16207; border: 1px solid #fde68a; }
+    .pill-p3 { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
+
+    .tag-seo { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; padding: 2px 7px; border-radius: 3px; font-size: 7.5pt; font-weight: 500; }
+    .tag-geo { background: #f5f3ff; color: #6d28d9; border: 1px solid #ddd6fe; padding: 2px 7px; border-radius: 3px; font-size: 7.5pt; font-weight: 500; }
+    .tag-both { background: #fdf4ff; color: #86198f; border: 1px solid #f0abfc; padding: 2px 7px; border-radius: 3px; font-size: 7.5pt; font-weight: 500; }
+
+    /* ── Page break helpers ── */
+    .break-before { page-break-before: always; }
+    .no-break { page-break-inside: avoid; }
+
+    /* ── Footer watermark ── */
+    .doc-footer {
+      margin-top: 48px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .doc-footer-text {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 7.5pt;
+      color: #bbbbbb;
+      letter-spacing: 0.08em;
+    }
+
+    /* ── Score card ── */
+    .score-cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .score-card {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 20px 16px;
+      text-align: center;
+    }
+
+    .score-card-num {
+      font-size: 28pt;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .score-card-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 7pt;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .score-card-sub {
+      font-size: 8pt;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    hr.section-sep {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 32px 0;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════════════
+     COVER PAGE
+════════════════════════════ -->
+<div class="cover">
+  <div class="cover-top">
+    <div class="cover-logo">hamzakhadri.com</div>
+    <div class="cover-date">22 juin 2026</div>
+  </div>
+
+  <div class="cover-main">
+    <div class="cover-label">Rapport d'audit — Généré via Playwright</div>
+    <div class="cover-title">Audit <span>SEO</span><br>& <span>GEO</span></div>
+    <div class="cover-subtitle">hamzakhadri.com</div>
+    <div class="cover-divider"></div>
+    <div class="cover-desc">
+      Audit technique complet du portfolio de Hamza Khadri — Product Owner, Designer &amp; Builder basé en Belgique.<br><br>
+      Ce rapport couvre l'optimisation pour les moteurs de recherche classiques (SEO) et l'optimisation pour les moteurs IA génératifs (GEO : ChatGPT, Perplexity, Gemini, Claude, Bing Copilot).
+    </div>
+  </div>
+
+  <div class="cover-bottom">
+    <div>
+      <div class="cover-meta">URL AUDITÉE &nbsp;·&nbsp; https://hamzakhadri.com/</div>
+      <div class="cover-meta" style="margin-top:4px">AUDITEUR &nbsp;·&nbsp; Claude Sonnet 4.6 via Claude Code</div>
+      <div class="cover-meta" style="margin-top:4px">OUTIL &nbsp;·&nbsp; Playwright CLI @playwright/cli v0.1.14</div>
+    </div>
+    <div class="cover-score-block">
+      <div class="score-item">
+        <div class="score-num red">3</div>
+        <div class="score-label">Critique P0</div>
+      </div>
+      <div class="score-item">
+        <div class="score-num orange">8</div>
+        <div class="score-label">Important P1</div>
+      </div>
+      <div class="score-item">
+        <div class="score-num yellow">5</div>
+        <div class="score-label">Modéré P2</div>
+      </div>
+      <div class="score-item">
+        <div class="score-num green">11</div>
+        <div class="score-label">OK ✓</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════
+     PAGE 2 — SEO TECHNIQUE : CE QUI FONCTIONNE
+════════════════════════════ -->
+<div class="page">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h1 class="section-title">SEO Technique — Points positifs</h1>
+  </div>
+
+  <div class="score-cards">
+    <div class="score-card">
+      <div class="score-card-num" style="color:var(--green)">11</div>
+      <div class="score-card-label">Points validés</div>
+      <div class="score-card-sub">Bases solides</div>
+    </div>
+    <div class="score-card">
+      <div class="score-card-num" style="color:var(--red)">3</div>
+      <div class="score-card-label">Critiques manquants</div>
+      <div class="score-card-sub">À corriger en priorité</div>
+    </div>
+    <div class="score-card">
+      <div class="score-card-num" style="color:var(--orange)">8</div>
+      <div class="score-card-label">Avertissements</div>
+      <div class="score-card-sub">Impact moyen à fort</div>
+    </div>
+    <div class="score-card">
+      <div class="score-card-num" style="color:#888880">~800</div>
+      <div class="score-card-label">Mots indexables</div>
+      <div class="score-card-sub">Contenu très fin</div>
+    </div>
+  </div>
+
+  <table class="check-table">
+    <thead>
+      <tr>
+        <th style="width:30px"></th>
+        <th style="width:200px">Élément</th>
+        <th>Valeur détectée</th>
+        <th style="width:80px">Statut</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="check-ok">✓</td>
+        <td><strong>&lt;title&gt;</strong></td>
+        <td>"Hamza Khadri — Product Owner, Designer &amp; Builder" — 51 chars, keyword-rich, lisible</td>
+        <td><span class="badge badge-ok">OK</span></td>
+      </tr>
+      <tr>
+        <td class="check-ok">✓</td>
+        <td><strong>Meta description</strong></td>
+        <td>"Product Owner, Designer &amp; Builder based in Belgium..." — 156 chars, sous la limite de 160</td>
+        <td><span class="badge badge-ok">OK</span></td>
+      </tr>
+      <tr>
+        <td class="check-ok">✓</td>
+        <td><strong>Canonical</strong></td>
+        <td>https://hamzakhadri.com/ — correctement renseigné, évite le duplicate content</td>
+        <td><span class="badge badge-ok">OK</span></td>
+      </tr>
+      <tr>
+        <td class="check-ok">✓</td>
+        <td><strong>Meta robots</strong></td>
+        <td>content="index, follow" — crawl et indexation autorisés</td>
+        <td><span class="badge badge-ok">OK</span></td>
+      </tr>
+      <tr>
+        <td class="check-ok">✓</td>
+        <td><strong>Open Graph (OG)</strong></td>
+        <td>og:type, og:url, og:title, og:description, og:image (1200×630), og:locale — complet</td>
+        <td><span class="badge badge-ok">OK</span></td>
+      </tr>
+      <tr>
+        <td class="check-ok">✓</td>
+        <td><strong>Twitter Card</strong></td>
+        <td>summary_large_image — optimal pour les previews LinkedIn/Twitter</td>
+        <td><span class="badge badge-ok">OK</span></td>
+      </tr>
+      <tr>
+        <td class="check-ok">✓</td>
+        <td><strong>Favicons</strong></td>
+        <td>5 formats : .ico, .svg, 32px, 192px, apple-touch-icon 180px</td>
+        <td><span class="badge badge-ok">OK</span></td>
+      </tr>
+      <tr>
+        <td class="check-ok">✓</td>
+        <td><strong>Alt texts images</strong></td>
+        <td>9/9 images ont un attribut alt renseigné et descriptif</td>
+        <td><span class="badge badge-ok">OK</span></td>
+      </tr>
+      <tr>
+        <td class="check-ok">✓</td>
+        <td><strong>Viewport</strong></td>
+        <td>width=device-width, initial-scale=1.0 — correct</td>
+        <td><span class="badge badge-ok">OK</span></td>
+      </tr>
+      <tr>
+        <td class="check-ok">✓</td>
+        <td><strong>Meta author</strong></td>
+        <td>content="Hamza Khadri" — présent</td>
+        <td><span class="badge badge-ok">OK</span></td>
+      </tr>
+      <tr>
+        <td class="check-ok">✓</td>
+        <td><strong>Responsive mobile</strong></td>
+        <td>Rendu validé sur 375×812px (iPhone) — mise en page correcte</td>
+        <td><span class="badge badge-ok">OK</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="doc-footer">
+    <div class="doc-footer-text">AUDIT SEO &amp; GEO — hamzakhadri.com — 22 juin 2026</div>
+    <div class="doc-footer-text">Page 2 / 6</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════
+     PAGE 3 — PROBLÈMES CRITIQUES (P0)
+════════════════════════════ -->
+<div class="page break-before">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h1 class="section-title">Problèmes critiques — Priorité P0</h1>
+  </div>
+
+  <p style="margin-bottom:24px;color:#444;font-size:9.5pt;">Ces 3 points doivent être corrigés en premier. Ils bloquent ou dégradent significativement l'indexation et la visibilité dans les moteurs classiques <strong>et</strong> les moteurs IA.</p>
+
+  <div class="issue-list">
+
+    <div class="issue-card critical no-break">
+      <div class="issue-head">
+        <div class="issue-icon">❌</div>
+        <div>
+          <div class="issue-title">Aucune donnée structurée Schema.org / JSON-LD</div>
+          <div style="margin-top:4px;display:flex;gap:6px;">
+            <span class="badge badge-error">Critique</span>
+            <span class="tag-both">SEO + GEO</span>
+          </div>
+        </div>
+      </div>
+      <div class="issue-body">
+        <p>Le site ne contient <strong>aucun bloc</strong> <code>&lt;script type="application/ld+json"&gt;</code>. C'est le problème le plus grave : Google Rich Results, Knowledge Panel, et tous les moteurs IA (ChatGPT, Perplexity, Gemini, Claude) utilisent les données structurées pour comprendre <em>qui tu es</em> et <em>ce que tu fais</em>.</p>
+        <p>Sans schéma <strong>Person</strong>, une requête comme <em>"product owner designer Belgium freelance"</em> ou <em>"Hamza Khadri"</em> sur un moteur IA ne peut pas extraire d'entité fiable depuis ton site.</p>
+        <p><strong>Solution minimum à implémenter dans &lt;head&gt; :</strong></p>
+        <div class="code-block"><span class="c-muted">&lt;script type="application/ld+json"&gt;</span>
+{
+  <span class="c-key">"@context"</span>: <span class="c-str">"https://schema.org"</span>,
+  <span class="c-key">"@type"</span>: <span class="c-str">"Person"</span>,
+  <span class="c-key">"name"</span>: <span class="c-str">"Hamza Khadri"</span>,
+  <span class="c-key">"jobTitle"</span>: <span class="c-str">"Product Owner, Designer &amp; Builder"</span>,
+  <span class="c-key">"url"</span>: <span class="c-str">"https://hamzakhadri.com"</span>,
+  <span class="c-key">"email"</span>: <span class="c-str">"Hamza.Khadri@outlook.com"</span>,
+  <span class="c-key">"address"</span>: { <span class="c-key">"@type"</span>: <span class="c-str">"PostalAddress"</span>, <span class="c-key">"addressCountry"</span>: <span class="c-str">"BE"</span>, <span class="c-key">"addressLocality"</span>: <span class="c-str">"Mont-Saint-Guibert"</span> },
+  <span class="c-key">"sameAs"</span>: [
+    <span class="c-str">"https://www.linkedin.com/in/hamzakhadri"</span>,
+    <span class="c-str">"https://github.com/hamza-k"</span>,
+    <span class="c-str">"https://dribbble.com/hamza-k"</span>
+  ],
+  <span class="c-key">"worksFor"</span>: { <span class="c-key">"@type"</span>: <span class="c-str">"Organization"</span>, <span class="c-key">"name"</span>: <span class="c-str">"The Maul"</span> },
+  <span class="c-key">"knowsAbout"</span>: [<span class="c-str">"Product Management"</span>, <span class="c-str">"UX Design"</span>, <span class="c-str">"No-code"</span>, <span class="c-str">"AI Integration"</span>, <span class="c-str">"Supabase"</span>, <span class="c-str">"Lovable"</span>]
+}
+<span class="c-muted">&lt;/script&gt;</span></div>
+      </div>
+    </div>
+
+    <div class="issue-card critical no-break">
+      <div class="issue-head">
+        <div class="issue-icon">❌</div>
+        <div>
+          <div class="issue-title">Pas de sitemap.xml — réponse 404</div>
+          <div style="margin-top:4px;display:flex;gap:6px;">
+            <span class="badge badge-error">Critique</span>
+            <span class="tag-seo">SEO</span>
+          </div>
+        </div>
+      </div>
+      <div class="issue-body">
+        <p>La requête <code>GET /sitemap.xml</code> retourne un <strong>404</strong>. Google et Bing utilisent le sitemap pour découvrir et prioriser les pages à indexer. Sans lui, le crawl repose entièrement sur les liens internes — insuffisant pour un single-page site.</p>
+        <p>Le sitemap doit aussi être déclaré dans robots.txt. Créer le fichier <code>sitemap.xml</code> à la racine :</p>
+        <div class="code-block"><span class="c-muted">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+&lt;<span class="c-key">urlset</span> xmlns=<span class="c-str">"http://www.sitemaps.org/schemas/sitemap/0.9"</span>&gt;
+  &lt;<span class="c-key">url</span>&gt;
+    &lt;<span class="c-key">loc</span>&gt;<span class="c-val">https://hamzakhadri.com/</span>&lt;/<span class="c-key">loc</span>&gt;
+    &lt;<span class="c-key">lastmod</span>&gt;<span class="c-val">2026-06-22</span>&lt;/<span class="c-key">lastmod</span>&gt;
+    &lt;<span class="c-key">changefreq</span>&gt;<span class="c-val">monthly</span>&lt;/<span class="c-key">changefreq</span>&gt;
+    &lt;<span class="c-key">priority</span>&gt;<span class="c-val">1.0</span>&lt;/<span class="c-key">priority</span>&gt;
+  &lt;/<span class="c-key">url</span>&gt;
+&lt;/<span class="c-key">urlset</span>&gt;</div>
+      </div>
+    </div>
+
+    <div class="issue-card critical no-break">
+      <div class="issue-head">
+        <div class="issue-icon">❌</div>
+        <div>
+          <div class="issue-title">Pas de robots.txt — réponse 404</div>
+          <div style="margin-top:4px;display:flex;gap:6px;">
+            <span class="badge badge-error">Critique</span>
+            <span class="tag-seo">SEO</span>
+          </div>
+        </div>
+      </div>
+      <div class="issue-body">
+        <p>La requête <code>GET /robots.txt</code> retourne un <strong>404</strong>. Sans ce fichier, les crawlers (dont les bots IA de Common Crawl, GPTBot, ClaudeBot, PerplexityBot) n'ont aucune directive.</p>
+        <p>Créer le fichier <code>robots.txt</code> à la racine :</p>
+        <div class="code-block"><span class="c-key">User-agent</span>: *
+<span class="c-key">Allow</span>: /
+
+<span class="c-key">User-agent</span>: GPTBot
+<span class="c-key">Allow</span>: /
+
+<span class="c-key">User-agent</span>: ClaudeBot
+<span class="c-key">Allow</span>: /
+
+<span class="c-key">User-agent</span>: PerplexityBot
+<span class="c-key">Allow</span>: /
+
+<span class="c-key">Sitemap</span>: https://hamzakhadri.com/sitemap.xml</div>
+        <p style="margin-top:8px;">Note : l'autorisation explicite des bots IA (GPTBot, ClaudeBot, PerplexityBot) est une bonne pratique GEO — elle maximise les chances d'être indexé par leurs bases de connaissances.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="doc-footer">
+    <div class="doc-footer-text">AUDIT SEO &amp; GEO — hamzakhadri.com — 22 juin 2026</div>
+    <div class="doc-footer-text">Page 3 / 6</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════
+     PAGE 4 — PROBLÈMES IMPORTANTS (P1)
+════════════════════════════ -->
+<div class="page break-before">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <h1 class="section-title">Problèmes importants — Priorité P1</h1>
+  </div>
+
+  <div class="issue-list">
+
+    <div class="issue-card warning no-break">
+      <div class="issue-head">
+        <div class="issue-icon">⚠️</div>
+        <div>
+          <div class="issue-title">H1 dynamique — contenu cassé pour les crawlers</div>
+          <div style="margin-top:4px;display:flex;gap:6px;"><span class="badge badge-warn">Important</span><span class="tag-seo">SEO</span></div>
+        </div>
+      </div>
+      <div class="issue-body">
+        <p>Le H1 contient un typewriter animé en React. Au moment du crawl, Playwright capture le texte suivant : <strong>"Ibuild|products."</strong> — la barre de caret <code>|</code> est incluse dans le DOM et l'espace entre "I" et le mot animé est absent. Google indexe ce texte corrompu.</p>
+        <p><strong>Solution :</strong> Ajouter un <code>aria-label</code> statique sur le H1 qui contient le texte complet optimisé :</p>
+        <div class="code-block">&lt;h1 <span class="c-key">aria-label</span>=<span class="c-str">"Hamza Khadri — I build, lead and ship products."</span> ...&gt;</div>
+      </div>
+    </div>
+
+    <div class="issue-card warning no-break">
+      <div class="issue-head">
+        <div class="issue-icon">⚠️</div>
+        <div>
+          <div class="issue-title">Attribut lang="en" statique — non mis à jour au switch FR</div>
+          <div style="margin-top:4px;display:flex;gap:6px;"><span class="badge badge-warn">Important</span><span class="tag-seo">SEO</span></div>
+        </div>
+      </div>
+      <div class="issue-body">
+        <p>Le site propose un switch EN/FR fonctionnel, mais <code>&lt;html lang="en"&gt;</code> ne change jamais côté DOM. Quand l'utilisateur passe en français, la langue déclarée reste l'anglais — mauvais pour le SEO francophone et les lecteurs d'écran.</p>
+        <p><strong>Solution :</strong> Dans <code>app.jsx</code>, appeler <code>document.documentElement.lang = lang</code> à chaque changement de langue.</p>
+      </div>
+    </div>
+
+    <div class="issue-card warning no-break">
+      <div class="issue-head">
+        <div class="issue-icon">⚠️</div>
+        <div>
+          <div class="issue-title">Aucune balise hreflang pour le contenu bilingue EN/FR</div>
+          <div style="margin-top:4px;display:flex;gap:6px;"><span class="badge badge-warn">Important</span><span class="tag-seo">SEO</span></div>
+        </div>
+      </div>
+      <div class="issue-body">
+        <p>Le site sert du contenu EN et FR sur la même URL sans directives <code>hreflang</code>. Les moteurs ne savent pas quelle langue cibler par région (BE-FR, BE-NL, etc.). Ajouter dans <code>&lt;head&gt;</code> :</p>
+        <div class="code-block">&lt;<span class="c-key">link</span> rel=<span class="c-str">"alternate"</span> hreflang=<span class="c-str">"en"</span> href=<span class="c-str">"https://hamzakhadri.com/"</span> /&gt;
+&lt;<span class="c-key">link</span> rel=<span class="c-str">"alternate"</span> hreflang=<span class="c-str">"fr"</span> href=<span class="c-str">"https://hamzakhadri.com/?lang=fr"</span> /&gt;
+&lt;<span class="c-key">link</span> rel=<span class="c-str">"alternate"</span> hreflang=<span class="c-str">"x-default"</span> href=<span class="c-str">"https://hamzakhadri.com/"</span> /&gt;</div>
+      </div>
+    </div>
+
+    <div class="issue-card warning no-break">
+      <div class="issue-head">
+        <div class="issue-icon">⚠️</div>
+        <div>
+          <div class="issue-title">Aucune image avec loading="lazy" — 9 images chargées immédiatement</div>
+          <div style="margin-top:4px;display:flex;gap:6px;"><span class="badge badge-warn">Important</span><span class="tag-seo">Core Web Vitals</span></div>
+        </div>
+      </div>
+      <div class="issue-body">
+        <p>Les 9 images projet ont toutes <code>loading="auto"</code>. Les images hors-viewport initiale (8 images projet sur 9) chargent immédiatement, bloquant la bande passante disponible pour le LCP.</p>
+        <p><strong>Solution :</strong> Ajouter <code>loading="lazy"</code> sur toutes les images projet dans <code>components/work.jsx</code>. Garder <code>loading="eager"</code> (ou pas d'attribut) uniquement sur la photo hero.</p>
+      </div>
+    </div>
+
+    <div class="issue-card warning no-break">
+      <div class="issue-head">
+        <div class="issue-icon">⚠️</div>
+        <div>
+          <div class="issue-title">Pas de preload sur l'image LCP (photo hero)</div>
+          <div style="margin-top:4px;display:flex;gap:6px;"><span class="badge badge-warn">Important</span><span class="tag-seo">LCP / Core Web Vitals</span></div>
+        </div>
+      </div>
+      <div class="issue-body">
+        <p><code>assets/hamza-photo.png</code> est l'élément LCP (Largest Contentful Paint) probable, mais n'est pas préchargé. Le navigateur ne la découvre qu'en parsant le JS/JSX. Ajouter dans <code>&lt;head&gt;</code>, avant les scripts :</p>
+        <div class="code-block">&lt;<span class="c-key">link</span> rel=<span class="c-str">"preload"</span> as=<span class="c-str">"image"</span> href=<span class="c-str">"assets/hamza-photo.png"</span> /&gt;</div>
+      </div>
+    </div>
+
+    <div class="issue-card warning no-break">
+      <div class="issue-head">
+        <div class="issue-icon">⚠️</div>
+        <div>
+          <div class="issue-title">React en mode développement + transpilation Babel dans le navigateur</div>
+          <div style="margin-top:4px;display:flex;gap:6px;"><span class="badge badge-warn">Important</span><span class="tag-seo">Performance</span></div>
+        </div>
+      </div>
+      <div class="issue-body">
+        <p>Le site charge <code>react.development.js</code> (non minifié, ~1MB) et transpile le JSX via <code>@babel/standalone</code> <em>dans le navigateur</em>. C'est 2 à 3 fois plus lent que servir des fichiers pré-compilés. Impact direct sur le FCP, LCP et le score Core Web Vitals.</p>
+        <p><strong>Solution :</strong> Passer à Vite (ou tout bundler) pour pré-compiler et minifier. Ou à minima charger <code>react.production.min.js</code> et <code>react-dom.production.min.js</code>.</p>
+      </div>
+    </div>
+
+    <div class="issue-card warning no-break">
+      <div class="issue-head">
+        <div class="issue-icon">⚠️</div>
+        <div>
+          <div class="issue-title">Contenu total : ~800 mots — thin content</div>
+          <div style="margin-top:4px;display:flex;gap:6px;"><span class="badge badge-warn">Important</span><span class="tag-seo">SEO Contenu</span></div>
+        </div>
+      </div>
+      <div class="issue-body">
+        <p>Le site ne contient que <strong>~800 mots indexables</strong>. Google considère les portfolios single-page comme "thin content" — peu de signal de pertinence thématique. Pour un profil Product Owner / Designer / Builder, la concurrence est forte.</p>
+        <p><strong>Solution :</strong> Créer des URLs dédiées par projet (ex. <code>/partenamut-prevention</code>) avec les descriptions complètes déjà rédigées dans <code>content.js</code>. Elles existent mais sont enfermées dans des modales.</p>
+      </div>
+    </div>
+
+    <div class="issue-card warning no-break">
+      <div class="issue-head">
+        <div class="issue-icon">⚠️</div>
+        <div>
+          <div class="issue-title">Pas d'URL unique par projet — case studies invisibles</div>
+          <div style="margin-top:4px;display:flex;gap:6px;"><span class="badge badge-warn">Important</span><span class="tag-seo">SEO Contenu</span></div>
+        </div>
+      </div>
+      <div class="issue-body">
+        <p>Les 8 case studies (Partenamut, Veleo, Gravaubel, etc.) s'ouvrent en modal sur <code>/#</code>. Ces pages ne sont jamais indexées : ni <code>/partenamut-prevention</code>, ni <code>/#partenamut</code> ne sont crawlés. Le contenu projet le plus riche du site est complètement invisible pour Google.</p>
+        <p>Ces descriptions existent déjà dans <code>content.js</code> — il suffit de les rendre accessibles via un routing client-side ou des pages statiques.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="doc-footer">
+    <div class="doc-footer-text">AUDIT SEO &amp; GEO — hamzakhadri.com — 22 juin 2026</div>
+    <div class="doc-footer-text">Page 4 / 6</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════
+     PAGE 5 — AUDIT GEO
+════════════════════════════ -->
+<div class="page break-before">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <h1 class="section-title">GEO — Generative Engine Optimization</h1>
+  </div>
+
+  <p style="margin-bottom:20px;color:#444;font-size:9.5pt;line-height:1.7;">
+    Le GEO est l'optimisation pour être <strong>cité, référencé et recommandé par les moteurs IA génératifs</strong> — ChatGPT, Perplexity, Gemini, Claude, Bing Copilot. Contrairement au SEO classique qui optimise pour le ranking, le GEO optimise pour <strong>l'extraction d'entités</strong> et la <strong>fiabilité des réponses générées</strong>. Les moteurs IA privilégient les sites qui fournissent des faits structurés, des entités claires et du contenu dense et vérifiable.
+  </p>
+
+  <hr class="section-sep">
+
+  <div class="subsection">
+    <div class="subsection-title">
+      <span>Problèmes critiques GEO</span>
+      <span class="badge badge-error">P0</span>
+    </div>
+
+    <div class="issue-list">
+
+      <div class="issue-card critical no-break">
+        <div class="issue-head">
+          <div class="issue-icon">❌</div>
+          <div>
+            <div class="issue-title">Aucune entité machine-lisible — le site est invisible pour les moteurs IA</div>
+            <div style="margin-top:4px;"><span class="tag-geo">GEO Critique</span></div>
+          </div>
+        </div>
+        <div class="issue-body">
+          <p>Si un utilisateur demande à ChatGPT ou Perplexity <em>"qui est Hamza Khadri ?"</em>, ou <em>"product owner designer freelance Belgique"</em>, le site ne fournit aucune entité structurée exploitable. Les moteurs IA ne peuvent pas construire de réponse fiable à partir d'un site sans JSON-LD.</p>
+          <p>La priorité est d'implémenter le schéma <strong>Person</strong> décrit en page 3, complété d'un schéma <strong>WebSite</strong> :</p>
+          <div class="code-block">{
+  <span class="c-key">"@context"</span>: <span class="c-str">"https://schema.org"</span>,
+  <span class="c-key">"@type"</span>: <span class="c-str">"WebSite"</span>,
+  <span class="c-key">"name"</span>: <span class="c-str">"Hamza Khadri — Portfolio"</span>,
+  <span class="c-key">"url"</span>: <span class="c-str">"https://hamzakhadri.com"</span>,
+  <span class="c-key">"description"</span>: <span class="c-str">"Portfolio de Hamza Khadri, Product Owner, Designer et Builder basé en Belgique."</span>,
+  <span class="c-key">"author"</span>: { <span class="c-key">"@type"</span>: <span class="c-str">"Person"</span>, <span class="c-key">"name"</span>: <span class="c-str">"Hamza Khadri"</span> }
+}</div>
+        </div>
+      </div>
+
+      <div class="issue-card critical no-break">
+        <div class="issue-head">
+          <div class="issue-icon">❌</div>
+          <div>
+            <div class="issue-title">Le contenu est du marketing copy, pas du contenu factuel citable</div>
+            <div style="margin-top:4px;"><span class="tag-geo">GEO Critique</span></div>
+          </div>
+        </div>
+        <div class="issue-body">
+          <p>Les moteurs IA citent des pages qui contiennent des <strong>faits concrets et vérifiables</strong>. Le site contient du copy engageant mais peu de données extraibles :</p>
+          <table class="check-table" style="margin-top:10px;margin-bottom:10px;">
+            <thead><tr><th>❌ Formulation actuelle (copy)</th><th>✅ Formulation GEO-optimisée (factuelle)</th></tr></thead>
+            <tbody>
+              <tr><td>"I own the product end-to-end"</td><td>"Product Owner sur 8 projets livrés entre 2025 et 2026 en Belgique"</td></tr>
+              <tr><td>"Many projects, many problems solved"</td><td>"15+ produits livrés, dont Partenamut, Veleo, Velox, LAM-MotionLabs"</td></tr>
+              <tr><td>"Discovery before pixels"</td><td>"17 tests utilisateurs modérés conduits pour Partenamut Prevention (2026)"</td></tr>
+              <tr><td>"5+ Years in product"</td><td>"5 ans d'expérience produit, depuis 2021, basé à Mont-Saint-Guibert, Belgique"</td></tr>
+            </tbody>
+          </table>
+          <p>Les chiffres et faits existent dans le contenu des case studies — il faut les remonter dans des paragraphes indexables.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <hr class="section-sep">
+
+  <div class="subsection">
+    <div class="subsection-title">
+      <span>Améliorations GEO importantes</span>
+      <span class="badge badge-warn">P1–P2</span>
+    </div>
+
+    <div class="issue-list">
+
+      <div class="issue-card warning no-break">
+        <div class="issue-head">
+          <div class="issue-icon">⚠️</div>
+          <div>
+            <div class="issue-title">Pas de section FAQ — format le plus cité par les moteurs IA</div>
+            <div style="margin-top:4px;"><span class="tag-geo">GEO</span></div>
+          </div>
+        </div>
+        <div class="issue-body">
+          <p>Les FAQ avec schéma <code>FAQPage</code> sont le format le plus souvent cité dans les réponses ChatGPT et Perplexity. Une section <em>"Questions sur mes services"</em> (coût, délai, process, disponibilité) avec <code>FAQPage</code> JSON-LD augmenterait significativement la surface de citation.</p>
+          <p>Exemples de questions pertinentes : <em>"Travailles-tu en remote ?"</em>, <em>"Quels types de produits as-tu livrés ?"</em>, <em>"Quelle est ta disponibilité en 2026 ?"</em></p>
+        </div>
+      </div>
+
+      <div class="issue-card warning no-break">
+        <div class="issue-head">
+          <div class="issue-icon">⚠️</div>
+          <div>
+            <div class="issue-title">Témoignages sans schéma Review — preuve sociale non structurée</div>
+            <div style="margin-top:4px;"><span class="tag-geo">GEO</span></div>
+          </div>
+        </div>
+        <div class="issue-body">
+          <p>Les deux témoignages (Nicolas Streel, CMO The Maul ; Simon Moreau, PM Line-out) sont riches mais non structurés. Ajouter un schéma <code>Review</code> ou <code>Person</code> sur chaque auteur permettrait aux moteurs IA de les utiliser comme signal de crédibilité.</p>
+        </div>
+      </div>
+
+      <div class="issue-card warning no-break">
+        <div class="issue-head">
+          <div class="issue-icon">⚠️</div>
+          <div>
+            <div class="issue-title">Bots IA non mentionnés dans robots.txt — indexation GEO non maîtrisée</div>
+            <div style="margin-top:4px;"><span class="tag-geo">GEO</span></div>
+          </div>
+        </div>
+        <div class="issue-body">
+          <p>Outre le problème d'absence de robots.txt (P0), les bots des moteurs IA ont des identifiants spécifiques : <code>GPTBot</code>, <code>ClaudeBot</code>, <code>PerplexityBot</code>, <code>Google-Extended</code>. Sans directives explicites, leur comportement est imprévisible. Le fichier robots.txt recommandé en page 3 couvre ce point.</p>
+        </div>
+      </div>
+
+      <div class="issue-card info no-break">
+        <div class="issue-head">
+          <div class="issue-icon">ℹ️</div>
+          <div>
+            <div class="issue-title">Projets sans schéma CreativeWork — œuvres non associées à l'entité</div>
+            <div style="margin-top:4px;"><span class="tag-geo">GEO P2</span></div>
+          </div>
+        </div>
+        <div class="issue-body">
+          <p>Chacun des 8 projets mériterait un schéma <code>CreativeWork</code> ou <code>SoftwareApplication</code> lié à l'entité <code>Person</code>. Cela permettrait aux moteurs IA d'associer "Veleo", "Partenamut", "Velox" à Hamza Khadri dans leurs bases de connaissances.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="doc-footer">
+    <div class="doc-footer-text">AUDIT SEO &amp; GEO — hamzakhadri.com — 22 juin 2026</div>
+    <div class="doc-footer-text">Page 5 / 6</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════
+     PAGE 6 — RÉCAPITULATIF & ROADMAP
+════════════════════════════ -->
+<div class="page break-before">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <h1 class="section-title">Roadmap priorisée — Plan d'action</h1>
+  </div>
+
+  <p style="margin-bottom:24px;color:#444;font-size:9.5pt;">Les actions sont classées par impact décroissant et effort estimé. Les P0 peuvent être implémentés en moins d'une heure.</p>
+
+  <table class="priority-table">
+    <thead>
+      <tr>
+        <th style="width:70px">Priorité</th>
+        <th style="width:60px">Effort</th>
+        <th>Action</th>
+        <th style="width:90px">Catégorie</th>
+        <th style="width:80px">Impact</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="pill pill-p0">🔴 P0</span></td>
+        <td style="color:var(--green);font-weight:600;">~20 min</td>
+        <td>Ajouter le schéma <strong>Person + WebSite</strong> JSON-LD dans <code>&lt;head&gt;</code></td>
+        <td><span class="tag-both">SEO + GEO</span></td>
+        <td style="font-weight:600;color:var(--red)">Critique</td>
+      </tr>
+      <tr>
+        <td><span class="pill pill-p0">🔴 P0</span></td>
+        <td style="color:var(--green);font-weight:600;">~5 min</td>
+        <td>Créer <code>sitemap.xml</code> à la racine du projet</td>
+        <td><span class="tag-seo">SEO</span></td>
+        <td style="font-weight:600;color:var(--red)">Critique</td>
+      </tr>
+      <tr>
+        <td><span class="pill pill-p0">🔴 P0</span></td>
+        <td style="color:var(--green);font-weight:600;">~5 min</td>
+        <td>Créer <code>robots.txt</code> avec autorisation des bots IA</td>
+        <td><span class="tag-both">SEO + GEO</span></td>
+        <td style="font-weight:600;color:var(--red)">Critique</td>
+      </tr>
+      <tr>
+        <td><span class="pill pill-p1">🟠 P1</span></td>
+        <td style="color:var(--orange);font-weight:600;">~15 min</td>
+        <td>Mettre <code>document.documentElement.lang</code> à jour au switch EN/FR dans <code>app.jsx</code></td>
+        <td><span class="tag-seo">SEO</span></td>
+        <td style="font-weight:600;color:var(--orange)">Fort</td>
+      </tr>
+      <tr>
+        <td><span class="pill pill-p1">🟠 P1</span></td>
+        <td style="color:var(--orange);font-weight:600;">~10 min</td>
+        <td>Ajouter les balises <code>hreflang</code> EN / FR / x-default dans <code>index.html</code></td>
+        <td><span class="tag-seo">SEO</span></td>
+        <td style="font-weight:600;color:var(--orange)">Fort</td>
+      </tr>
+      <tr>
+        <td><span class="pill pill-p1">🟠 P1</span></td>
+        <td style="color:var(--orange);font-weight:600;">~10 min</td>
+        <td>Ajouter <code>loading="lazy"</code> sur les 8 images projet dans <code>components/work.jsx</code></td>
+        <td><span class="tag-seo">Core Web Vitals</span></td>
+        <td style="font-weight:600;color:var(--orange)">Fort</td>
+      </tr>
+      <tr>
+        <td><span class="pill pill-p1">🟠 P1</span></td>
+        <td style="color:var(--orange);font-weight:600;">~5 min</td>
+        <td>Ajouter <code>&lt;link rel="preload"&gt;</code> pour <code>hamza-photo.png</code> dans <code>index.html</code></td>
+        <td><span class="tag-seo">LCP</span></td>
+        <td style="font-weight:600;color:var(--orange)">Fort</td>
+      </tr>
+      <tr>
+        <td><span class="pill pill-p1">🟠 P1</span></td>
+        <td style="color:var(--orange);font-weight:600;">~10 min</td>
+        <td>Ajouter <code>aria-label</code> statique sur le H1 dans <code>components/hero.jsx</code></td>
+        <td><span class="tag-seo">SEO</span></td>
+        <td style="font-weight:600;color:var(--orange)">Moyen</td>
+      </tr>
+      <tr>
+        <td><span class="pill pill-p1">🟠 P1</span></td>
+        <td style="color:var(--orange);font-weight:600;">~1 h</td>
+        <td>Rendre le contenu des case studies factuel : chiffres, dates, noms d'organisations</td>
+        <td><span class="tag-geo">GEO</span></td>
+        <td style="font-weight:600;color:var(--orange)">Fort</td>
+      </tr>
+      <tr>
+        <td><span class="pill pill-p2">🟡 P2</span></td>
+        <td style="color:#a16207;font-weight:600;">~2–4 h</td>
+        <td>Passer de React CDN + Babel in-browser à Vite (build pré-compilé, production)</td>
+        <td><span class="tag-seo">Performance</span></td>
+        <td style="font-weight:600;color:#a16207">Moyen</td>
+      </tr>
+      <tr>
+        <td><span class="pill pill-p2">🟡 P2</span></td>
+        <td style="color:#a16207;font-weight:600;">~1–2 h</td>
+        <td>Ajouter une section FAQ avec schéma <code>FAQPage</code> JSON-LD</td>
+        <td><span class="tag-geo">GEO</span></td>
+        <td style="font-weight:600;color:#a16207">Moyen</td>
+      </tr>
+      <tr>
+        <td><span class="pill pill-p2">🟡 P2</span></td>
+        <td style="color:#a16207;font-weight:600;">~30 min</td>
+        <td>Ajouter schéma <code>Review</code> sur les témoignages (Nicolas Streel, Simon Moreau)</td>
+        <td><span class="tag-geo">GEO</span></td>
+        <td style="font-weight:600;color:#a16207">Moyen</td>
+      </tr>
+      <tr>
+        <td><span class="pill pill-p3">🟢 P3</span></td>
+        <td style="color:var(--green);font-weight:600;">~1 journée</td>
+        <td>Créer des URLs dédiées pour chaque projet (routing client-side ou pages statiques)</td>
+        <td><span class="tag-seo">SEO Contenu</span></td>
+        <td style="font-weight:600;color:var(--green)">Long terme</td>
+      </tr>
+      <tr>
+        <td><span class="pill pill-p3">🟢 P3</span></td>
+        <td style="color:var(--green);font-weight:600;">~2–3 h</td>
+        <td>Ajouter des schémas <code>CreativeWork</code> / <code>SoftwareApplication</code> pour chaque projet</td>
+        <td><span class="tag-geo">GEO</span></td>
+        <td style="font-weight:600;color:var(--green)">Long terme</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <hr class="section-sep" style="margin-top:36px;">
+
+  <div style="background:#f8f8f8;border:1px solid var(--border);border-radius:6px;padding:20px 24px;margin-top:8px;" class="no-break">
+    <div style="font-weight:700;font-size:10.5pt;margin-bottom:10px;">Résumé exécutif</div>
+    <p style="font-size:9pt;color:#444;line-height:1.7;">
+      Le portfolio de Hamza Khadri dispose de <strong>bases SEO solides</strong> (meta tags, OG, favicons, responsive) mais manque des trois fondamentaux qui permettraient une visibilité réelle : données structurées, sitemap et robots.txt.
+      Le site est actuellement <strong>quasi-invisible pour les moteurs IA génératifs</strong> (ChatGPT, Perplexity, Gemini) faute d'entité machine-lisible. Les <strong>P0 sont tous implémentables en moins d'une heure</strong> et auraient un impact immédiat.
+      Sur le moyen terme, transformer les modales projet en pages dédiées indexables multiplierait par 8 la surface de contenu crawlable — c'est le levier SEO le plus puissant disponible dans ce projet.
+    </p>
+  </div>
+
+  <div class="doc-footer" style="margin-top:40px;">
+    <div class="doc-footer-text">AUDIT SEO &amp; GEO — hamzakhadri.com — 22 juin 2026 — Généré via Playwright CLI + Claude Sonnet 4.6</div>
+    <div class="doc-footer-text">Page 6 / 6</div>
+  </div>
+</div>
+
+</body>
+</html>

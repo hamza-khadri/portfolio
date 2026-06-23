@@ -1,5 +1,7 @@
-function Services({ t, lang }) {
-  const cards = window.CONTENT.services;
+import CONTENT from '../content.js';
+
+export default function Services({ t, lang }) {
+  const cards = CONTENT.services;
   const icons = ['lni-target-customer', 'lni-pencil-alt', 'lni-bolt'];
 
   return (
@@ -60,5 +62,3 @@ function Services({ t, lang }) {
     </section>
   );
 }
-
-Object.assign(window, { Services });

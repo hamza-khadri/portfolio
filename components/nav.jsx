@@ -1,9 +1,9 @@
-const { useState: useNavState, useEffect: useNavEffect } = React;
+import { useState, useEffect } from 'react';
 
-function Nav({ t, lang, setLang }) {
-  const [scrolled, setScrolled] = useNavState(false);
+export default function Nav({ t, lang, setLang }) {
+  const [scrolled, setScrolled] = useState(false);
 
-  useNavEffect(() => {
+  useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
@@ -60,7 +60,7 @@ function Nav({ t, lang, setLang }) {
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
           {['en', 'fr'].map((l, i) => (
-            <React.Fragment key={l}>
+            <div key={l} style={{ display: 'flex', alignItems: 'center' }}>
               {i > 0 && (
                 <span style={{ color: '#333', fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem' }}>/</span>
               )}
@@ -68,24 +68,20 @@ function Nav({ t, lang, setLang }) {
                 onClick={() => setLang(l)}
                 style={{
                   background: 'none', border: 'none',
+                  color: lang === l ? '#F5F5F0' : '#333',
                   fontFamily: 'JetBrains Mono, monospace',
-                  fontSize: '0.68rem', letterSpacing: '0.1em',
-                  color: lang === l ? 'var(--accent)' : '#888880',
-                  fontWeight: lang === l ? 500 : 400,
-                  padding: '0.3rem 0.4rem',
+                  fontSize: '0.65rem', letterSpacing: '0.15em',
+                  textTransform: 'uppercase', cursor: 'pointer',
+                  padding: '0.25rem 0.4rem',
                   transition: 'color 0.2s',
-                  textTransform: 'uppercase',
-                  cursor: 'pointer',
                 }}
               >
                 {l}
               </button>
-            </React.Fragment>
+            </div>
           ))}
         </div>
       </div>
     </nav>
   );
 }
-
-Object.assign(window, { Nav });

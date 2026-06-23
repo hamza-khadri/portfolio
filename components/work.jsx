@@ -1,8 +1,9 @@
-const { useState: useStateWork } = React;
+import { useState } from 'react';
+import CONTENT from '../content.js';
 
-function Work({ t, lang, openProject }) {
-  const [hovered, setHovered] = useStateWork(null);
-  const projects = window.CONTENT.projects;
+export default function Work({ t, lang, openProject }) {
+  const [hovered, setHovered] = useState(null);
+  const projects = CONTENT.projects;
 
   return (
     <section
@@ -78,20 +79,15 @@ function Work({ t, lang, openProject }) {
                     <span style={{
                       fontFamily: 'JetBrains Mono, monospace', fontSize: '0.6rem',
                       color: '#444', marginLeft: 'auto', letterSpacing: '0.1em',
-                      display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
-                    }}>
-                      <i className="lni lni-arrow-right" aria-hidden="true"></i>
-                      {t.viewCase}
-                    </span>
+                    }}>{t.viewCase} →</span>
                   </div>
                 </div>
               </div>
 
-              {/* Hover thumbnail */}
               <div
                 className="hide-mobile"
                 style={{
-                  position: 'absolute', right: '0', top: '50%',
+                  position: 'absolute', right: '3rem', top: '50%',
                   width: 260,
                   opacity: hovered === i ? 1 : 0,
                   transform: hovered === i ? 'translateY(-50%) scale(1)' : 'translateY(-50%) scale(0.93)',
@@ -100,8 +96,12 @@ function Work({ t, lang, openProject }) {
                 }}
               >
                 {proj.heroImage ? (
-                  <img src={proj.heroImage} alt={proj.name}
-                    style={{ width: '100%', aspectRatio: '16/10', objectFit: 'cover', borderRadius: '3px', display: 'block' }} />
+                  <img
+                    src={proj.heroImage}
+                    alt={proj.name}
+                    loading="lazy"
+                    style={{ width: '100%', aspectRatio: '16/10', objectFit: 'cover', borderRadius: '3px', display: 'block' }}
+                  />
                 ) : (
                   <div className="stripe-bg" style={{
                     width: '100%', aspectRatio: '16/10', borderRadius: '3px',
@@ -120,5 +120,3 @@ function Work({ t, lang, openProject }) {
     </section>
   );
 }
-
-Object.assign(window, { Work });

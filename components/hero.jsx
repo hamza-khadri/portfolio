@@ -1,19 +1,17 @@
-const { useState: useHeroState, useEffect: useHeroEffect, useRef: useHeroRef } = React;
+import { useState, useEffect, useRef } from 'react';
 
-function Hero({ t }) {
-  const [idx, setIdx]     = useHeroState(0);
-  const [shown, setShown] = useHeroState(t.heroWords[0]);
-  const [phase, setPhase] = useHeroState('idle');
-  const idxRef = useHeroRef(0);
+export default function Hero({ t }) {
+  const [shown, setShown] = useState(t.heroWords[0]);
+  const [phase, setPhase] = useState('idle');
+  const idxRef = useRef(0);
 
-  useHeroEffect(() => {
+  useEffect(() => {
     idxRef.current = 0;
-    setIdx(0);
     setShown(t.heroWords[0]);
     setPhase('idle');
   }, [t]);
 
-  useHeroEffect(() => {
+  useEffect(() => {
     const HOLD = 1400;
     const ERASE_TOTAL = 250;
     const TYPE_TOTAL = 500;
@@ -38,7 +36,6 @@ function Hero({ t }) {
           if (i === next.length) {
             setPhase('idle');
             idxRef.current = (idxRef.current + 1) % t.heroWords.length;
-            setIdx(idxRef.current);
           } else {
             setPhase('typing');
           }
@@ -53,6 +50,8 @@ function Hero({ t }) {
     };
   }, [t]);
 
+  const staticLabel = `${t.heroPrefix} ${t.heroWords.join(', ')} ${t.heroSuffix}`;
+
   return (
     <section
       id="hero"
@@ -61,19 +60,20 @@ function Hero({ t }) {
         minHeight: '100vh', position: 'relative', overflow: 'hidden',
       }}
     >
-      {/* ── Photo: full-bleed to viewport right edge ── */}
       <div className="hero-photo-wrap" style={{
         position: 'absolute', right: 0, top: 0, bottom: 0,
         width: '42%', overflow: 'hidden', zIndex: 1,
       }}>
-        <img src="assets/hamza-photo.png" alt="Hamza Khadri"
-          style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block' }} />
+        <img
+          src="assets/hamza-photo.png"
+          alt="Hamza Khadri — Product Owner, Designer & Builder based in Belgium"
+          style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block' }}
+        />
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, #0A0A0A 0%, rgba(10,10,10,0.35) 35%, transparent 65%)', pointerEvents: 'none' }}></div>
         <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 200, background: 'linear-gradient(to top, #0A0A0A 0%, transparent 100%)', pointerEvents: 'none' }}></div>
         <div className="portrait-zone" style={{ position: 'absolute', left: '20%', right: '10%', top: '10%', bottom: '30%', borderRadius: '50%', pointerEvents: 'auto' }}></div>
       </div>
 
-      {/* ── Centered text content ── */}
       <div
         className="hero-inner mobile-pad"
         style={{
@@ -102,15 +102,19 @@ function Hero({ t }) {
             marginBottom: '1.2rem',
           }}>Hamza Khadri</div>
 
-          <h1 className="hero-title" style={{ margin: 0, fontSize: 'clamp(2.8rem, 7vw, 7.5rem)' }}>
-            <span style={{ display: 'flex', alignItems: 'baseline', gap: '0.28em', flexWrap: 'nowrap', whiteSpace: 'nowrap' }}>
+          <h1
+            className="hero-title"
+            aria-label={staticLabel}
+            style={{ margin: 0, fontSize: 'clamp(2.8rem, 7vw, 7.5rem)' }}
+          >
+            <span aria-hidden="true" style={{ display: 'flex', alignItems: 'baseline', gap: '0.28em', flexWrap: 'nowrap', whiteSpace: 'nowrap' }}>
               <span style={{ color: '#F5F5F0' }}>{t.heroPrefix}</span>
               <span style={{ color: 'var(--accent)', display: 'inline-flex', alignItems: 'baseline' }}>
                 <span>{shown}</span>
                 <span className="type-caret" aria-hidden="true">|</span>
               </span>
             </span>
-            <span style={{ display: 'block', color: '#F5F5F0', whiteSpace: 'nowrap' }}>{t.heroSuffix}</span>
+            <span aria-hidden="true" style={{ display: 'block', color: '#F5F5F0', whiteSpace: 'nowrap' }}>{t.heroSuffix}</span>
           </h1>
 
           <p style={{ marginTop: '2.5rem', maxWidth: '460px', fontSize: '1.05rem', lineHeight: 1.7, color: '#888880' }}>
@@ -126,5 +130,3 @@ function Hero({ t }) {
     </section>
   );
 }
-
-Object.assign(window, { Hero });

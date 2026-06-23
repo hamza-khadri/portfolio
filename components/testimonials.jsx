@@ -1,5 +1,7 @@
-function Testimonials({ t, lang }) {
-  const items = window.CONTENT.testimonials;
+import CONTENT from '../content.js';
+
+export default function Testimonials({ t, lang }) {
+  const items = CONTENT.testimonials;
 
   return (
     <section style={{ padding: '9rem 3rem', background: '#0D0D0D' }} className="mobile-pad mobile-section section-fade">
@@ -36,5 +38,3 @@ function Testimonials({ t, lang }) {
     </section>
   );
 }
-
-Object.assign(window, { Testimonials });

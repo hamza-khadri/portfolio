@@ -1,5 +1,7 @@
-function Contact({ t }) {
-  const socials = window.CONTENT.socials;
+import CONTENT from '../content.js';
+
+export default function Contact({ t }) {
+  const socials = CONTENT.socials;
 
   const iconFor = (label) => {
     const k = label.toLowerCase();
@@ -80,5 +82,3 @@ function Contact({ t }) {
     </>
   );
 }
-
-Object.assign(window, { Contact });

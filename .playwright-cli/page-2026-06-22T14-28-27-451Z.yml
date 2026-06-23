@@ -1,0 +1,476 @@
+- generic [active] [ref=e1]:
+  - img [ref=e4]
+  - generic [ref=e57]:
+    - navigation [ref=e58]:
+      - link [ref=e59] [cursor=pointer]:
+        - /url: "#hero"
+        - img [ref=e60]
+      - generic [ref=e66]:
+        - generic [ref=e67]:
+          - link "Work" [ref=e68] [cursor=pointer]:
+            - /url: "#work"
+            - generic [ref=e69]: 
+            - generic [ref=e70]: Work
+            - generic: Work
+          - link "About" [ref=e71] [cursor=pointer]:
+            - /url: "#about"
+            - generic [ref=e72]: 
+            - generic [ref=e73]: About
+            - generic: About
+          - link "Services" [ref=e74] [cursor=pointer]:
+            - /url: "#services"
+            - generic [ref=e75]: 
+            - generic [ref=e76]: Services
+            - generic: Services
+          - link "Contact" [ref=e77] [cursor=pointer]:
+            - /url: "#contact"
+            - generic [ref=e78]: 
+            - generic [ref=e79]: Contact
+            - generic: Contact
+        - generic [ref=e80]:
+          - button "en" [ref=e81] [cursor=pointer]
+          - generic [ref=e82]: /
+          - button "fr" [ref=e83] [cursor=pointer]
+    - generic [ref=e84]:
+      - img "Hamza Khadri" [ref=e86]
+      - generic [ref=e88]:
+        - generic [ref=e91]: Available for Q3 2026 — Open to Product Owner roles & freelance product missions
+        - generic [ref=e92]: Hamza Khadri
+        - heading "I lead products." [level=1] [ref=e93]:
+          - generic [ref=e94]:
+            - generic [ref=e95]: I
+            - generic [ref=e96]:
+              - generic [ref=e97]: lead
+              - generic [ref=e98]: "|"
+          - generic [ref=e99]: products.
+        - paragraph [ref=e100]: Product Owner, Designer & Builder based in Belgium. I own the product end-to-end — from discovery and prioritisation to design, build, and ship — with no-code, code, and AI.
+        - generic [ref=e101]:
+          - generic [ref=e102]: Scroll
+          - generic [ref=e103]: ↓
+    - generic [ref=e105]:
+      - generic [ref=e107]: 01 — ABOUT
+      - heading "From content to product. From discovery to shipped." [level=2] [ref=e108]
+      - generic [ref=e109]:
+        - generic [ref=e110]:
+          - paragraph [ref=e111]: "I started as a content creator — building audiences, telling stories, understanding what makes people pay attention. Then I realised: the most interesting challenge isn't the message. It's the product."
+          - paragraph [ref=e112]: Over the past 5 years, I've moved from pixels to products. I scope the problem, prioritise the roadmap, design in Figma, and build in Bubble, Lovable, and Supabase. I own the chain — discovery, delivery, and everything between.
+          - paragraph [ref=e113]: Currently at The Maul in Mont-Saint-Guibert. Looking for my next product team — as Product Owner, or full end-to-end.
+        - generic [ref=e114]:
+          - generic [ref=e115]:
+            - generic [ref=e116]:
+              - generic [ref=e117]: 
+              - generic [ref=e118]: 5+
+            - generic [ref=e119]: Years in product
+          - generic [ref=e120]:
+            - generic [ref=e121]:
+              - generic [ref=e122]: 
+              - generic [ref=e123]: 15+
+            - generic [ref=e124]: Products shipped
+          - generic [ref=e125]:
+            - generic [ref=e126]:
+              - generic [ref=e127]: 
+              - generic [ref=e128]: 10+
+            - generic [ref=e129]: Stack mastered
+          - generic [ref=e130]:
+            - generic [ref=e131]:
+              - generic [ref=e132]: 
+              - generic [ref=e133]: "3"
+            - generic [ref=e134]: Languages (FR/EN/NL)
+    - generic [ref=e136]:
+      - generic [ref=e137]:
+        - generic [ref=e138]: 02 — SELECTED WORK
+        - heading "Many projects, many problems solved." [level=2] [ref=e139]
+      - generic [ref=e140]:
+        - generic [ref=e141] [cursor=pointer]:
+          - generic [ref=e142]:
+            - generic [ref=e143]: "01"
+            - generic [ref=e144]:
+              - generic [ref=e145]:
+                - generic [ref=e146]: Partenamut Prevention
+                - generic [ref=e147]: Health Tech / Mutual Insurance
+                - generic [ref=e148]: Product Owner
+              - paragraph [ref=e149]: Owned, designed and built a preventive health space for one of Belgium's largest health insurers.
+              - generic [ref=e150]:
+                - generic [ref=e151]: Lovable
+                - generic [ref=e152]: Supabase
+                - generic [ref=e153]: UX Research
+                - generic [ref=e154]: User Test Monitoring
+                - generic [ref=e155]: AI Integrations
+                - generic [ref=e156]:
+                  - generic [ref=e157]: 
+                  - text: View case study
+          - generic:
+            - img "Partenamut Prevention"
+        - generic [ref=e158] [cursor=pointer]:
+          - generic [ref=e159]:
+            - generic [ref=e160]: "02"
+            - generic [ref=e161]:
+              - generic [ref=e162]:
+                - generic [ref=e163]: Veleo
+                - generic [ref=e164]: FamilyTech / Silver Economy
+                - generic [ref=e165]: Product Owner
+              - paragraph [ref=e166]: Owning, designing and building a shared family dashboard to coordinate elderly parent care in Belgium.
+              - generic [ref=e167]:
+                - generic [ref=e168]: Lovable
+                - generic [ref=e169]: Supabase
+                - generic [ref=e170]: Claude ecosystem
+                - generic [ref=e171]: User searching
+                - generic [ref=e172]: AI Integrations
+                - generic [ref=e173]:
+                  - generic [ref=e174]: 
+                  - text: View case study
+          - generic:
+            - img "Veleo"
+        - generic [ref=e175] [cursor=pointer]:
+          - generic [ref=e176]:
+            - generic [ref=e177]: "03"
+            - generic [ref=e178]:
+              - generic [ref=e179]:
+                - generic [ref=e180]: Gravaubel
+                - generic [ref=e181]: ConstructionTech / Sales Automation
+                - generic [ref=e182]: Product Owner
+              - paragraph [ref=e183]: Designing and building an AI-powered platform that automates commercial offer generation for a road works company.
+              - generic [ref=e184]:
+                - generic [ref=e185]: Lovable
+                - generic [ref=e186]: Supabase
+                - generic [ref=e187]: AI extraction
+                - generic [ref=e188]: AI Integrations
+                - generic [ref=e189]:
+                  - generic [ref=e190]: 
+                  - text: View case study
+          - generic:
+            - img "Gravaubel"
+        - generic [ref=e191] [cursor=pointer]:
+          - generic [ref=e192]:
+            - generic [ref=e193]: "04"
+            - generic [ref=e194]:
+              - generic [ref=e195]:
+                - generic [ref=e196]: Greasily.be
+                - generic [ref=e197]: Restaurant Tech / Web as a Service
+                - generic [ref=e198]: Product Owner
+              - paragraph [ref=e199]: Co-owned and built a white-label web platform allowing Belgian restaurateurs to get a professional site in minutes.
+              - generic [ref=e200]:
+                - generic [ref=e201]: Lovable
+                - generic [ref=e202]: Supabase
+                - generic [ref=e203]:
+                  - generic [ref=e204]: 
+                  - text: View case study
+          - generic:
+            - img "Greasily.be"
+        - generic [ref=e205] [cursor=pointer]:
+          - generic [ref=e206]:
+            - generic [ref=e207]: "05"
+            - generic [ref=e208]:
+              - generic [ref=e209]:
+                - generic [ref=e210]: LAM-MotionLabs
+                - generic [ref=e211]: Sports Science / Research Tool
+              - paragraph [ref=e212]: Designed and built a biomechanical data management platform for the sports performance research center at ULiège.
+              - generic [ref=e213]:
+                - generic [ref=e214]: Lovable
+                - generic [ref=e215]: Supabase
+                - generic [ref=e216]:
+                  - generic [ref=e217]: 
+                  - text: View case study
+          - generic:
+            - img "LAM-MotionLabs"
+        - generic [ref=e218] [cursor=pointer]:
+          - generic [ref=e219]:
+            - generic [ref=e220]: "06"
+            - generic [ref=e221]:
+              - generic [ref=e222]:
+                - generic [ref=e223]: Réseau Entreprendre Bruxelles
+                - generic [ref=e224]: Community Platform
+              - paragraph [ref=e225]: Built a community platform for one of the leading entrepreneurship networks in Brussels.
+              - generic [ref=e226]:
+                - generic [ref=e227]: Bubble.io
+                - generic [ref=e228]: Notion
+                - generic [ref=e229]: APIs
+                - generic [ref=e230]:
+                  - generic [ref=e231]: 
+                  - text: View case study
+          - generic:
+            - img "Réseau Entreprendre Bruxelles"
+        - generic [ref=e232] [cursor=pointer]:
+          - generic [ref=e233]:
+            - generic [ref=e234]: "07"
+            - generic [ref=e235]:
+              - generic [ref=e236]:
+                - generic [ref=e237]: AI For Brokers
+                - generic [ref=e238]: InsurTech / AI Tooling
+              - paragraph [ref=e239]: Migrated and rebuilt an AI-powered insurance broker platform from mobile to desktop.
+              - generic [ref=e240]:
+                - generic [ref=e241]: Lovable
+                - generic [ref=e242]: Supabase
+                - generic [ref=e243]: AI Integrations
+                - generic [ref=e244]:
+                  - generic [ref=e245]: 
+                  - text: View case study
+          - generic:
+            - img "AI For Brokers"
+        - generic [ref=e246] [cursor=pointer]:
+          - generic [ref=e247]:
+            - generic [ref=e248]: "08"
+            - generic [ref=e249]:
+              - generic [ref=e250]:
+                - generic [ref=e251]: Velox
+                - generic [ref=e252]: Logistics Tech / Transport Marketplace
+              - paragraph [ref=e253]: Built a PWA marketplace connecting shippers and carriers for end-to-end freight management.
+              - generic [ref=e254]:
+                - generic [ref=e255]: Lovable
+                - generic [ref=e256]: Supabase
+                - generic [ref=e257]: AI Integrations
+                - generic [ref=e258]:
+                  - generic [ref=e259]: 
+                  - text: View case study
+          - generic:
+            - img "Velox"
+    - generic [ref=e261]:
+      - generic [ref=e262]:
+        - generic [ref=e263]: 03 — APPROACH
+        - heading "Product isn't pixels. It's prioritised decisions, shipped." [level=2] [ref=e264]
+      - generic [ref=e265]:
+        - generic [ref=e266]:
+          - generic [ref=e268]: 
+          - generic [ref=e269]: "01"
+          - heading "Discovery before pixels." [level=3] [ref=e270]
+          - paragraph [ref=e271]: I start with the problem, not the screen. User research, prioritisation, scope — the right thing built before the thing built right.
+        - generic [ref=e272]:
+          - generic [ref=e274]: 
+          - generic [ref=e275]: "02"
+          - heading "Ship, don't polish forever." [level=3] [ref=e276]
+          - paragraph [ref=e277]: A live product teaches more than a perfect Figma file. Iteration beats perfection — every time.
+        - generic [ref=e278]:
+          - generic [ref=e280]: 
+          - generic [ref=e281]: "03"
+          - heading "Own the full chain." [level=3] [ref=e282]
+          - paragraph [ref=e283]: I don't hand off. I scope, I design, I build, I ship. The gap between PO, designer, and developer doesn't exist in my workflow.
+    - generic [ref=e284]:
+      - generic [ref=e286]:
+        - generic [ref=e287]: 04 — STACK
+        - heading "The toolkit." [level=2] [ref=e288]
+      - generic [ref=e290]:
+        - generic [ref=e291]:
+          - generic [ref=e292]: Figma
+          - generic [ref=e293]: ◆
+        - generic [ref=e294]:
+          - generic [ref=e295]: Bubble
+          - generic [ref=e296]: ◆
+        - generic [ref=e297]:
+          - generic [ref=e298]: Lovable
+          - generic [ref=e299]: ◆
+        - generic [ref=e300]:
+          - generic [ref=e301]: Supabase
+          - generic [ref=e302]: ◆
+        - generic [ref=e303]:
+          - generic [ref=e304]: OpenAI
+          - generic [ref=e305]: ◆
+        - generic [ref=e306]:
+          - generic [ref=e307]: Airtable
+          - generic [ref=e308]: ◆
+        - generic [ref=e309]:
+          - generic [ref=e310]: Notion
+          - generic [ref=e311]: ◆
+        - generic [ref=e312]:
+          - generic [ref=e313]: Framer
+          - generic [ref=e314]: ◆
+        - generic [ref=e315]:
+          - generic [ref=e316]: Webflow
+          - generic [ref=e317]: ◆
+        - generic [ref=e318]:
+          - generic [ref=e319]: Maze
+          - generic [ref=e320]: ◆
+        - generic [ref=e321]:
+          - generic [ref=e322]: Claude
+          - generic [ref=e323]: ◆
+        - generic [ref=e324]:
+          - generic [ref=e325]: Make
+          - generic [ref=e326]: ◆
+        - generic [ref=e327]:
+          - generic [ref=e328]: N8N
+          - generic [ref=e329]: ◆
+        - generic [ref=e330]:
+          - generic [ref=e331]: Jitter
+          - generic [ref=e332]: ◆
+        - generic [ref=e333]:
+          - generic [ref=e334]: Spline
+          - generic [ref=e335]: ◆
+        - generic [ref=e336]:
+          - generic [ref=e337]: Wordpress
+          - generic [ref=e338]: ◆
+        - generic [ref=e339]:
+          - generic [ref=e340]: Figma
+          - generic [ref=e341]: ◆
+        - generic [ref=e342]:
+          - generic [ref=e343]: Bubble
+          - generic [ref=e344]: ◆
+        - generic [ref=e345]:
+          - generic [ref=e346]: Lovable
+          - generic [ref=e347]: ◆
+        - generic [ref=e348]:
+          - generic [ref=e349]: Supabase
+          - generic [ref=e350]: ◆
+        - generic [ref=e351]:
+          - generic [ref=e352]: OpenAI
+          - generic [ref=e353]: ◆
+        - generic [ref=e354]:
+          - generic [ref=e355]: Airtable
+          - generic [ref=e356]: ◆
+        - generic [ref=e357]:
+          - generic [ref=e358]: Notion
+          - generic [ref=e359]: ◆
+        - generic [ref=e360]:
+          - generic [ref=e361]: Framer
+          - generic [ref=e362]: ◆
+        - generic [ref=e363]:
+          - generic [ref=e364]: Webflow
+          - generic [ref=e365]: ◆
+        - generic [ref=e366]:
+          - generic [ref=e367]: Maze
+          - generic [ref=e368]: ◆
+        - generic [ref=e369]:
+          - generic [ref=e370]: Claude
+          - generic [ref=e371]: ◆
+        - generic [ref=e372]:
+          - generic [ref=e373]: Make
+          - generic [ref=e374]: ◆
+        - generic [ref=e375]:
+          - generic [ref=e376]: N8N
+          - generic [ref=e377]: ◆
+        - generic [ref=e378]:
+          - generic [ref=e379]: Jitter
+          - generic [ref=e380]: ◆
+        - generic [ref=e381]:
+          - generic [ref=e382]: Spline
+          - generic [ref=e383]: ◆
+        - generic [ref=e384]:
+          - generic [ref=e385]: Wordpress
+          - generic [ref=e386]: ◆
+      - generic [ref=e388]:
+        - generic [ref=e389]:
+          - generic [ref=e390]: Design & UX
+          - generic [ref=e391]:
+            - generic [ref=e392]: 
+            - generic [ref=e393]: Figma
+          - generic [ref=e394]:
+            - generic [ref=e395]: 
+            - generic [ref=e396]: Adobe Suite
+          - generic [ref=e397]:
+            - generic [ref=e398]: 
+            - generic [ref=e399]: Maze
+          - generic [ref=e400]:
+            - generic [ref=e401]: 
+            - generic [ref=e402]: Jitter
+          - generic [ref=e403]:
+            - generic [ref=e404]: 
+            - generic [ref=e405]: Spline
+        - generic [ref=e406]:
+          - generic [ref=e407]: No-Code & Vibe-Code
+          - generic [ref=e408]:
+            - generic [ref=e409]: 
+            - generic [ref=e410]: Lovable
+          - generic [ref=e411]:
+            - generic [ref=e412]: 
+            - generic [ref=e413]: Bubble.io
+          - generic [ref=e414]:
+            - generic [ref=e415]: 
+            - generic [ref=e416]: Webflow
+          - generic [ref=e417]:
+            - generic [ref=e418]: 
+            - generic [ref=e419]: Framer
+          - generic [ref=e420]:
+            - generic [ref=e421]: 
+            - generic [ref=e422]: Notion
+          - generic [ref=e423]:
+            - generic [ref=e424]: 
+            - generic [ref=e425]: Airtable
+          - generic [ref=e426]:
+            - generic [ref=e427]: 
+            - generic [ref=e428]: Wordpress
+        - generic [ref=e429]:
+          - generic [ref=e430]: Backend & Data
+          - generic [ref=e431]:
+            - generic [ref=e432]: 
+            - generic [ref=e433]: Supabase
+          - generic [ref=e434]:
+            - generic [ref=e435]: 
+            - generic [ref=e436]: Notion
+          - generic [ref=e437]:
+            - generic [ref=e438]: 
+            - generic [ref=e439]: Airtable
+        - generic [ref=e440]:
+          - generic [ref=e441]: IA & Intégrations
+          - generic [ref=e442]:
+            - generic [ref=e443]: 
+            - generic [ref=e444]: OpenAI API
+          - generic [ref=e445]:
+            - generic [ref=e446]: 
+            - generic [ref=e447]: Claude
+          - generic [ref=e448]:
+            - generic [ref=e449]: 
+            - generic [ref=e450]: Make
+          - generic [ref=e451]:
+            - generic [ref=e452]: 
+            - generic [ref=e453]: N8N
+    - generic [ref=e455]:
+      - generic [ref=e456]:
+        - generic [ref=e457]: 05 — EXPERTISES
+        - heading "Three disciplines, one mindset." [level=2] [ref=e458]
+      - generic [ref=e459]:
+        - generic [ref=e460]:
+          - generic [ref=e462]: 
+          - generic [ref=e463]: "01"
+          - heading "Product Ownership" [level=3] [ref=e464]
+          - paragraph [ref=e465]: Discovery, user research, roadmap prioritisation, stakeholder alignment. I own the why and the what before the how.
+        - generic [ref=e467]:
+          - generic [ref=e469]: 
+          - generic [ref=e470]: "02"
+          - heading "Product Design" [level=3] [ref=e471]
+          - paragraph [ref=e472]: UX/UI, design systems, prototyping. End-to-end design that's built to ship.
+        - generic [ref=e474]:
+          - generic [ref=e476]: 
+          - generic [ref=e477]: "03"
+          - heading "Build & AI" [level=3] [ref=e478]
+          - paragraph [ref=e479]: Full product build with Bubble, Lovable, Supabase. OpenAI Assistants, automation, AI-first features. From architecture to launch.
+    - generic [ref=e482]:
+      - generic [ref=e484]: 06 — KIND WORDS
+      - generic [ref=e485]:
+        - generic [ref=e486]:
+          - generic [ref=e487]: 
+          - paragraph [ref=e488]: "\"Working with Hamza is a pleasure! Always in good spirits and with a great work ethic, Hamza successfully brings his creativity and ability to view problems from multiple angles to the table.\""
+          - generic [ref=e489]:
+            - generic [ref=e490]: Nicolas Streel
+            - generic [ref=e491]: CMO & Co-founder @TheMaul
+        - generic [ref=e492]:
+          - generic [ref=e493]: 
+          - paragraph [ref=e494]: "\"Hamza is the magician of the story. Or the rocket. Take your pick. Once he takes on a project, he understands the user’s needs and turns an idea into a beautiful product.\""
+          - generic [ref=e495]:
+            - generic [ref=e496]: Simon Moreau
+            - generic [ref=e497]: PM @Line-out
+    - generic [ref=e499]:
+      - generic [ref=e501]: 07 — LET'S TALK
+      - heading "Got a product to ship?" [level=2] [ref=e502]
+      - link "Hamza.Khadri@outlook.com" [ref=e503] [cursor=pointer]:
+        - /url: mailto:Hamza.Khadri@outlook.com
+        - generic [ref=e504]: 
+        - text: Hamza.Khadri@outlook.com
+      - generic [ref=e505]:
+        - link "LinkedIn" [ref=e506] [cursor=pointer]:
+          - /url: https://www.linkedin.com/in/hamzakhadri
+          - generic [ref=e507]: 
+          - text: LinkedIn
+        - link "GitHub" [ref=e508] [cursor=pointer]:
+          - /url: https://github.com/hamza-k
+          - generic [ref=e509]: 
+          - text: GitHub
+        - link "Dribbble" [ref=e510] [cursor=pointer]:
+          - /url: https://dribbble.com/hamza-k
+          - generic [ref=e511]: 
+          - text: Dribbble
+        - link "Uxcel" [ref=e512] [cursor=pointer]:
+          - /url: https://app.uxcel.com/ux/FGXWC3Z7OP22
+          - generic [ref=e513]: 
+          - text: Uxcel
+      - paragraph [ref=e514]: "Currently open to: full-time Product Owner roles in Belgium / EU remote, freelance end-to-end product missions, AI product builds."
+    - contentinfo [ref=e515]:
+      - generic [ref=e516]: Designed and built by Hamza Khadri — 2026
+      - generic [ref=e517]: This portfolio has been entirely prompted. Of course it is.
