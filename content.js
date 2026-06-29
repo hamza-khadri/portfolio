@@ -125,7 +125,7 @@ const CONTENT = {
         en: "Live product serving Belgian restaurateurs. Ongoing maintenance and iteration handled internally at The Maul.",
         fr: "Produit live au service des restaurateurs belges. Maintenance et itérations gérées en interne chez The Maul.",
       },
-      is_visible:  true,
+      is_visible:  false,
       heroImage:   '/assets/projects/greasily-detail.png',
       detailImage: '',
     },
