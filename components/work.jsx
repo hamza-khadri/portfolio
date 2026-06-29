@@ -3,7 +3,7 @@ import CONTENT from '../content.js';
 
 export default function Work({ t, lang, openProject }) {
   const [hovered, setHovered] = useState(null);
-  const projects = CONTENT.projects;
+  const projects = CONTENT.projects.filter(p => p.is_visible !== false);
 
   return (
     <section
