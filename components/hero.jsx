@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import hamzaPhoto from '../assets/hamza-photo.png';
 
 export default function Hero({ t }) {
   const [shown, setShown] = useState(t.heroWords[0]);
@@ -65,7 +66,7 @@ export default function Hero({ t }) {
         width: '42%', overflow: 'hidden', zIndex: 1,
       }}>
         <img
-          src="assets/hamza-photo.png"
+          src={hamzaPhoto}
           alt="Hamza Khadri — Product Owner, Designer & Builder based in Belgium"
           style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block' }}
         />
