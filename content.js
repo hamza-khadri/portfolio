@@ -30,7 +30,7 @@ const CONTENT = {
         fr: "Livraison d'un rapport UX complet, d'une roadmap produit priorisée et d'un prototype fonctionnel. 17/17 participants ont complété l'onboarding, validant la crédibilité du produit. Le projet a ensuite été repris en interne par Partenamut.",
       },
       is_visible:  true,
-      heroImage:   'assets/projects/partena-detail.png',
+      heroImage:   '/assets/projects/partena-detail.png',
       detailImage: '',
     },
     {
@@ -62,7 +62,7 @@ const CONTENT = {
         fr: "Produit actuellement en discovery et développement actif. Recherche utilisateur et itération de roadmap en cours.",
       },
       is_visible:  true,
-      heroImage:   'assets/projects/veleo-details.png',
+      heroImage:   '/assets/projects/veleo-details.png',
       detailImage: '',
     },
     {
@@ -94,7 +94,7 @@ const CONTENT = {
         fr: "Temps de création des offres fortement réduit, avec une structure cohérente et reproductible d'une demande à l'autre. Plateforme livrée et en usage.",
       },
       is_visible:  true,
-      heroImage:   'assets/projects/gravaubel-details.png',
+      heroImage:   '/assets/projects/gravaubel-details.png',
       detailImage: '',
     },
     {
@@ -248,7 +248,7 @@ const CONTENT = {
         fr: "PWA complète livrée et en ligne. Le client est actuellement en phase de prospection pour onboarder ses premiers clients.",
       },
       is_visible:  true,
-      heroImage:   'assets/projects/myvelox-details.png',
+      heroImage:   '/assets/projects/myvelox-details.png',
       detailImage: '',
     },
   ],
