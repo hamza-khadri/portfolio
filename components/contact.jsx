@@ -55,7 +55,7 @@ export default function Contact({ t }) {
           </div>
 
           <p className="reveal" style={{
-            fontFamily: 'JetBrains Mono, monospace',
+            fontFamily: 'Satoshi, sans-serif',
             fontSize: '0.72rem', color: '#888880',
             letterSpacing: '0.08em', lineHeight: 1.9, maxWidth: '480px',
           }}>
@@ -71,11 +71,11 @@ export default function Contact({ t }) {
         alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem',
       }}>
         <span style={{
-          fontFamily: 'JetBrains Mono, monospace',
+          fontFamily: 'Satoshi, sans-serif',
           fontSize: '0.65rem', color: '#888880', letterSpacing: '0.08em',
         }}>{t.footer}</span>
         <span style={{
-          fontFamily: 'JetBrains Mono, monospace',
+          fontFamily: 'Satoshi, sans-serif',
           fontSize: '0.6rem', color: '#333', letterSpacing: '0.05em', fontStyle: 'italic',
         }}>{t.footerNote}</span>
       </footer>

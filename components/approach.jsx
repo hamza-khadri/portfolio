@@ -42,7 +42,7 @@ export default function Approach({ t }) {
               </div>
               <div style={{
                 color: 'var(--accent)',
-                fontFamily: 'JetBrains Mono, monospace',
+                fontFamily: 'Satoshi, sans-serif',
                 fontSize: '0.65rem', letterSpacing: '0.18em',
                 marginBottom: '0.75rem',
               }}>

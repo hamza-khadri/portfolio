@@ -91,13 +91,13 @@ export default function Hero({ t }) {
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '2rem', marginTop: '6rem' }}>
             <div className="avail-dot" style={{ width: 8, height: 8, borderRadius: '50%', background: '#4ade80', flexShrink: 0 }}></div>
-            <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.68rem', letterSpacing: '0.1em', color: '#888880' }}>
+            <span style={{ fontFamily: 'Satoshi, sans-serif', fontSize: '0.68rem', letterSpacing: '0.1em', color: '#888880' }}>
               {t.availability}
             </span>
           </div>
 
           <div style={{
-            fontFamily: 'JetBrains Mono, monospace',
+            fontFamily: 'Satoshi, sans-serif',
             fontSize: '0.72rem', letterSpacing: '0.22em',
             textTransform: 'uppercase', color: '#888880',
             marginBottom: '1.2rem',
@@ -123,7 +123,7 @@ export default function Hero({ t }) {
           </p>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', marginTop: '4rem', paddingBottom: '2rem' }}>
-            <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.63rem', letterSpacing: '0.2em', color: '#888880' }}>{t.scrollLabel}</span>
+            <span style={{ fontFamily: 'Satoshi, sans-serif', fontSize: '0.63rem', letterSpacing: '0.2em', color: '#888880' }}>{t.scrollLabel}</span>
             <span className="scroll-bounce" style={{ color: '#888880', fontSize: '0.85rem' }}>↓</span>
           </div>
         </div>

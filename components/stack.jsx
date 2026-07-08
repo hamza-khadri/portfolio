@@ -23,7 +23,7 @@ export default function Stack({ t }) {
           {doubled.map((item, i) => (
             <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '3.5rem', flexShrink: 0 }}>
               <span style={{
-                fontFamily: 'JetBrains Mono, monospace',
+                fontFamily: 'Satoshi, sans-serif',
                 fontSize: '0.78rem', letterSpacing: '0.2em',
                 color: '#888880', textTransform: 'uppercase', flexShrink: 0,
               }}>{item}</span>

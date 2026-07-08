@@ -34,7 +34,7 @@ export default function Work({ t, lang, openProject }) {
                 <span
                   className="proj-num"
                   style={{
-                    fontFamily: 'JetBrains Mono, monospace',
+                    fontFamily: 'Satoshi, sans-serif',
                     fontSize: '0.7rem', color: '#888880',
                     paddingTop: '0.35rem', minWidth: '2rem', flexShrink: 0,
                   }}
@@ -47,13 +47,13 @@ export default function Work({ t, lang, openProject }) {
                       style={{ fontSize: 'clamp(1.25rem, 2.5vw, 2rem)', fontWeight: 700, letterSpacing: '-0.02em' }}
                     >{proj.name}</span>
                     <span style={{
-                      fontFamily: 'JetBrains Mono, monospace',
+                      fontFamily: 'Satoshi, sans-serif',
                       fontSize: '0.6rem', color: '#888880',
                       letterSpacing: '0.12em', textTransform: 'uppercase',
                     }}>{proj.category}</span>
                     {proj.productOwner && (
                       <span style={{
-                        fontFamily: 'JetBrains Mono, monospace',
+                        fontFamily: 'Satoshi, sans-serif',
                         fontSize: '0.55rem', letterSpacing: '0.14em',
                         textTransform: 'uppercase', color: 'var(--accent)',
                         padding: '0.2rem 0.5rem',
@@ -69,7 +69,7 @@ export default function Work({ t, lang, openProject }) {
                   <div style={{ display: 'flex', gap: '0.45rem', flexWrap: 'wrap', alignItems: 'center' }}>
                     {proj.stack.map(s => (
                       <span key={s} style={{
-                        fontFamily: 'JetBrains Mono, monospace',
+                        fontFamily: 'Satoshi, sans-serif',
                         fontSize: '0.6rem', letterSpacing: '0.08em',
                         padding: '0.18rem 0.55rem',
                         border: '1px solid #1F1F1F', color: '#888880',
@@ -77,7 +77,7 @@ export default function Work({ t, lang, openProject }) {
                       }}>{s}</span>
                     ))}
                     <span style={{
-                      fontFamily: 'JetBrains Mono, monospace', fontSize: '0.6rem',
+                      fontFamily: 'Satoshi, sans-serif', fontSize: '0.6rem',
                       color: '#444', marginLeft: 'auto', letterSpacing: '0.1em',
                     }}>{t.viewCase} →</span>
                   </div>
@@ -107,7 +107,7 @@ export default function Work({ t, lang, openProject }) {
                     width: '100%', aspectRatio: '16/10', borderRadius: '3px',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                   }}>
-                    <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.6rem', color: '#3a3a3a', textAlign: 'center', lineHeight: 1.8 }}>
+                    <span style={{ fontFamily: 'Satoshi, sans-serif', fontSize: '0.6rem', color: '#3a3a3a', textAlign: 'center', lineHeight: 1.8 }}>
                       {proj.name}<br />16 × 10 mockup
                     </span>
                   </div>

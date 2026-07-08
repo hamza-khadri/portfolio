@@ -47,7 +47,7 @@ export default function About({ t }) {
                   }}>{num}</span>
                 </div>
                 <div style={{
-                  fontFamily: 'JetBrains Mono, monospace',
+                  fontFamily: 'Satoshi, sans-serif',
                   fontSize: '0.65rem', color: '#888880',
                   letterSpacing: '0.1em',
                 }}>{label}</div>

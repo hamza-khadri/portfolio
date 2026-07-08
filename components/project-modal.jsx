@@ -38,14 +38,14 @@ export default function ProjectModal({ project, lang, onClose, t }) {
   };
 
   const labelStyle = {
-    fontFamily: 'JetBrains Mono, monospace',
+    fontFamily: 'Satoshi, sans-serif',
     fontSize: '0.62rem', letterSpacing: '0.2em',
     textTransform: 'uppercase', color: '#888880',
   };
   const sectionTitleStyle = {
     fontSize: '0.72rem', fontWeight: 700,
     letterSpacing: '0.18em', textTransform: 'uppercase',
-    color: 'var(--accent)', fontFamily: 'JetBrains Mono, monospace',
+    color: 'var(--accent)', fontFamily: 'Satoshi, sans-serif',
     marginBottom: '0.9rem',
   };
   const bodyStyle = { color: '#888880', lineHeight: 1.8, fontSize: '1rem' };
@@ -99,7 +99,7 @@ export default function ProjectModal({ project, lang, onClose, t }) {
             <span style={labelStyle}>{p.category}</span>
             {p.productOwner && (
               <span style={{
-                fontFamily: 'JetBrains Mono, monospace',
+                fontFamily: 'Satoshi, sans-serif',
                 fontSize: '0.6rem', letterSpacing: '0.18em',
                 textTransform: 'uppercase', color: 'var(--accent)',
                 padding: '0.25rem 0.6rem',
@@ -117,7 +117,7 @@ export default function ProjectModal({ project, lang, onClose, t }) {
 
           {metaParts.length > 0 && (
             <div style={{
-              fontFamily: 'JetBrains Mono, monospace',
+              fontFamily: 'Satoshi, sans-serif',
               fontSize: '0.72rem', letterSpacing: '0.06em',
               color: '#888880', lineHeight: 1.7,
             }}>
@@ -137,7 +137,7 @@ export default function ProjectModal({ project, lang, onClose, t }) {
               width: '100%', aspectRatio: '16/10', borderRadius: '3px',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
-              <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem', color: '#333', textAlign: 'center', lineHeight: 1.8 }}>
+              <span style={{ fontFamily: 'Satoshi, sans-serif', fontSize: '0.65rem', color: '#333', textAlign: 'center', lineHeight: 1.8 }}>
                 {p.name}<br />hero image — 16 × 10<br />
                 <span style={{ color: '#2a2a2a' }}>set heroImage in content.js</span>
               </span>
@@ -191,7 +191,7 @@ export default function ProjectModal({ project, lang, onClose, t }) {
             style={{
               display: 'inline-flex', alignItems: 'center', gap: '0.6rem',
               color: 'var(--accent)', textDecoration: 'none',
-              fontFamily: 'JetBrains Mono, monospace',
+              fontFamily: 'Satoshi, sans-serif',
               fontSize: '0.75rem', letterSpacing: '0.12em', textTransform: 'uppercase',
               borderBottom: '1px solid currentColor', paddingBottom: '2px',
             }}>{t.modalLive}</a>

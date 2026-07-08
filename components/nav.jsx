@@ -62,14 +62,14 @@ export default function Nav({ t, lang, setLang }) {
           {['en', 'fr'].map((l, i) => (
             <div key={l} style={{ display: 'flex', alignItems: 'center' }}>
               {i > 0 && (
-                <span style={{ color: '#333', fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem' }}>/</span>
+                <span style={{ color: '#333', fontFamily: 'Satoshi, sans-serif', fontSize: '0.65rem' }}>/</span>
               )}
               <button
                 onClick={() => setLang(l)}
                 style={{
                   background: 'none', border: 'none',
                   color: lang === l ? '#F5F5F0' : '#333',
-                  fontFamily: 'JetBrains Mono, monospace',
+                  fontFamily: 'Satoshi, sans-serif',
                   fontSize: '0.65rem', letterSpacing: '0.15em',
                   textTransform: 'uppercase', cursor: 'pointer',
                   padding: '0.25rem 0.4rem',

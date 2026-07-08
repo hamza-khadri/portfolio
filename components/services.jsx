@@ -34,7 +34,7 @@ export default function Services({ t, lang }) {
 
               <div style={{
                 color: 'var(--accent)',
-                fontFamily: 'JetBrains Mono, monospace',
+                fontFamily: 'Satoshi, sans-serif',
                 fontSize: '0.62rem', letterSpacing: '0.18em',
                 marginBottom: '0.75rem',
               }}>{card.num}</div>
@@ -51,7 +51,7 @@ export default function Services({ t, lang }) {
 
               <div style={{ paddingTop: '1.5rem', borderTop: '1px solid #1F1F1F' }}>
                 <span style={{
-                  fontFamily: 'JetBrains Mono, monospace',
+                  fontFamily: 'Satoshi, sans-serif',
                   fontSize: '0.72rem', color: '#888880', letterSpacing: '0.08em',
                 }}>{card.price[lang] || card.price.en}</span>
               </div>

@@ -26,7 +26,7 @@ export default function Testimonials({ t, lang }) {
               <div style={{ paddingLeft: '1rem', borderLeft: '2px solid var(--accent)' }}>
                 <div style={{ fontWeight: 600, fontSize: '0.88rem' }}>{item.name}</div>
                 <div style={{
-                  fontFamily: 'JetBrains Mono, monospace',
+                  fontFamily: 'Satoshi, sans-serif',
                   fontSize: '0.65rem', color: '#888880',
                   marginTop: '0.3rem', letterSpacing: '0.08em',
                 }}>{item.role}</div>
