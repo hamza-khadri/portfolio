@@ -1,4 +1,5 @@
 import CONTENT from '../content.js';
+import posthog from '../posthog.js';
 
 export default function Contact({ t }) {
   const socials = CONTENT.socials;
@@ -32,6 +33,7 @@ export default function Contact({ t }) {
 
           <a
             href={`mailto:${t.contactEmail}`}
+            onClick={() => posthog.capture('contact email clicked')}
             className="contact-email reveal"
             style={{
               display: 'inline-flex', alignItems: 'center', gap: '0.9rem',
@@ -47,7 +49,15 @@ export default function Contact({ t }) {
 
           <div className="reveal" style={{ display: 'flex', gap: '2rem', marginBottom: '3rem', flexWrap: 'wrap' }}>
             {socials.map(s => (
-              <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" className="social-link" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
+              <a
+                key={s.label}
+                href={s.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => posthog.capture('social link clicked', { platform: s.label })}
+                className="social-link"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}
+              >
                 <i className={`lni ${s.icon || iconFor(s.label)}`} style={{ fontSize: '1rem' }} aria-hidden="true"></i>
                 {s.label}
               </a>

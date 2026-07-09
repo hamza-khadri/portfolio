@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import posthog from '../posthog.js';
 
 export default function ProjectModal({ project, lang, onClose, t }) {
   const [visible, setVisible] = useState(false);
@@ -187,14 +188,19 @@ export default function ProjectModal({ project, lang, onClose, t }) {
         )}
 
         {p.liveUrl && (
-          <a href={p.liveUrl} target="_blank" rel="noopener noreferrer"
+          <a
+            href={p.liveUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => posthog.capture('project live url clicked', { project_name: p.name, project_url: p.liveUrl })}
             style={{
               display: 'inline-flex', alignItems: 'center', gap: '0.6rem',
               color: 'var(--accent)', textDecoration: 'none',
               fontFamily: 'Satoshi, sans-serif',
               fontSize: '0.75rem', letterSpacing: '0.12em', textTransform: 'uppercase',
               borderBottom: '1px solid currentColor', paddingBottom: '2px',
-            }}>{t.modalLive}</a>
+            }}
+          >{t.modalLive}</a>
         )}
       </div>
     </div>

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import posthog from '../posthog.js';
 
 export default function Nav({ t, lang, setLang }) {
   const [scrolled, setScrolled] = useState(false);
@@ -44,6 +45,7 @@ export default function Nav({ t, lang, setLang }) {
             <a
               key={item.key}
               href={item.href}
+              onClick={() => posthog.capture('nav item clicked', { item: item.key })}
               className="nav-link"
               style={{
                 fontSize: '0.85rem', fontWeight: 500, color: '#F5F5F0',
@@ -65,7 +67,10 @@ export default function Nav({ t, lang, setLang }) {
                 <span style={{ color: '#333', fontFamily: 'Satoshi, sans-serif', fontSize: '0.65rem' }}>/</span>
               )}
               <button
-                onClick={() => setLang(l)}
+                onClick={() => {
+                  posthog.capture('language changed', { from_language: lang, to_language: l });
+                  setLang(l);
+                }}
                 style={{
                   background: 'none', border: 'none',
                   color: lang === l ? '#F5F5F0' : '#333',

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import CONTENT from '../content.js';
+import posthog from '../posthog.js';
 
 export default function Work({ t, lang, openProject }) {
   const [hovered, setHovered] = useState(null);
@@ -24,7 +25,15 @@ export default function Work({ t, lang, openProject }) {
               className={`project-row reveal delay-${Math.min(i + 1, 4)}`}
               onMouseEnter={() => setHovered(i)}
               onMouseLeave={() => setHovered(null)}
-              onClick={() => openProject(proj)}
+              onClick={() => {
+                posthog.capture('project opened', {
+                  project_name: proj.name,
+                  project_num: proj.num,
+                  project_category: proj.category,
+                  language: lang,
+                });
+                openProject(proj);
+              }}
               style={{ padding: '2.2rem 0', cursor: 'pointer' }}
             >
               <div
