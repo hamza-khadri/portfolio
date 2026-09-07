@@ -7,7 +7,7 @@ export default function Testimonials({ t, lang }) {
   return (
     <section id="testimonials" className="section">
       <div className="wrap">
-        <div className="sec-label mono" data-reveal="fade" style={{ marginBottom: '2.6rem' }}>{t.s06}</div>
+        <div className="sec-label label" data-reveal="fade" style={{ marginBottom: '2.6rem' }}>{t.s06}</div>
         <div className="quotes">
           {items.map((item, i) => (
             <figure className="quote glass" key={i} data-reveal="up" style={{ '--i': i + 1 }}>

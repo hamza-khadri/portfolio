@@ -91,7 +91,7 @@ export default function Nav({ t, lang, setLang, active }) {
       <div className={`menu-sheet${open ? ' open' : ''}`} aria-hidden={!open}>
         {ITEMS.map((item, i) => (
           <a key={item.key} href={item.href} onClick={() => onNav(item.key)} tabIndex={open ? 0 : -1}>
-            <span className="mono">{String(i + 1).padStart(2, '0')}</span>
+            <span className="label">{String(i + 1).padStart(2, '0')}</span>
             {t.nav[item.key]}
             <ArrowUpRight style={{ width: 22, height: 22, marginLeft: 'auto', color: 'var(--ink-3)' }} />
           </a>

@@ -25,14 +25,14 @@ export default function Stack({ t }) {
         <div className="stack-cats">
           {cats.map((cat, i) => (
             <div className="stack-cat" key={cat.label} data-reveal="up" style={{ '--i': i }}>
-              <div className="mono"><span>{cat.label}</span><span style={{ color: 'var(--ink-4)' }}>{String(cat.items.length).padStart(2, '0')}</span></div>
+              <div className="label"><span>{cat.label}</span><span style={{ color: 'var(--ink-4)' }}>{String(cat.items.length).padStart(2, '0')}</span></div>
               <div className="chips">
                 {cat.items.map(item => <span className="chip glass" key={item}>{item}</span>)}
               </div>
             </div>
           ))}
         </div>
-        <div className="mono" data-reveal="fade" style={{ marginTop: '2.5rem', display: 'flex', gap: '1.4rem', color: 'var(--ink-3)' }}>
+        <div className="label" data-reveal="fade" style={{ marginTop: '2.5rem', display: 'flex', gap: '1.4rem', color: 'var(--ink-3)' }}>
           <span>{t.stackCount(total)}</span>
           <span>·</span>
           <span>{t.toolkitMeta[1]}</span>

@@ -37,7 +37,6 @@ export default function Hero({ t }) {
     return () => { window.removeEventListener('scroll', onScroll); cancelAnimationFrame(raf); };
   }, []);
 
-  const longest = words.reduce((a, b) => (b.length > a.length ? b : a), '');
   const staticLabel = `${t.heroPrefix} ${words.join(', ')} ${t.heroSuffix}`;
 
   return (
@@ -46,7 +45,7 @@ export default function Hero({ t }) {
         <img ref={portrait} className="portrait-img" src={hamzaPhoto} alt="" fetchpriority="high" />
         <span className="scan" />
         <div className="specimen">
-          {t.specimen.map((s, i) => <span className="mono" key={i} data-reveal="fade" style={{ '--i': 6 + i }}>{s}</span>)}
+          {t.specimen.map((s, i) => <span className="label" key={i} data-reveal="fade" style={{ '--i': 6 + i }}>{s}</span>)}
         </div>
         <span className="hero-zone" data-cursor="hover" />
       </div>
@@ -60,17 +59,17 @@ export default function Hero({ t }) {
             </div>
 
             <div className="hero-name" data-reveal="fade" style={{ '--i': 1 }}>
-              <span className="mono">Hamza Khadri</span>
+              <span className="label">Hamza Khadri</span>
               <span className="rule" aria-hidden="true" />
-              <span className="mono" style={{ color: 'var(--ink-3)' }}>{t.roleLine}</span>
+              <span className="label" style={{ color: 'var(--ink-3)' }}>{t.roleLine}</span>
             </div>
 
             <h1 className="display h-hero lines" aria-label={staticLabel}>
               <span className="ln"><span className="ln-in h-line" aria-hidden="true">
                 <span>{t.heroPrefix}</span>
                 <span className="roll">
-                  <span className="roll-sizer">{longest}</span>
-                  <span className="roll-track" style={{ transform: `translateY(calc(${idx} * var(--lh) * -1em))` }}>
+                  <span className="roll-sizer">{words.map(w => <span key={w}>{w}</span>)}</span>
+                  <span className="roll-track" style={{ transform: `translateY(calc(${idx} * var(--cell) * -1))` }}>
                     {words.map(w => <span className="roll-word" key={w}>{w}</span>)}
                   </span>
                 </span>
@@ -107,11 +106,10 @@ export default function Hero({ t }) {
         <div className="hero-foot" data-reveal="fade" style={{ '--i': 6 }}>
           <div className="scroll-cue">
             <span className="bar" aria-hidden="true" />
-            <span className="mono">{t.scrollLabel}</span>
+            <span className="label">{t.scrollLabel}</span>
           </div>
           <div className="coords">
-            <span className="mono">{t.coordsLabel}</span>
-            <span className="mono" style={{ color: 'var(--ink-3)' }}>UTC+1 · CET</span>
+            <span className="label">{t.coordsLabel}</span>
           </div>
         </div>
       </div>
