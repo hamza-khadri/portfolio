@@ -11,7 +11,7 @@ export default function SectionHead({ label, title, index, max = '18ch' }) {
           ))}
         </h2>
       </div>
-      {index && <div className="sec-index" aria-hidden="true" data-reveal="blur">{index}</div>}
+      {index && <div className="sec-index" aria-hidden="true" data-reveal="fade">{index}</div>}
     </header>
   );
 }

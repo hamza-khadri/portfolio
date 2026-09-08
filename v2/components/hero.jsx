@@ -1,25 +1,54 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import hamzaPhoto from '../../assets/hamza-photo.png';
 import { prefersReducedMotion, useMagnetic } from '../lib/hooks.js';
 import { ArrowDown, ArrowUpRight } from '../lib/icons.jsx';
 
+/* Glyphs the verb passes through while it resolves. Letters and digits only:
+   symbols read as gibberish at display weight. */
+const GLYPHS = 'abcdefghijklmnopqrstuvwxyz0123456789';
+const SCRAMBLE_MS = 520;
+const HOLD_MS = 2200;
+const STEP_MS = 40; // chunky on purpose — a decode, not a smooth fade
+
 export default function Hero({ t }) {
   const words = t.heroWords;
-  const [idx, setIdx] = useState(0);
   const portrait = useRef(null);
+  const doneRef = useRef(null);
+  const noiseRef = useRef(null);
   const magPrimary = useMagnetic(0.3);
   const magGhost = useMagnetic(0.3);
 
-  useEffect(() => { setIdx(0); }, [t]);
-
-  /* Rolling verb: a vertical slot, one word at a time. */
+  /* The verb resolves letter by letter, written straight to the DOM so the
+     hero does not re-render on every frame. */
   useEffect(() => {
-    if (prefersReducedMotion()) return;
-    const id = setInterval(() => setIdx(i => (i + 1) % words.length), 2400);
-    return () => clearInterval(id);
+    const done = doneRef.current, noise = noiseRef.current;
+    if (!done || !noise) return;
+    done.textContent = words[0];
+    noise.textContent = '';
+    if (prefersReducedMotion() || words.length < 2) return;
+
+    let idx = 0, step = 0, hold = 0;
+
+    const run = () => {
+      idx = (idx + 1) % words.length;
+      const word = words[idx];
+      const started = performance.now();
+      step = setInterval(() => {
+        const p = Math.min(1, (performance.now() - started) / SCRAMBLE_MS);
+        const solid = Math.round(word.length * p);
+        let n = '';
+        for (let i = solid; i < word.length; i++) n += GLYPHS[(Math.random() * GLYPHS.length) | 0];
+        done.textContent = word.slice(0, solid);
+        noise.textContent = n;
+        if (p === 1) { clearInterval(step); hold = setTimeout(run, HOLD_MS); }
+      }, STEP_MS);
+    };
+
+    hold = setTimeout(run, HOLD_MS);
+    return () => { clearInterval(step); clearTimeout(hold); };
   }, [words]);
 
-  /* Parallax: the portrait drifts slower than the page and eases out. */
+  /* The portrait drifts slower than the page and eases out. */
   useEffect(() => {
     const el = portrait.current;
     if (!el || prefersReducedMotion()) return;
@@ -43,10 +72,7 @@ export default function Hero({ t }) {
     <section id="hero" className="hero">
       <div className="hero-portrait" aria-hidden="true">
         <img ref={portrait} className="portrait-img" src={hamzaPhoto} alt="" fetchpriority="high" />
-        <span className="scan" />
-        <div className="specimen">
-          {t.specimen.map((s, i) => <span className="label" key={i} data-reveal="fade" style={{ '--i': 6 + i }}>{s}</span>)}
-        </div>
+        <span className="grade" />
         <span className="hero-zone" data-cursor="hover" />
       </div>
 
@@ -67,11 +93,9 @@ export default function Hero({ t }) {
             <h1 className="display h-hero lines" aria-label={staticLabel}>
               <span className="ln"><span className="ln-in h-line" aria-hidden="true">
                 <span>{t.heroPrefix}</span>
-                <span className="roll">
-                  <span className="roll-sizer">{words.map(w => <span key={w}>{w}</span>)}</span>
-                  <span className="roll-track" style={{ transform: `translateY(calc(${idx} * var(--cell) * -1))` }}>
-                    {words.map(w => <span className="roll-word" key={w}>{w}</span>)}
-                  </span>
+                <span className="scramble">
+                  <span className="scramble-sizer">{words.map(w => <span key={w}>{w}</span>)}</span>
+                  <span><span ref={doneRef}>{words[0]}</span><span className="noise" ref={noiseRef} /></span>
                 </span>
               </span></span>
               <span className="ln"><span className="ln-in" style={{ '--li': 1 }} aria-hidden="true">{t.heroSuffix}</span></span>
