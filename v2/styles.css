@@ -115,46 +115,31 @@ img { display: block; max-width: 100%; }
 
 /* ─── Background system ────────────────────────────────────────── */
 .bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
-/* The grid is a ground plane the page sits on, not an overlay: both layers
-   are offset by the scroll position (background.jsx), so they travel with
-   the content instead of sliding under it. They are tiled, so the offset is
-   taken modulo the cell and the pattern never runs out.
-   The fade is linear at the top and bottom edges only — a radial mask made
-   the lines die along a visible arc. */
-.bg-grid {
-  --cell: 88px;
-  position: absolute; inset: -1px;
-  background-image:
-    linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px);
-  background-size: var(--cell) var(--cell);
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 clamp(96px, 15vh, 170px));
-  mask-image: linear-gradient(to bottom, transparent 0, #000 clamp(96px, 15vh, 170px));
-}
-.bg-dots {
-  --cell: 24px;
-  position: absolute; inset: 0;
-  background-image: radial-gradient(rgba(255,255,255,0.11) 0.6px, transparent 0.9px);
-  background-size: var(--cell) var(--cell);
-  opacity: 0.5;
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 clamp(70px, 11vh, 130px));
-  mask-image: linear-gradient(to bottom, transparent 0, #000 clamp(70px, 11vh, 130px));
-}
+/* No repeating pattern: a small tile reads as texture for texture's sake.
+   The ground is built from light alone — a horizon band at the top, a soft
+   floor at the bottom, and two slow glows — so it has depth without any
+   motif to spot. */
 .bg-glow {
   position: absolute; width: 70vmax; height: 70vmax; border-radius: 50%;
   filter: blur(80px);
-  opacity: 0.1;
+  opacity: 0.13;
   will-change: transform;
 }
 .bg-glow.a { top: -35vmax; left: -20vmax; background: radial-gradient(circle, rgba(var(--accent-rgb),0.9), transparent 60%); }
-.bg-glow.b { bottom: -40vmax; right: -25vmax; background: radial-gradient(circle, rgba(120,170,255,0.7), transparent 60%); opacity: 0.09; }
-/* A wide, low horizon band: depth from light rather than from noise. */
+.bg-glow.b { bottom: -40vmax; right: -25vmax; background: radial-gradient(circle, rgba(120,170,255,0.7), transparent 60%); opacity: 0.11; }
 .bg-horizon {
   position: absolute; left: 50%; top: -22vmax; width: 140vmax; height: 44vmax;
   transform: translateX(-50%);
   background: radial-gradient(ellipse 50% 50% at 50% 50%,
-    rgba(190,205,255,0.10) 0%, rgba(var(--accent-rgb),0.07) 40%, transparent 72%);
+    rgba(190,205,255,0.14) 0%, rgba(var(--accent-rgb),0.09) 40%, transparent 72%);
   filter: blur(30px);
+}
+.bg-floor {
+  position: absolute; left: 50%; bottom: -32vmax; width: 150vmax; height: 52vmax;
+  transform: translateX(-50%);
+  background: radial-gradient(ellipse 50% 50% at 50% 50%,
+    rgba(150,170,230,0.11) 0%, rgba(var(--accent-rgb),0.06) 45%, transparent 72%);
+  filter: blur(40px);
 }
 .bg-vignette {
   position: absolute; inset: 0;
@@ -397,9 +382,15 @@ img { display: block; max-width: 100%; }
 .cursor-ring.hidden, .cursor-dot.hidden { opacity: 0; }
 
 /* ─── Hero ──────────────────────────────────────────────────────── */
-.hero { position: relative; min-height: 100svh; display: grid; align-items: end; overflow: hidden; padding-top: 6rem; }
-.hero-grid { position: relative; z-index: 2; display: grid; grid-template-columns: repeat(12, 1fr); column-gap: 1.5rem; align-items: end; padding-bottom: clamp(2.5rem, 6vh, 5rem); }
-.hero-copy { grid-column: 1 / 8; }
+.hero { position: relative; min-height: 100svh; display: flex; flex-direction: column; overflow: hidden; padding-top: 6rem; }
+.hero > .wrap { flex: 1; display: flex; flex-direction: column; }
+.hero-grid {
+  position: relative; z-index: 2; flex: 1;
+  display: grid; grid-template-columns: repeat(12, 1fr); column-gap: 1.5rem;
+  align-items: center;
+  padding-bottom: clamp(2.5rem, 6vh, 5rem);
+}
+.hero-copy { grid-column: 1 / 8; align-self: center; }
 .hero-meta { grid-column: 9 / 13; align-self: end; }
 
 .hero-status { display: inline-flex; align-items: center; gap: 0.7rem; margin-bottom: 2.4rem; --r: var(--r-pill); padding: 0.45rem 0.9rem 0.45rem 0.6rem; }
@@ -544,7 +535,15 @@ img { display: block; max-width: 100%; }
 .work-preview.on { opacity: 1; transform: translate3d(-50%, -50%, 0) scale(1); }
 .work-preview img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.35s; }
 .work-preview img.on { opacity: 1; }
-.work-preview .lbl { position: absolute; left: 0.8rem; bottom: 0.7rem; --r: 6px; padding: 0.32rem 0.6rem; font-family: var(--font-body); font-size: 0.72rem; font-weight: 500; letter-spacing: 0.005em; }
+.work-preview .lbl {
+  position: absolute; left: 0.8rem; bottom: 0.7rem;
+  padding: 0.34rem 0.62rem; border-radius: 6px;
+  /* Solid, because it sits over whatever the screenshot happens to be. */
+  background: rgba(7,8,10,0.88);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  color: #fff;
+  font-family: var(--font-body); font-size: 0.72rem; font-weight: 500; letter-spacing: 0.005em;
+}
 
 /* ─── Approach ──────────────────────────────────────────────────── */
 .approach { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; position: relative; }
@@ -666,7 +665,7 @@ img { display: block; max-width: 100%; }
   .nav-links { display: none; }
   .nav-burger { display: inline-flex; }
   .hero { padding-top: 5rem; }
-  .hero-grid { grid-template-columns: 1fr; row-gap: 2rem; }
+  .hero-grid { grid-template-columns: 1fr; row-gap: 2rem; align-items: start; }
   .hero-copy, .hero-meta { grid-column: 1 / -1; }
   .hero-portrait { width: 100%; right: 0; left: 0; top: 0; height: 56svh; bottom: auto; }
   .hero-portrait .portrait-img { object-position: 50% 20%; -webkit-mask-image: linear-gradient(to bottom, #000 40%, transparent 100%); mask-image: linear-gradient(to bottom, #000 40%, transparent 100%); }

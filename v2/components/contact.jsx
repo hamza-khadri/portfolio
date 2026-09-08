@@ -7,7 +7,7 @@ import { ArrowUpRight, Check, Copy, Mail } from '../lib/icons.jsx';
 export default function Contact({ t }) {
   const [copied, setCopied] = useState(false);
   const time = useClock('Europe/Brussels');
-  const magCopy = useMagnetic(0.3);
+  const magCopy = useMagnetic();
 
   const copy = async () => {
     try { await navigator.clipboard.writeText(t.contactEmail); setCopied(true); setTimeout(() => setCopied(false), 1800); } catch (_) {}

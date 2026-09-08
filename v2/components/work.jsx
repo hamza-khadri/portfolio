@@ -92,7 +92,7 @@ export default function Work({ t, lang, openProject }) {
         {projects.map((p, i) => p.heroImage && (
           <img key={p.num} src={p.heroImage} alt="" loading="lazy" className={hovered === i ? 'on' : ''} />
         ))}
-        <span className="lbl glass">{hovered !== null ? `${t.caseLabel} ${projects[hovered].num}` : ''}</span>
+        <span className="lbl">{hovered !== null ? `${t.caseLabel} ${projects[hovered].num}` : ''}</span>
       </div>
     </section>
   );
