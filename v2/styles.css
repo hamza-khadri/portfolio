@@ -664,8 +664,12 @@ img { display: block; max-width: 100%; }
   .stack-cats { grid-template-columns: 1fr 1fr; gap: 2rem; }
 }
 @media (max-width: 900px) {
-  .nav { grid-template-columns: auto 1fr auto; }
+  /* The links are gone here, so the bar is two items: two columns, with the
+     controls pushed to the far edge. Keeping three columns left the second
+     item sitting in the middle column, hard against the logo. */
+  .nav { grid-template-columns: 1fr auto; }
   .nav-links { display: none; }
+  .nav-right { justify-self: end; }
   .nav-burger { display: inline-flex; }
   .hero { padding-top: 5rem; }
   .hero-grid { grid-template-columns: 1fr; row-gap: 2rem; align-items: start; }
