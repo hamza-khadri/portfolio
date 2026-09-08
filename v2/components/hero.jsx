@@ -73,7 +73,9 @@ export default function Hero({ t }) {
   return (
     <section id="hero" className="hero">
       <div className="hero-portrait" aria-hidden="true">
-        <img ref={portrait} className="portrait-img" src={hamzaPhoto} alt="" fetchpriority="high" />
+        <div className="portrait-frame">
+          <img ref={portrait} className="portrait-img" src={hamzaPhoto} alt="" fetchpriority="high" />
+        </div>
         <span className="grade" />
         <span className="hero-zone" data-cursor="hover" />
       </div>
