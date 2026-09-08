@@ -39,9 +39,9 @@ export default function ProjectDrawer({ project, lang, t, onClose }) {
       <aside className={`drawer glass${on ? ' on' : ''}`} role="dialog" aria-modal="true" aria-labelledby="drawer-title">
         <div className="head">
           <div className="crumbs">
-            <span className="mono">{t.caseLabel} {p.num}</span>
-            <span className="mono" style={{ color: 'var(--ink-4)' }}>/</span>
-            <span className="mono" style={{ color: 'var(--ink-3)' }}>{p.category}</span>
+            <span className="label">{t.caseLabel} {p.num}</span>
+            <span className="label" style={{ color: 'var(--ink-4)' }}>/</span>
+            <span className="label" style={{ color: 'var(--ink-3)' }}>{p.category}</span>
           </div>
           <button ref={closeBtn} className="btn btn-icon glass" onClick={close} aria-label={t.modalClose}><Close className="ico" /></button>
         </div>

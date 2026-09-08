@@ -11,7 +11,7 @@ function Stat({ raw, label, i }) {
     <div className="stat glass" data-reveal="up" style={{ '--i': i + 1 }} ref={ref}>
       <div className="n tnum">{val}{suffix && <sup>{suffix}</sup>}</div>
       <div>
-        <div className="l"><span className="mono">{label}</span><span className="mono idx">{String(i + 1).padStart(2, '0')}</span></div>
+        <div className="l"><span className="label">{label}</span><span className="label idx">{String(i + 1).padStart(2, '0')}</span></div>
         <div className="meter" style={{ marginTop: '0.6rem' }}><i style={{ '--w': `${pct}%` }} /></div>
       </div>
     </div>
@@ -31,7 +31,7 @@ export default function About({ t }) {
             <p className="lead hi" data-reveal="blur" style={{ '--i': 2 }}>{t.aboutP3}</p>
             <div className="kicker" data-reveal="fade" style={{ '--i': 3 }}>
               <span className="ln" aria-hidden="true" />
-              <span className="mono">{t.baseLine}</span>
+              <span className="label">{t.baseLine}</span>
             </div>
           </div>
           <div className="stats">

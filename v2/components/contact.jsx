@@ -18,7 +18,7 @@ export default function Contact({ t }) {
     <>
       <section id="contact" className="section">
         <div className="wrap">
-          <div className="sec-label mono" data-reveal="fade">{t.s07}</div>
+          <div className="sec-label label" data-reveal="fade">{t.s07}</div>
           <h2 className="display contact-title lines" style={{ marginTop: '1.4rem' }}>
             <span className="ln"><span className="ln-in">{t.contactTitle}</span></span>
           </h2>
@@ -46,7 +46,7 @@ export default function Contact({ t }) {
               ))}
             </div>
             <div className="open-to glass" data-reveal="up" style={{ '--i': 4 }}>
-              <div className="mono"><Mail style={{ width: 14, height: 14, color: 'var(--accent)' }} />{t.openTo}</div>
+              <div className="label"><Mail style={{ width: 14, height: 14, color: 'var(--accent)' }} />{t.openTo}</div>
               <p>{t.currentlyOpen.replace(/^Currently open to:\s*|^Ouvert à :\s*/i, '')}</p>
             </div>
           </div>
@@ -56,15 +56,15 @@ export default function Contact({ t }) {
       <footer className="footer">
         <div className="wrap cols">
           <div>
-            <span className="mono">{t.footer}</span>
+            <span className="label">{t.footer}</span>
             <span className="note">{t.footerNote}</span>
           </div>
           <div className="clock glass">
             <span className="led" aria-hidden="true" />
-            <span className="mono tnum">BRU {time}</span>
+            <span className="label tnum">{t.localTime} {time}</span>
           </div>
           <div>
-            <span className="mono">{t.coordsLabel}</span>
+            <span className="label">{t.roleLine}</span>
           </div>
         </div>
       </footer>

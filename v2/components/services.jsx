@@ -22,7 +22,7 @@ export default function Services({ t, lang }) {
                 <h3>{card.title[lang] || card.title.en}</h3>
                 <p>{card.body[lang] || card.body.en}</p>
                 <div className="foot">
-                  <span className="mono">{price || t.ctaContact}</span>
+                  <span className="label">{price || t.ctaContact}</span>
                   <span className="go" aria-hidden="true"><ArrowUpRight /></span>
                 </div>
               </a>
