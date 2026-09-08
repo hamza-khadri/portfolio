@@ -15,8 +15,8 @@ export default function Hero({ t }) {
   const portrait = useRef(null);
   const doneRef = useRef(null);
   const noiseRef = useRef(null);
-  const magPrimary = useMagnetic(0.3);
-  const magGhost = useMagnetic(0.3);
+  const magPrimary = useMagnetic();
+  const magGhost = useMagnetic();
 
   /* The verb resolves letter by letter, written straight to the DOM so the
      hero does not re-render on every frame. */

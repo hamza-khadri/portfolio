@@ -86,36 +86,46 @@ export function useCountUp(target, { duration = 1400, start = true } = {}) {
   return [ref, val];
 }
 
-/* Pull an element a few px towards the pointer while hovered. */
-export function useMagnetic(strength = 0.35, radius = 90) {
+/* Pull an element a few px towards the pointer.
+
+   The displacement is capped in pixels, and small: a magnet strong enough to
+   carry the element out from under the pointer makes it flee as you approach
+   and snap back the moment you leave, so the button becomes hard to click. */
+export function useMagnetic(max = 9, pad = 36) {
   const ref = useRef(null);
   useEffect(() => {
     const el = ref.current;
     if (!el || !isFinePointer() || prefersReducedMotion()) return;
-    let raf = 0, tx = 0, ty = 0, cx = 0, cy = 0, active = false;
+    let raf = 0, tx = 0, ty = 0, cx = 0, cy = 0;
+
+    const clamp = (v) => Math.max(-1, Math.min(1, v));
 
     const loop = () => {
       cx += (tx - cx) * 0.18; cy += (ty - cy) * 0.18;
-      el.style.transform = `translate3d(${cx.toFixed(2)}px, ${cy.toFixed(2)}px, 0)`;
-      if (Math.abs(tx - cx) > 0.05 || Math.abs(ty - cy) > 0.05 || active) raf = requestAnimationFrame(loop);
-      else { raf = 0; el.style.transform = ''; }
+      const settled = Math.abs(tx - cx) < 0.05 && Math.abs(ty - cy) < 0.05;
+      if (settled) { cx = tx; cy = ty; raf = 0; } else { raf = requestAnimationFrame(loop); }
+      el.style.transform = cx || cy ? `translate3d(${cx.toFixed(2)}px, ${cy.toFixed(2)}px, 0)` : '';
     };
+
     const onMove = (e) => {
+      /* Measure where the element sits at rest. Reading the moved box would
+         feed the offset back into itself and let it drift away. */
       const r = el.getBoundingClientRect();
-      const dx = e.clientX - (r.left + r.width / 2);
-      const dy = e.clientY - (r.top + r.height / 2);
-      const d = Math.hypot(dx, dy);
-      if (d < radius + Math.max(r.width, r.height) / 2) {
-        active = true; tx = dx * strength; ty = dy * strength;
-      } else { active = false; tx = 0; ty = 0; }
+      const left = r.left - cx, top = r.top - cy;
+      const inside = e.clientX > left - pad && e.clientX < left + r.width + pad
+                  && e.clientY > top - pad && e.clientY < top + r.height + pad;
+      if (inside) {
+        tx = clamp((e.clientX - (left + r.width / 2)) / (r.width / 2 + pad)) * max;
+        ty = clamp((e.clientY - (top + r.height / 2)) / (r.height / 2 + pad)) * max;
+      } else {
+        tx = 0; ty = 0;
+      }
       if (!raf) raf = requestAnimationFrame(loop);
     };
-    const onLeave = () => { active = false; tx = 0; ty = 0; if (!raf) raf = requestAnimationFrame(loop); };
 
     window.addEventListener('pointermove', onMove, { passive: true });
-    el.addEventListener('pointerleave', onLeave);
-    return () => { window.removeEventListener('pointermove', onMove); el.removeEventListener('pointerleave', onLeave); cancelAnimationFrame(raf); };
-  }, [strength, radius]);
+    return () => { window.removeEventListener('pointermove', onMove); cancelAnimationFrame(raf); };
+  }, [max, pad]);
   return ref;
 }
 
