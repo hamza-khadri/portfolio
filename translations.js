@@ -67,7 +67,7 @@ const TRANSLATIONS = {
     heroPrefix: 'Je',
     heroWords: ['pilote', 'design', 'build', 'livre', 'rêve'],
     heroSuffix: 'des produits.',
-    heroBio: "Product Owner, Designer & Builder basé en Belgique (Mont-Saint-Guibert). 5+ ans à construire des produits digitaux — 15+ livrés dans la HealthTech, FamilyTech, Logistique, Sciences du sport et les plateformes communautaires, avec le no-code, le code et l'IA.",
+    heroBio: "Product Owner, Designer & Builder basé en Belgique (Charleroi). 5+ ans à construire des produits digitaux — 15+ livrés dans la HealthTech, FamilyTech, Logistique, Sciences du sport et les plateformes communautaires, avec le no-code, le code et l'IA.",
     scrollLabel: 'Défiler',
     s01: '01 — À PROPOS',
     aboutTitle: ['Du contenu au produit.', 'De la discovery au livré.'],
