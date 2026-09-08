@@ -418,10 +418,13 @@ img { display: block; max-width: 100%; }
 .hero-portrait {
   position: absolute; right: 0; top: 0; bottom: 0; width: 52%;
   pointer-events: none;
+  /* The image parallaxes downwards inside this box and the hero clips it, so
+     the bottom of the fade has to be transparent across the whole travel
+     (parallax + scale, ~10% of the hero) or the clip shows as a hard edge. */
   --fade:
     linear-gradient(to right, transparent 0%, #000 42%),
     linear-gradient(to left, transparent 0%, #000 14%),
-    linear-gradient(to top, transparent 0%, #000 26%),
+    linear-gradient(to top, transparent 0%, transparent 12%, #000 38%),
     linear-gradient(to bottom, transparent 0%, #000 12%);
 }
 .hero-portrait .portrait-img {
