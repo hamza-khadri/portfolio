@@ -1,7 +1,7 @@
 const TRANSLATIONS = {
   en: {
     nav: { work: 'Work', about: 'About', services: 'Services', contact: 'Contact' },
-    availability: 'Available for Q3 2027 — Open to Product Owner roles & freelance product missions',
+    availability: 'Available for 2027 — Open to Product Owner roles & freelance product missions',
     heroPrefix: 'I',
     heroWords: ['lead', 'design', 'build', 'ship', 'dream'],
     heroSuffix: 'products.',
@@ -11,7 +11,7 @@ const TRANSLATIONS = {
     aboutTitle: ['From content to product.', 'From discovery to shipped.'],
     aboutP1: "I started as a content creator — building audiences, telling stories, understanding what makes people pay attention. Then I realised: the most interesting challenge isn't the message. It's the product.",
     aboutP2: "Over 5 years, I've moved from pixels to products. I scope, prioritise, design in Figma, and build with Bubble, Lovable, and Supabase — having delivered 15+ products including Partenamut Prevention, Veleo, Velox, and LAM-MotionLabs (ULiège).",
-    aboutP3: 'Currently Product Owner at The Maul. Available for full-time PO roles and freelance missions in Q3 2027, in Belgium or EU remote.',
+    aboutP3: 'Currently Product Owner at The Maul. Available for full-time PO roles and freelance missions in 2027, in Belgium or EU remote.',
     stat1: ['5+',  'Years in product'],
     stat2: ['15+', 'Products shipped'],
     stat3: ['10+', 'Stack mastered'],
@@ -63,7 +63,7 @@ const TRANSLATIONS = {
   },
   fr: {
     nav: { work: 'Projets', about: 'À propos', services: 'Services', contact: 'Contact' },
-    availability: 'Disponible pour Q3 2027 — Ouvert aux postes Product Owner & missions freelance',
+    availability: 'Disponible pour 2027 — Ouvert aux postes Product Owner & missions freelance',
     heroPrefix: 'Je',
     heroWords: ['pilote', 'design', 'build', 'livre', 'rêve'],
     heroSuffix: 'des produits.',
@@ -73,7 +73,7 @@ const TRANSLATIONS = {
     aboutTitle: ['Du contenu au produit.', 'De la discovery au livré.'],
     aboutP1: "J'ai commencé comme créateur de contenu — construire des audiences, raconter des histoires, comprendre ce qui retient l'attention. Puis j'ai réalisé : le défi le plus intéressant n'est pas le message. C'est le produit.",
     aboutP2: "Depuis 5 ans, je suis passé des pixels aux produits. Je cadre, priorise, design dans Figma et build avec Bubble, Lovable et Supabase — ayant livré 15+ produits dont Partenamut Prevention, Veleo, Velox et LAM-MotionLabs (ULiège).",
-    aboutP3: 'Actuellement Product Owner chez The Maul. Disponible pour des postes PO temps plein et missions freelance en Q3 2027, en Belgique ou remote EU.',
+    aboutP3: 'Actuellement Product Owner chez The Maul. Disponible pour des postes PO temps plein et missions freelance en 2027, en Belgique ou remote EU.',
     stat1: ['5+',  'Ans en produit'],
     stat2: ['15+', 'Produits livrés'],
     stat3: ['10+', 'Outils maîtrisés'],
