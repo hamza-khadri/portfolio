@@ -118,8 +118,7 @@ export default function Hero({ t }) {
           </div>
 
           <aside className="hero-meta" data-reveal="up" style={{ '--i': 5 }}>
-            <div className="hero-meta-card glass brackets">
-              <span className="bk" aria-hidden="true" />
+            <div className="hero-meta-card glass">
               <div className="row"><span className="k">{t.metaRole}</span><span className="v">{t.roleLine}</span></div>
               <div className="row"><span className="k">{t.metaBase}</span><span className="v dim">{t.baseLine}</span></div>
               <div className="row"><span className="k">{t.metaStatus}</span><span className="v" style={{ color: 'var(--signal)' }}>{t.statusLine}</span></div>

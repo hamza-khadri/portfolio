@@ -1,12 +1,36 @@
 import { useEffect, useRef } from 'react';
 import { isFinePointer, prefersReducedMotion } from '../lib/hooks.js';
 
-/* Ground: engineering grid, fine dot field, a low horizon band and two
-   restrained glows. No grain: the depth comes from light and geometry.
-   Everything sits under #root, nothing here is interactive. */
+/* Ground: an engineering grid and a fine dot field that travel with the page,
+   a low horizon band and two restrained glows. No grain: the depth comes from
+   light and geometry. Everything sits under #root, nothing here is interactive. */
 export default function Background() {
   const glowA = useRef(null);
   const glowB = useRef(null);
+  const grid = useRef(null);
+  const dots = useRef(null);
+
+  /* Offset both tiled layers by the scroll position so they read as printed
+     on the document rather than fixed to the viewport. Taken modulo the cell
+     size, which is visually identical and keeps the numbers small. */
+  useEffect(() => {
+    let raf = 0;
+    const shift = (el) => {
+      if (!el) return;
+      const cell = parseFloat(getComputedStyle(el).getPropertyValue('--cell')) || 1;
+      el.style.backgroundPosition = `0 ${-(window.scrollY % cell)}px`;
+    };
+    const update = () => { raf = 0; shift(grid.current); shift(dots.current); };
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
+    update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      cancelAnimationFrame(raf);
+    };
+  }, []);
 
   /* Glows drift very slowly with the pointer and the scroll: alive, not busy. */
   useEffect(() => {
@@ -31,8 +55,8 @@ export default function Background() {
       <div className="bg-glow a" ref={glowA} />
       <div className="bg-glow b" ref={glowB} />
       <div className="bg-horizon" />
-      <div className="bg-grid" />
-      <div className="bg-dots" />
+      <div className="bg-grid" ref={grid} />
+      <div className="bg-dots" ref={dots} />
       <div className="bg-vignette" />
     </div>
   );
