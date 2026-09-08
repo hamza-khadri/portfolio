@@ -674,7 +674,10 @@ img { display: block; max-width: 100%; }
   .hero { padding-top: 5rem; }
   .hero-grid { grid-template-columns: 1fr; row-gap: 2rem; align-items: start; }
   .hero-copy, .hero-meta { grid-column: 1 / -1; }
-  .hero-portrait { width: 100%; right: 0; left: 0; top: 0; height: 56svh; bottom: auto; }
+  /* top matches .hero's own padding-top so the portrait clears the fixed
+     nav instead of starting behind it; height shrinks by the same amount
+     so the bottom edge — where the mask fades into the copy — doesn't move. */
+  .hero-portrait { width: 100%; right: 0; left: 0; top: 5rem; height: calc(56svh - 5rem); bottom: auto; }
   .hero-portrait .portrait-img { object-position: 50% 20%; -webkit-mask-image: linear-gradient(to bottom, #000 40%, transparent 100%); mask-image: linear-gradient(to bottom, #000 40%, transparent 100%); }
   .hero-copy { padding-top: 34svh; }
   .hero-name .rule, .hero-name .label + .rule + .label { display: none; }
