@@ -58,7 +58,9 @@ export default function Hero({ t }) {
       raf = requestAnimationFrame(() => {
         raf = 0;
         const y = Math.min(window.scrollY, window.innerHeight);
-        el.style.transform = `translate3d(0, ${y * 0.18}px, 0) scale(${1 + y / window.innerHeight * 0.04})`;
+        /* Gentle: every pixel of travel has to stay inside the mask's
+           transparent band at the bottom, or the hero's clip cuts the photo. */
+        el.style.transform = `translate3d(0, ${y * 0.08}px, 0) scale(${1 + y / window.innerHeight * 0.03})`;
         el.style.opacity = String(1 - (y / window.innerHeight) * 0.6);
       });
     };
