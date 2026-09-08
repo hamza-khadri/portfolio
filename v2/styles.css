@@ -679,8 +679,17 @@ img { display: block; max-width: 100%; }
      nav instead of starting behind it; height shrinks by the same amount
      so the bottom edge — where the mask fades into the copy — doesn't move. */
   .hero-portrait { width: 100%; right: 0; left: 0; top: 5rem; height: calc(56svh - 5rem); bottom: auto; }
-  .hero-portrait .portrait-frame { position: absolute; inset: 0; }
-.hero-portrait .portrait-img { object-position: 50% 20%; -webkit-mask-image: linear-gradient(to bottom, #000 40%, transparent 100%); mask-image: linear-gradient(to bottom, #000 40%, transparent 100%); }
+  /* The mask used to be fully opaque from the top edge, which was invisible
+     while the photo sat flush with the viewport top (behind the nav). Once
+     it got clearance above, that hard edge became a visible seam — so it
+     fades in here too. */
+  .hero-portrait .portrait-img { object-position: 50% 20%; -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 16%, #000 40%, transparent 100%); mask-image: linear-gradient(to bottom, transparent 0%, #000 16%, #000 40%, transparent 100%); }
+  /* Shrinking the box's height without changing its width made it relatively
+     wider, so object-fit: cover showed a wider (less zoomed) slice of the
+     source photo — the empty-looking margin on both sides was the studio
+     backdrop. Scaling the frame (not the img — the parallax effect owns the
+     img's transform) restores the tighter crop. */
+  .hero-portrait .portrait-frame { transform: scale(1.2); }
   .hero-copy { padding-top: 34svh; }
   .hero-name .rule, .hero-name .label + .rule + .label { display: none; }
   .hero-status { margin-bottom: 1.6rem; }
