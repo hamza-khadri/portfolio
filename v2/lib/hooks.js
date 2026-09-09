@@ -7,9 +7,12 @@ export const isFinePointer = () =>
   typeof window !== 'undefined' && window.matchMedia('(pointer: fine)').matches;
 
 /* Observe every [data-reveal] / .lines element once and flip it to `.in`.
-   Re-runs when `dep` changes (language switch re-renders the copy). */
-export function useReveal(dep) {
+   Re-runs when `dep` changes (language switch re-renders the copy).
+   `ready` holds it back while the intro is still on screen, so the hero
+   makes its entrance after the reveal rather than behind it. */
+export function useReveal(dep, ready = true) {
   useEffect(() => {
+    if (!ready) return;
     const els = Array.from(document.querySelectorAll('[data-reveal], .lines'));
     if (!els.length) return;
     if (prefersReducedMotion()) { els.forEach(el => el.classList.add('in')); return; }
@@ -32,7 +35,7 @@ export function useReveal(dep) {
       }
     });
     return () => io.disconnect();
-  }, [dep]);
+  }, [dep, ready]);
 }
 
 /* Feed --mx / --my (in %) to every .glass surface so the specular follows the pointer. */
