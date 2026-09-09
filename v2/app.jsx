@@ -8,6 +8,7 @@ import { useActiveSection, useGlassPointer, useReveal } from './lib/hooks.js';
 
 import Background from './components/background.jsx';
 import Cursor from './components/cursor.jsx';
+import Intro, { introPending } from './components/intro.jsx';
 import Rail from './components/rail.jsx';
 import Nav from './components/nav.jsx';
 import Hero from './components/hero.jsx';
@@ -37,6 +38,7 @@ function App() {
     try { return localStorage.getItem('hk_lang') || 'en'; } catch (_) { return 'en'; }
   });
   const [activeProject, setActiveProject] = useState(null);
+  const [intro, setIntro] = useState(introPending);
   const t = STRINGS[lang];
 
   useEffect(() => {
@@ -44,12 +46,13 @@ function App() {
     try { localStorage.setItem('hk_lang', lang); } catch (_) {}
   }, [lang]);
 
-  useReveal(lang);
+  useReveal(lang, !intro);
   useGlassPointer();
   const active = useActiveSection(SECTIONS, lang);
 
   return (
     <>
+      {intro && <Intro onDone={() => setIntro(false)} />}
       <Background />
       <Cursor />
       <Rail sections={SECTIONS} active={active} labels={t.railLabels} />
