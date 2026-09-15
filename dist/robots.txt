@@ -1,6 +1,7 @@
 User-agent: *
 Allow: /
 Disallow: /v1
+Disallow: /v2-0-1
 
 User-agent: GPTBot
 Allow: /

@@ -3,13 +3,17 @@ import { resolve } from 'node:path'
 import react from '@vitejs/plugin-react'
 import { cloudflare } from '@cloudflare/vite-plugin'
 
-/* Dev-only: let `/v1` resolve to `v1.html` (Cloudflare assets do this in prod). */
-function v1Rewrite() {
+/* Extra pages served next to the homepage, each at `/<name>` from `<name>.html`. */
+const PAGES = ['v1', 'v2-0-1']
+
+/* Dev-only: let `/<name>` resolve to `<name>.html` (Cloudflare assets do this in prod). */
+function pageRewrite() {
   return {
-    name: 'v1-rewrite',
+    name: 'page-rewrite',
     configureServer(server) {
       server.middlewares.use((req, _res, next) => {
-        if (req.url === '/v1' || req.url === '/v1/') req.url = '/v1.html'
+        const name = req.url?.replace(/^\/|\/$/g, '')
+        if (PAGES.includes(name)) req.url = `/${name}.html`
         next()
       })
     },
@@ -17,12 +21,12 @@ function v1Rewrite() {
 }
 
 export default defineConfig({
-  plugins: [v1Rewrite(), react(), cloudflare()],
+  plugins: [pageRewrite(), react(), cloudflare()],
   build: {
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
-        v1:   resolve(__dirname, 'v1.html'),
+        ...Object.fromEntries(PAGES.map((name) => [name, resolve(__dirname, `${name}.html`)])),
       },
     },
   },
