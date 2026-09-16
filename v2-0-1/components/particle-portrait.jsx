@@ -10,13 +10,18 @@ import { isFinePointer, prefersReducedMotion } from '../lib/hooks.js';
    pointer moves on. Touch screens have no hover, so there the formed zone
    stays on the face. Disabled on reduced-motion: that gets the plain photo. */
 
-const GAP = 2; // CSS px between particles once formed — fine enough that the photo reads as a photo, not as dots
-const POINT_SIZE_RATIO = 1.15; // point diameter as a multiple of the gap: just enough overlap to seal the grid
-/* A big portrait box would otherwise push the grid into six figures, and the
-   per-frame forming pass runs on the CPU — so the gap widens on large boxes
-   to hold the count here, and the point size follows it. */
+const GAP = 3; // CSS px between particles once formed — dense enough to read as a photo
+/* Below the portrait's own breakpoint the box is barely half as wide, so the
+   face gets half as many particles across and the same gap turned it into
+   visible discs. Finer there, unchanged on desktop. */
+const GAP_COMPACT = 2;
+const COMPACT_QUERY = '(max-width: 900px)'; // the breakpoint the portrait's CSS uses
+const POINT_SIZE_RATIO = 1.15; // point diameter as a multiple of the gap, so the photo stays sealed at either density
+const SCATTERED_RATIO = 1.45; // helix points, relative to the formed ones: visibility matters more than detail there
+/* The grid grows with the square of the box, and the per-frame forming pass
+   runs on the CPU — so on a box big enough to blow past this (a large tablet
+   at the compact density) the gap widens again and the point size follows. */
 const MAX_PARTICLES = 90000;
-const POINT_SIZE_SCATTERED = 4.0; // larger in the helix, where visibility matters more than detail
 const HELIX_ANGLE = 30; // degrees above the horizontal, pointing right: the flow heads east-north-east
 const HELIX_RADIUS = 0.24; // fraction of the box's shorter side
 const HELIX_TURNS = 1.0; // full turns over the axis's span across the box
@@ -47,6 +52,7 @@ const VERTEX = /* glsl */ `
   attribute float aForm;
   uniform float uTime;
   uniform float uSize;
+  uniform float uSizeScattered;
   uniform float uPixelRatio;
   uniform vec2 uBox;
   uniform vec2 uCenter; // centre of the subject, in box px
@@ -94,7 +100,7 @@ const VERTEX = /* glsl */ `
     vColor = min(aColor + ${COLOR_BOOST.toFixed(2)} * (1.0 - f), vec3(1.0));
     vAlpha = mix(${ALPHA_SCATTERED.toFixed(2)} * front, ${ALPHA_FORMED.toFixed(2)}, f);
 
-    gl_PointSize = mix(${POINT_SIZE_SCATTERED.toFixed(2)}, uSize, f) * uPixelRatio;
+    gl_PointSize = mix(uSizeScattered, uSize, f) * uPixelRatio;
     gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 0.0, 1.0);
   }
 `;
@@ -161,6 +167,7 @@ const ParticlePortrait = forwardRef(function ParticlePortrait({ src }, forwarded
       uniforms: {
         uTime: { value: 0 },
         uSize: { value: GAP * POINT_SIZE_RATIO },
+        uSizeScattered: { value: GAP * POINT_SIZE_RATIO * SCATTERED_RATIO },
         uPixelRatio: { value: 1 },
         uBox: { value: new THREE.Vector2(1, 1) },
         uCenter: { value: new THREE.Vector2(0, 0) },
@@ -205,8 +212,11 @@ const ParticlePortrait = forwardRef(function ParticlePortrait({ src }, forwarded
         mouse.y = mouse.targetY = ((FACE_FOCUS.v * img.naturalHeight - srcY) / srcH) * boxH;      }
 
       /* One sample pixel per particle: the offscreen canvas is the particle grid. */
-      const gap = Math.max(GAP, Math.sqrt((boxW * boxH) / MAX_PARTICLES));
-      material.uniforms.uSize.value = gap * POINT_SIZE_RATIO;
+      const base = window.matchMedia(COMPACT_QUERY).matches ? GAP_COMPACT : GAP;
+      const gap = Math.max(base, Math.sqrt((boxW * boxH) / MAX_PARTICLES));
+      const size = gap * POINT_SIZE_RATIO;
+      material.uniforms.uSize.value = size;
+      material.uniforms.uSizeScattered.value = size * SCATTERED_RATIO;
       const sw = Math.max(1, Math.round(boxW / gap));
       const sh = Math.max(1, Math.round(boxH / gap));
       const off = document.createElement('canvas');
