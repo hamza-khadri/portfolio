@@ -10,9 +10,13 @@ import { isFinePointer, prefersReducedMotion } from '../lib/hooks.js';
    pointer moves on. Touch screens have no hover, so there the formed zone
    stays on the face. Disabled on reduced-motion: that gets the plain photo. */
 
-const GAP = 3; // CSS px between particles once formed — dense enough to read as a photo
-const POINT_SIZE = 3.4; // once formed — matches GAP so the photo stays sharp
-const POINT_SIZE_SCATTERED = 5.0; // larger in the helix, where visibility matters more than detail
+const GAP = 2; // CSS px between particles once formed — fine enough that the photo reads as a photo, not as dots
+const POINT_SIZE_RATIO = 1.15; // point diameter as a multiple of the gap: just enough overlap to seal the grid
+/* A big portrait box would otherwise push the grid into six figures, and the
+   per-frame forming pass runs on the CPU — so the gap widens on large boxes
+   to hold the count here, and the point size follows it. */
+const MAX_PARTICLES = 90000;
+const POINT_SIZE_SCATTERED = 4.0; // larger in the helix, where visibility matters more than detail
 const HELIX_ANGLE = 30; // degrees above the horizontal, pointing right: the flow heads east-north-east
 const HELIX_RADIUS = 0.24; // fraction of the box's shorter side
 const HELIX_TURNS = 1.0; // full turns over the axis's span across the box
@@ -156,7 +160,7 @@ const ParticlePortrait = forwardRef(function ParticlePortrait({ src }, forwarded
       depthWrite: false,
       uniforms: {
         uTime: { value: 0 },
-        uSize: { value: POINT_SIZE },
+        uSize: { value: GAP * POINT_SIZE_RATIO },
         uPixelRatio: { value: 1 },
         uBox: { value: new THREE.Vector2(1, 1) },
         uCenter: { value: new THREE.Vector2(0, 0) },
@@ -201,8 +205,10 @@ const ParticlePortrait = forwardRef(function ParticlePortrait({ src }, forwarded
         mouse.y = mouse.targetY = ((FACE_FOCUS.v * img.naturalHeight - srcY) / srcH) * boxH;      }
 
       /* One sample pixel per particle: the offscreen canvas is the particle grid. */
-      const sw = Math.max(1, Math.round(boxW / GAP));
-      const sh = Math.max(1, Math.round(boxH / GAP));
+      const gap = Math.max(GAP, Math.sqrt((boxW * boxH) / MAX_PARTICLES));
+      material.uniforms.uSize.value = gap * POINT_SIZE_RATIO;
+      const sw = Math.max(1, Math.round(boxW / gap));
+      const sh = Math.max(1, Math.round(boxH / gap));
       const off = document.createElement('canvas');
       off.width = sw; off.height = sh;
       const ctx = off.getContext('2d', { willReadFrequently: true });
