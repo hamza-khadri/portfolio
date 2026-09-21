@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react'
 import { cloudflare } from '@cloudflare/vite-plugin'
 
 /* Extra pages served next to the homepage, each at `/<name>` from `<name>.html`. */
-const PAGES = ['v1', 'v2-0-1']
+const PAGES = ['v1', 'v2-0-0']
 
 /* Dev-only: let `/<name>` resolve to `<name>.html` (Cloudflare assets do this in prod). */
 function pageRewrite() {
