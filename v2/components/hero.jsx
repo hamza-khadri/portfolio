@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import hamzaPhoto from '../../assets/hamza-photo.png';
+import ParticlePortrait from './particle-portrait.jsx';
 import { prefersReducedMotion, useMagnetic } from '../lib/hooks.js';
 import { ArrowDown, ArrowUpRight } from '../lib/icons.jsx';
 
@@ -73,9 +74,7 @@ export default function Hero({ t }) {
   return (
     <section id="hero" className="hero">
       <div className="hero-portrait" aria-hidden="true">
-        <div className="portrait-frame">
-          <img ref={portrait} className="portrait-img" src={hamzaPhoto} alt="" fetchpriority="high" />
-        </div>
+        <ParticlePortrait ref={portrait} src={hamzaPhoto} />
         <span className="grade" />
         <span className="hero-zone" data-cursor="hover" />
       </div>

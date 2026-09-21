@@ -403,11 +403,10 @@ img { display: block; max-width: 100%; }
 .hero-meta { grid-column: 9 / 13; align-self: end; }
 
 .hero-status { display: inline-flex; align-items: center; gap: 0.7rem; margin-bottom: 2.4rem; --r: var(--r-pill); padding: 0.6rem; }
-.hero-status .pulse { position: relative; flex-shrink: 0; width: 8px; height: 8px; border-radius: 50%; background: var(--signal); box-shadow: 0 0 10px rgba(var(--signal-rgb),0.9); }
+.hero-status .pulse { position: relative; width: 8px; height: 8px; border-radius: 50%; background: var(--signal); box-shadow: 0 0 10px rgba(var(--signal-rgb),0.9); }
 .hero-status .pulse::after { content: ""; position: absolute; inset: -4px; border-radius: 50%; border: 1px solid rgba(var(--signal-rgb),0.7); animation: pulse-ring 2.4s var(--ease-out) infinite; }
 @keyframes pulse-ring { 0% { transform: scale(0.6); opacity: 1; } 100% { transform: scale(2.2); opacity: 0; } }
 .hero-status span { font-family: var(--font-body); font-size: 0.78rem; font-weight: 500; letter-spacing: 0.005em; color: var(--ink-2); }
-.hero-status span:not(.pulse) { width: 100%; }
 
 .hero-name { display: flex; align-items: center; gap: 0.9rem; margin-bottom: 1.4rem; }
 .hero-name .label { color: var(--ink-2); }
@@ -460,14 +459,7 @@ img { display: block; max-width: 100%; }
   mask-image: var(--fade);
   mask-composite: intersect;
 }
-/* Covers the whole photo (the particle reveal itself is tracked on the
-   document and ignores this — this span only drives the custom cursor's
-   hover state). z-index above .hero-grid (2) so the copy/meta card doesn't
-   paint over it and swallow the hover first. */
-.hero-zone { position: absolute; inset: 0; pointer-events: auto; z-index: 3; }
-/* Once the particle field is built, it replaces the photo entirely; the <img>
-   stays in the DOM as the sample source and the no-WebGL fallback. */
-.hero-portrait .portrait-img.is-particles { visibility: hidden; }
+.hero-zone { position: absolute; right: 8%; top: 12%; width: 30%; height: 50%; border-radius: 50%; pointer-events: auto; }
 
 .hero-meta-card {
   --r: var(--r-lg); padding: 1.35rem 1.4rem; display: grid; gap: 0.95rem;
