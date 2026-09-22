@@ -10,16 +10,16 @@ const CONTENT = {
       year: '2026',
       liveUrl: 'https://prevention-mvp.partenamut.be',
       desc: {
-        en: "Owned, designed and built a preventive health space for one of Belgium's largest health insurers.",
-        fr: "Pilotage produit, conception et production d'un espace de santé préventive de premier degré pour l'une des plus grandes mutuelles belges.",
+        en: "Owned, designed and built a preventive health space for Partenamut, a Belgian health insurer with around 2 million members.",
+        fr: "Pilotage produit, conception et production d'un espace de santé préventive pour Partenamut, mutuelle belge de près de 2 millions de membres.",
       },
       overview: {
-        en: "Partenamut wanted to move beyond reimbursements and become a real health companion for their members. As Product Owner, I led the discovery, scoped the product, prioritised the roadmap, designed the UX and built the prototype — from strategic framing to moderated user testing.",
-        fr: "Partenamut souhaitait dépasser le rôle de rembourseur pour devenir un véritable accompagnateur santé. En tant que Product Owner, j'ai piloté la discovery, cadré le produit, priorisé la roadmap, conçu l'UX et builté le prototype — du cadrage stratégique jusqu'aux tests utilisateurs modérés.",
+        en: "Partenamut wanted to move beyond reimbursements and become a real health companion for their members. As Product Owner, I led the discovery, scoped the product, prioritised the roadmap, designed the UX and built the prototype, from strategic framing to moderated user testing.",
+        fr: "Partenamut souhaitait dépasser le rôle de rembourseur pour devenir un véritable accompagnateur santé. En tant que Product Owner, j'ai piloté la discovery, cadré le produit, priorisé la roadmap, conçu l'UX et builté le prototype, du cadrage stratégique jusqu'aux tests utilisateurs modérés.",
       },
       challenge: {
-        en: "The core challenge was making prevention feel personal and actionable — not like a content catalogue. Members needed to feel guided, not just informed.",
-        fr: "Le défi central était de rendre la prévention personnelle et actionnable — pas comme un catalogue de contenus. Les membres devaient se sentir guidés, pas seulement informés.",
+        en: "The core challenge was making prevention feel personal and actionable, not like a content catalogue. Members needed to feel guided, not just informed.",
+        fr: "Le défi central était de rendre la prévention personnelle et actionnable, pas comme un catalogue de contenus. Les membres devaient se sentir guidés, pas seulement informés.",
       },
       approach: {
         en: "I scoped 5 key journeys and ran 17 moderated user testing sessions across 4 user profiles using Maze for scenario-based flows. Results were synthesized into 4 UX insights and 5 prioritised product opportunities.",
@@ -46,16 +46,16 @@ const CONTENT = {
         fr: "Pilotage produit, conception et production d'un tableau de bord familial partagé pour coordonner le suivi des parents âgés en Belgique.",
       },
       overview: {
-        en: "Veleo is a Belgian startup I'm founding and running as solo Product Owner. It's a shared family dashboard that helps families coordinate the care of an elderly parent — centralizing information, tasks, appointments, and communication in one place, with native FR/NL bilingual support and Belgian administrative localization (AVIQ, Iriscare, mutualities).",
-        fr: "Veleo est une startup belge que je fonde et que je pilote en solo Product Owner. C'est un tableau de bord familial partagé qui aide les familles à coordonner le suivi d'un parent âgé — centralisant informations, tâches, rendez-vous et communication en un seul endroit, avec un support bilingue FR/NL natif et une localisation administrative belge (AVIQ, Iriscare, mutuelles).",
+        en: "Veleo is a Belgian startup I'm founding and running as solo Product Owner. It's a shared family dashboard that helps families coordinate the care of an elderly parent, centralizing information, tasks, appointments, and communication in one place, with native FR/NL bilingual support and Belgian administrative localization (AVIQ, Iriscare, mutualities).",
+        fr: "Veleo est une startup belge que je fonde et que je pilote en solo Product Owner. C'est un tableau de bord familial partagé qui aide les familles à coordonner le suivi d'un parent âgé, centralisant informations, tâches, rendez-vous et communication en un seul endroit, avec un support bilingue FR/NL natif et une localisation administrative belge (AVIQ, Iriscare, mutuelles).",
       },
       challenge: {
         en: "Caring for an elderly parent in Belgium involves fragmented information, multiple family members with different levels of involvement, and a complex administrative landscape that varies by region. No existing tool addresses all three at once.",
         fr: "S'occuper d'un parent âgé en Belgique implique des informations fragmentées, plusieurs membres de la famille avec des niveaux d'implication différents, et un paysage administratif complexe qui varie selon la région. Aucun outil existant n'adresse les trois à la fois.",
       },
       approach: {
-        en: "I own the full product lifecycle — discovery, strategic positioning, roadmap prioritisation, UX design, and no-code build. The Belgian administrative localization (AVIQ, Iriscare, mutualities) is the core product moat, prioritised in from day one.",
-        fr: "Je pilote l'ensemble du cycle produit — discovery, positionnement stratégique, priorisation de la roadmap, conception UX et build no-code. La localisation administrative belge (AVIQ, Iriscare, mutuelles) est le différenciateur central du produit, priorisée dès le départ.",
+        en: "I own the full product lifecycle: discovery, strategic positioning, roadmap prioritisation, UX design, and no-code build. The Belgian administrative localization (AVIQ, Iriscare, mutualities) is the core product moat, prioritised in from day one.",
+        fr: "Je pilote l'ensemble du cycle produit : discovery, positionnement stratégique, priorisation de la roadmap, conception UX et build no-code. La localisation administrative belge (AVIQ, Iriscare, mutuelles) est le différenciateur central du produit, priorisée dès le départ.",
       },
       results: {
         en: "Product currently in active discovery and development. User research and roadmap iteration ongoing.",
@@ -114,12 +114,12 @@ const CONTENT = {
         fr: "Greasily est un produit The Maul pensé pour les restaurateurs qui ont besoin d'une présence web mais n'ont ni le temps, ni le budget, ni les compétences pour la gérer. La plateforme génère un site prêt à l'emploi à partir des contenus fournis par le restaurateur, qui ne gère ensuite que l'essentiel : horaires, carte et réservations.",
       },
       challenge: {
-        en: "Restaurateurs don't need a website builder — they need a website. The challenge was scoping a system simple enough to generate a professional result in minutes, while giving owners just enough control without overwhelming them.",
-        fr: "Les restaurateurs n'ont pas besoin d'un outil pour créer un site — ils ont besoin d'un site. Le défi était de cadrer un système suffisamment simple pour générer un résultat professionnel en quelques minutes, tout en donnant aux propriétaires juste assez de contrôle sans les noyer.",
+        en: "Restaurateurs don't need a website builder. They need a website. The challenge was scoping a system simple enough to generate a professional result in minutes, while giving owners just enough control without overwhelming them.",
+        fr: "Les restaurateurs n'ont pas besoin d'un outil pour créer un site. Ils ont besoin d'un site. Le défi était de cadrer un système suffisamment simple pour générer un résultat professionnel en quelques minutes, tout en donnant aux propriétaires juste assez de contrôle sans les noyer.",
       },
       approach: {
-        en: "I co-owned the product alongside the team — structuring the data model, defining the UX logic, prioritising the feature scope — then took on the build in Lovable and became the go-to PO for maintenance and ongoing iterations.",
-        fr: "J'ai co-piloté le produit avec l'équipe — structurant le modèle de données, définissant la logique UX, priorisant le scope fonctionnel — avant de prendre en charge le build sur Lovable et de devenir le PO de référence pour la maintenance et les itérations.",
+        en: "I co-owned the product alongside the team: structuring the data model, defining the UX logic, prioritising the feature scope. Then I took on the build in Lovable and became the go-to PO for maintenance and ongoing iterations.",
+        fr: "J'ai co-piloté le produit avec l'équipe : structurant le modèle de données, définissant la logique UX, priorisant le scope fonctionnel. Puis j'ai pris en charge le build sur Lovable et je suis devenu le PO de référence pour la maintenance et les itérations.",
       },
       results: {
         en: "Live product serving Belgian restaurateurs. Ongoing maintenance and iteration handled internally at The Maul.",
@@ -142,8 +142,8 @@ const CONTENT = {
         fr: "Conception et production d'une plateforme de gestion de données biomécaniques pour le centre de recherche en performance sportive de l'ULiège.",
       },
       overview: {
-        en: "LAM-MotionLabs is a research platform built for the CAPS (Centre d'Aide à la Performance Sportive) at the University of Liège. The center previously relied on Excel files to collect and communicate biomechanical data — a system that quickly became unmanageable. The platform replaces that with a structured environment for formula creation, data entry, and report generation.",
-        fr: "LAM-MotionLabs est une plateforme de recherche conçue pour le CAPS (Centre d'Aide à la Performance Sportive) de l'Université de Liège. Le centre s'appuyait jusqu'alors sur des fichiers Excel pour collecter et communiquer des données biomécaniques — un système rapidement ingérable. La plateforme remplace ça par un environnement structuré pour la création de formules, l'encodage de données et la génération de rapports.",
+        en: "LAM-MotionLabs is a research platform built for the CAPS (Centre d'Aide à la Performance Sportive) at the University of Liège. The center previously relied on Excel files to collect and communicate biomechanical data, a system that quickly became unmanageable. The platform replaces that with a structured environment for formula creation, data entry, and report generation.",
+        fr: "LAM-MotionLabs est une plateforme de recherche conçue pour le CAPS (Centre d'Aide à la Performance Sportive) de l'Université de Liège. Le centre s'appuyait jusqu'alors sur des fichiers Excel pour collecter et communiquer des données biomécaniques, un système rapidement ingérable. La plateforme remplace ça par un environnement structuré pour la création de formules, l'encodage de données et la génération de rapports.",
       },
       challenge: {
         en: "Biomechanical research data (forces, movement metrics) is complex and multi-layered. The challenge was designing a data model flexible enough to handle custom formulas with dynamic inputs and outputs, while serving three distinct user types with very different needs.",
@@ -170,12 +170,12 @@ const CONTENT = {
       year: '2025',
       liveUrl: 'https://reseauentreprendrebruxelles.org/',
       desc: {
-        en: 'Built a community platform for one of the leading entrepreneurship networks in Brussels.',
-        fr: "Production d'une plateforme communautaire pour l'un des principaux réseaux d'entrepreneuriat bruxellois.",
+        en: 'Built a community platform for Réseau Entreprendre Bruxelles, the Brussels chapter of the Réseau Entreprendre network.',
+        fr: "Production d'une plateforme communautaire pour Réseau Entreprendre Bruxelles, l'antenne bruxelloise du réseau national Réseau Entreprendre.",
       },
       overview: {
-        en: "Réseau Entreprendre Bruxelles needed a private digital space for their member community. I built a mobile-accessible platform centralizing member profiles, company pages, event registrations, perks, and shared documents — all synced with their existing Notion workspace via API.",
-        fr: "Réseau Entreprendre Bruxelles avait besoin d'un espace digital privé pour leur communauté de membres. J'ai produit une plateforme accessible sur mobile centralisant les profils membres, pages entreprises, inscriptions aux événements, perks et documents partagés — le tout synchronisé avec leur espace Notion existant via API.",
+        en: "Réseau Entreprendre Bruxelles needed a private digital space for their member community. I built a mobile-accessible platform centralizing member profiles, company pages, event registrations, perks, and shared documents, all synced with their existing Notion workspace via API.",
+        fr: "Réseau Entreprendre Bruxelles avait besoin d'un espace digital privé pour leur communauté de membres. J'ai produit une plateforme accessible sur mobile centralisant les profils membres, pages entreprises, inscriptions aux événements, perks et documents partagés, le tout synchronisé avec leur espace Notion existant via API.",
       },
       challenge: {
         en: "The platform had to feel like a professional community tool while staying tightly connected to an existing Notion-based back-office. Keeping data consistent across both systems without a dedicated technical team was the core constraint.",
@@ -207,8 +207,8 @@ const CONTENT = {
         fr: "AI For Brokers est une plateforme web interne donnant aux courtiers en assurance accès à trois outils IA : analyse de contrat, optimisation de couverture et évaluation de partenaires. L'app existait initialement en version mobile sur Bubble et devait être migrée et repensée pour un usage desktop.",
       },
       challenge: {
-        en: "Migrating from Bubble to Lovable while simultaneously adapting a mobile-first interface into a desktop experience — without losing the existing logic and AI integrations.",
-        fr: "Migrer de Bubble vers Lovable tout en adaptant simultanément une interface pensée mobile en une expérience desktop — sans perdre la logique existante et les intégrations IA.",
+        en: "Migrating from Bubble to Lovable while simultaneously adapting a mobile-first interface into a desktop experience, without losing the existing logic and AI integrations.",
+        fr: "Migrer de Bubble vers Lovable tout en adaptant simultanément une interface pensée mobile en une expérience desktop, sans perdre la logique existante et les intégrations IA.",
       },
       approach: {
         en: "I handled the full migration from Bubble to Lovable, rebuilding the platform for desktop and integrating the three AI tools via OpenAI Assistants API, with Supabase as the data layer.",
@@ -232,16 +232,16 @@ const CONTENT = {
         fr: "Production d'une PWA marketplace connectant expéditeurs et transporteurs pour une gestion de fret de bout en bout.",
       },
       overview: {
-        en: "Velox is a Progressive Web App designed for both desktop and mobile, built for a Belgian logistics client. It connects shippers and carriers on a single platform: publish freight, access a verified carrier network, assign drivers, validate deliveries via QR code, and manage invoicing and payments — all in one place.",
-        fr: "Velox est une Progressive Web App pensée pour desktop et mobile, produite pour un client belge dans la logistique. Elle connecte expéditeurs et transporteurs sur une seule plateforme : publier du fret, accéder à un réseau de transporteurs vérifiés, assigner des chauffeurs, valider les livraisons via QR code, et gérer la facturation et les paiements — en un seul endroit.",
+        en: "Velox is a Progressive Web App designed for both desktop and mobile, built for a Belgian logistics client. It connects shippers and carriers on a single platform: publish freight, access a verified carrier network, assign drivers, validate deliveries via QR code, and manage invoicing and payments, all in one place.",
+        fr: "Velox est une Progressive Web App pensée pour desktop et mobile, produite pour un client belge dans la logistique. Elle connecte expéditeurs et transporteurs sur une seule plateforme : publier du fret, accéder à un réseau de transporteurs vérifiés, assigner des chauffeurs, valider les livraisons via QR code, et gérer la facturation et les paiements, en un seul endroit.",
       },
       challenge: {
         en: "Freight management involves multiple actors (shippers, carriers, drivers, admins) with very different needs and workflows. The challenge was designing a data model and UX logic that serves all four roles without fragmenting the experience.",
         fr: "La gestion de fret implique plusieurs acteurs (expéditeurs, transporteurs, chauffeurs, admins) avec des besoins et workflows très différents. Le défi était de concevoir un modèle de données et une logique UX qui serve les quatre rôles sans fragmenter l'expérience.",
       },
       approach: {
-        en: "I designed the full data architecture to support a 6-step workflow — from freight publication and carrier booking, through driver assignment and QR-based delivery validation, to automatic invoice generation and payment closure. I then built the entire platform in Lovable with Supabase as the data layer.",
-        fr: "J'ai conçu l'architecture de données complète pour supporter un workflow en 6 étapes — de la publication du fret et la réservation transporteur, jusqu'à l'assignation des chauffeurs, la validation de livraison par QR code, la génération automatique de factures et la clôture des paiements. J'ai ensuite builté l'intégralité de la plateforme sur Lovable avec Supabase comme couche de données.",
+        en: "I designed the full data architecture to support a 6-step workflow: from freight publication and carrier booking, through driver assignment and QR-based delivery validation, to automatic invoice generation and payment closure. I then built the entire platform in Lovable with Supabase as the data layer.",
+        fr: "J'ai conçu l'architecture de données complète pour supporter un workflow en 6 étapes : de la publication du fret et la réservation transporteur, jusqu'à l'assignation des chauffeurs, la validation de livraison par QR code, la génération automatique de factures et la clôture des paiements. J'ai ensuite builté l'intégralité de la plateforme sur Lovable avec Supabase comme couche de données.",
       },
       results: {
         en: "Full PWA delivered and live. Client is currently in prospecting phase to onboard their first customers.",
