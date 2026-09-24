@@ -19,7 +19,19 @@ import { prefersReducedMotion } from '../lib/hooks.js';
 
    Everything around the stage — the halo, the hairline frame, the
    texture, the sweep — is v2 material, keyed to where the animation
-   is via a `data-phase` attribute. */
+   is via a `data-phase` attribute.
+
+   The exit hands the stage over to the site instead of fading over it:
+   the monogram flies into the nav and becomes its logo, the dark ground
+   opens like an aperture from the centre, the hero comes into focus
+   behind it and the background grid lights up. Skipping keeps the quick
+   fade.
+
+   Nothing in the exit repaints the page frame by frame, or it stutters
+   on 120 Hz and large screens: the flight, the zoom and the fades are
+   compositor-only transforms and opacities, the focus pull is a blur
+   layer that fades out rather than a blur that animates, and the
+   aperture is a small canvas that only redraws its own gradient. */
 
 const SRC = '/assets/logo-intro.json';
 const VISIT_KEY = 'hk_visited';
@@ -45,6 +57,33 @@ const F_BUILD = 187.8;    // slabs stop moving, fill begins
 const F_FILL = 235.8;     // monogram is solid
 const F_END = 272;
 
+/* Exit timings, ms. */
+const FLIGHT = 1600;
+const APERTURE = 1300;
+const EXIT_EASE = 'cubic-bezier(0.87, 0, 0.13, 1)'; // expo in-out: a held start, a fast middle, a long landing
+const SETTLE_EASE = 'cubic-bezier(0.16, 1, 0.3, 1)';
+const APERTURE_DELAY = 80;
+/* The aperture's soft edge, and how far it opens, in vmax. */
+const APERTURE_EDGE = 40;
+const APERTURE_END = 110;
+/* A soft gradient loses nothing at half resolution. */
+const GROUND_SCALE = 0.5;
+
+/* Where the finished monogram sits on screen: the union of the painted
+   shapes in the player's SVG. */
+function monogramRect(svgHost) {
+  let l = Infinity, t = Infinity, r = -Infinity, b = -Infinity;
+  svgHost.querySelectorAll('path').forEach((p) => {
+    const fill = p.getAttribute('fill');
+    if (!fill || fill === 'none' || p.getAttribute('fill-opacity') === '0') return;
+    const q = p.getBoundingClientRect();
+    if (q.width < 1 || q.height < 1) return;
+    l = Math.min(l, q.left); t = Math.min(t, q.top);
+    r = Math.max(r, q.right); b = Math.max(b, q.bottom);
+  });
+  return r > l ? { left: l, top: t, width: r - l, height: b - t } : null;
+}
+
 /* The file's own easing on both pointer moves. Solved by bisection:
    cheap, and precise well past what 60 fps can show. */
 function cubic(x1, y1, x2, y2) {
@@ -59,6 +98,7 @@ function cubic(x1, y1, x2, y2) {
   };
 }
 const EASE = cubic(0.5, 0, 0, 1);
+const APERTURE_EASE = cubic(0.65, 0, 0.35, 1);
 
 function tipAt(f) {
   if (f <= TIP[0].f) return TIP[0];
@@ -112,21 +152,24 @@ export const introPending = (() => {
   try { return localStorage.getItem(VISIT_KEY) !== '1'; } catch (_) { return true; }
 })();
 
-export default function Intro({ onDone }) {
+export default function Intro({ onReveal, onDone }) {
   const root = useRef(null);
   /* Held in a ref: a new `onDone` identity on a parent re-render must not
      tear the player down and start the intro over. */
   const done = useRef(onDone);
   done.current = onDone;
+  const reveal = useRef(onReveal);
+  reveal.current = onReveal;
   const stage = useRef(null);
   const holder = useRef(null);
+  const ground = useRef(null);
   const dot = useRef(null);
   const ring = useRef(null);
 
   useEffect(() => {
     const rootEl = root.current, stageEl = stage.current;
     const dotEl = dot.current, ringEl = ring.current;
-    let anim = null, over = false, capId = 0, outId = 0, restId = 0, phase = '';
+    let anim = null, over = false, capId = 0, outId = 0, restId = 0, groundRaf = 0, phase = '';
     let animDone = false, pageDone = document.readyState === 'complete';
     let ringX = TIP[0].x, ringY = TIP[0].y;
     let scale = 1;
@@ -138,14 +181,100 @@ export default function Intro({ onDone }) {
     const measure = () => { scale = (stageEl.clientWidth || COMP_W) / COMP_W; };
     measure();
 
+    /* The ground opens from the centre: transparent up to the radius, a
+       soft edge, then the page colour. Before the radius goes positive the
+       centre is already thinning, so the opening starts as a glow. */
+    const openGround = () => {
+      const c = ground.current;
+      const ctx = c?.getContext('2d');
+      if (!ctx) return;
+      const W = window.innerWidth, H = window.innerHeight;
+      c.width = Math.ceil(W * GROUND_SCALE);
+      c.height = Math.ceil(H * GROUND_SCALE);
+      c.style.background = 'transparent';
+      const hex = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim() || '#07080A';
+      const n = parseInt(hex.replace('#', ''), 16);
+      const rgb = `${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}`;
+      const vmax = Math.max(W, H) / 100;
+      const edge = APERTURE_EDGE * vmax, from = -edge, to = APERTURE_END * vmax;
+      let t0 = 0;
+      const frame = (t) => {
+        if (!t0) t0 = t;
+        const p = Math.min(1, Math.max(0, (t - t0 - APERTURE_DELAY) / APERTURE));
+        const r = from + (to - from) * APERTURE_EASE(p);
+        ctx.setTransform(GROUND_SCALE, 0, 0, GROUND_SCALE, 0, 0);
+        ctx.clearRect(0, 0, W, H);
+        if (r + edge > 0) {
+          const g = ctx.createRadialGradient(W / 2, H / 2, Math.max(0, r), W / 2, H / 2, r + edge);
+          g.addColorStop(0, `rgba(${rgb}, ${r < 0 ? -r / edge : 0})`);
+          g.addColorStop(1, `rgb(${rgb})`);
+          ctx.fillStyle = g;
+          ctx.fillRect(0, 0, W, H);
+        }
+        if (p < 1) groundRaf = requestAnimationFrame(frame);
+      };
+      groundRaf = requestAnimationFrame(frame);
+    };
+
+    /* The crafted exit. Every target is measured before anything moves. */
+    const handOver = () => {
+      const logo = document.querySelector('.nav-logo svg');
+      const mono = monogramRect(holder.current);
+      const box = stageEl.getBoundingClientRect();
+
+      reveal.current?.();
+      window.dispatchEvent(new Event('hk:intro-exit'));
+      rootEl.classList.add('exit');
+      openGround();
+
+      /* 1. The monogram flies into the nav's logo slot. */
+      if (logo && mono) {
+        const to = logo.getBoundingClientRect();
+        const s = to.width / mono.width;
+        const tx = to.left - box.left - (mono.left - box.left) * s;
+        const ty = to.top - box.top - (mono.top - box.top) * s;
+        stageEl.style.transformOrigin = '0 0';
+        stageEl.animate(
+          [{ transform: 'none' }, { transform: `translate(${tx}px, ${ty}px) scale(${s})` }],
+          { duration: FLIGHT, easing: EXIT_EASE, fill: 'forwards' },
+        );
+        /* Its glow burns off on the way, so it lands as a plain logo. */
+        holder.current.animate(
+          [{ filter: getComputedStyle(holder.current).filter }, { filter: 'none' }],
+          { duration: FLIGHT * 0.7, easing: SETTLE_EASE, fill: 'forwards' },
+        );
+      } else {
+        stageEl.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 500, fill: 'forwards' });
+      }
+
+      /* 2. The site comes into focus behind the opening ground: the blur
+         is the .intro-focus layer fading out (CSS), the hero only settles
+         its scale and opacity. */
+      document.getElementById('hero')?.animate(
+        [{ transform: 'scale(1.035)', opacity: 0.5 }, { transform: 'none', opacity: 1 }],
+        { duration: APERTURE + 200, easing: SETTLE_EASE },
+      );
+      document.querySelector('.bg')?.animate(
+        [{ transform: 'scale(1.1)', opacity: 0.2 }, { transform: 'none', opacity: 1 }],
+        { duration: APERTURE + 500, easing: SETTLE_EASE },
+      );
+      document.querySelector('.nav-wrap')?.animate(
+        [{ opacity: 0, transform: 'translateY(-14px)' }, { opacity: 1, transform: 'none' }],
+        { duration: 900, delay: 250, easing: SETTLE_EASE, fill: 'backwards' },
+      );
+
+      outId = setTimeout(() => done.current(), Math.max(FLIGHT, APERTURE) + 60);
+    };
+
     const finish = (fast) => {
       if (over) return;
       over = true;
       clearTimeout(capId); clearTimeout(restId);
       try { localStorage.setItem(VISIT_KEY, '1'); } catch (_) {}
-      if (fast) rootEl.classList.add('fast');
-      rootEl.classList.add('out');
-      outId = setTimeout(() => done.current(), fast ? 420 : 900);
+      if (!fast) { handOver(); return; }
+      reveal.current?.();
+      rootEl.classList.add('fast', 'out');
+      outId = setTimeout(() => done.current(), 420);
     };
 
     /* Reveal once the animation has landed *and* the page behind it is
@@ -216,15 +345,25 @@ export default function Intro({ onDone }) {
       window.removeEventListener('keydown', onSkip);
       rootEl.removeEventListener('pointerdown', onSkip);
       clearTimeout(capId); clearTimeout(outId); clearTimeout(restId);
+      cancelAnimationFrame(groundRaf);
       anim?.destroy();
     };
   }, []);
 
   return (
     <div className="intro" ref={root} data-phase="travel">
-      <div className="intro-sky" aria-hidden="true" />
-      <div className="intro-halo" aria-hidden="true" />
-      <div className="intro-texture" aria-hidden="true" />
+      {/* Blurs the site under the opening ground, then fades: the focus pull. */}
+      <div className="intro-focus" aria-hidden="true" />
+      {/* Everything behind the stage: the ground the exit opens, and its light. */}
+      <div className="intro-backdrop" aria-hidden="true">
+        <canvas className="intro-ground" ref={ground} />
+        <div className="intro-light">
+          <div className="intro-sky" />
+          <div className="intro-halo" />
+          <div className="intro-texture" />
+          <div className="intro-vignette" />
+        </div>
+      </div>
 
       <div className="intro-stage brackets" ref={stage}>
         <span className="bk" aria-hidden="true" />
@@ -238,8 +377,6 @@ export default function Intro({ onDone }) {
         <span className="intro-bar" aria-hidden="true"><i /></span>
         <button type="button" className="intro-skip label" data-cursor="hover">Skip intro</button>
       </div>
-
-      <div className="intro-vignette" aria-hidden="true" />
     </div>
   );
 }

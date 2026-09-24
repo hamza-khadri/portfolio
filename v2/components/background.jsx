@@ -1,9 +1,10 @@
 import { useEffect, useRef } from 'react';
 import { isFinePointer, prefersReducedMotion } from '../lib/hooks.js';
+import LightGrid from './light-grid.jsx';
 
-/* Ground: light only. A horizon band at the top, a soft floor at the bottom
-   and two slow glows. No tiled pattern — at small scale it reads as texture
-   for texture's sake. Everything sits under #root, nothing is interactive. */
+/* Ground: a horizon band at the top, a soft floor at the bottom, two slow
+   glows, and a large grid of light, out of focus, lit section by section.
+   Everything sits under #root, nothing is interactive. */
 export default function Background() {
   const glowA = useRef(null);
   const glowB = useRef(null);
@@ -32,6 +33,7 @@ export default function Background() {
       <div className="bg-glow b" ref={glowB} />
       <div className="bg-horizon" />
       <div className="bg-floor" />
+      <LightGrid />
       <div className="bg-vignette" />
     </div>
   );
