@@ -39,6 +39,8 @@ function App() {
   });
   const [activeProject, setActiveProject] = useState(null);
   const [intro, setIntro] = useState(introPending);
+  /* The page starts revealing while the intro is still opening onto it. */
+  const [ready, setReady] = useState(!introPending);
   const t = STRINGS[lang];
 
   useEffect(() => {
@@ -46,13 +48,13 @@ function App() {
     try { localStorage.setItem('hk_lang', lang); } catch (_) {}
   }, [lang]);
 
-  useReveal(lang, !intro);
+  useReveal(lang, ready);
   useGlassPointer();
   const active = useActiveSection(SECTIONS, lang);
 
   return (
     <>
-      {intro && <Intro onDone={() => setIntro(false)} />}
+      {intro && <Intro onReveal={() => setReady(true)} onDone={() => { setReady(true); setIntro(false); }} />}
       <Background />
       <Cursor />
       <Rail sections={SECTIONS} active={active} labels={t.railLabels} />

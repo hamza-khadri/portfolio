@@ -116,10 +116,10 @@ img { display: block; max-width: 100%; }
 
 /* ─── Background system ────────────────────────────────────────── */
 .bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
-/* No repeating pattern: a small tile reads as texture for texture's sake.
-   The ground is built from light alone — a horizon band at the top, a soft
-   floor at the bottom, and two slow glows — so it has depth without any
-   motif to spot. */
+/* The ground is built from light: a horizon band at the top, a soft floor
+   at the bottom, two slow glows, and one large grid seen through reeded
+   glass (light-grid.jsx). The grid is wide-pitched and blurred on purpose:
+   a small crisp tile would read as texture for texture's sake. */
 .bg-glow {
   position: absolute; width: 70vmax; height: 70vmax; border-radius: 50%;
   filter: blur(80px);
@@ -146,6 +146,13 @@ img { display: block; max-width: 100%; }
   position: absolute; inset: 0;
   background: radial-gradient(ellipse 130% 100% at 50% 40%, transparent 62%, rgba(0,0,0,0.34) 100%);
 }
+/* Screen-blended so the grid only ever adds light over the glows. */
+.bg-grid {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  mix-blend-mode: screen;
+  opacity: 0; transition: opacity 1.6s var(--ease-out);
+}
+.bg-grid.on { opacity: 1; }
 #root { position: relative; }
 
 /* ─── Materials: Liquid Glass ──────────────────────────────────── */
@@ -438,12 +445,18 @@ img { display: block; max-width: 100%; }
     linear-gradient(to bottom, transparent 0%, #000 12%);
 }
 .hero-portrait .portrait-frame { position: absolute; inset: 0; }
+/* A dark pad under the portrait: the screen blend would otherwise lift its
+   shadows to whatever light the background has behind it. */
+.hero-portrait::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse 60% 62% at 60% 42%, rgba(7,8,10,0.92) 0%, rgba(7,8,10,0.6) 55%, transparent 80%);
+}
 .hero-portrait .portrait-img {
   position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 62% 30%;
   /* Screen drops the photo's blacks, so the page's grid reads straight
      through the shadows and the portrait sits in the same ground. */
   mix-blend-mode: screen;
-  filter: grayscale(1) contrast(0.98) brightness(1.04);
+  filter: grayscale(1) contrast(1.18) brightness(1.08);
   will-change: transform;
   -webkit-mask-image: var(--fade);
   -webkit-mask-composite: source-in;
@@ -751,12 +764,36 @@ img { display: block; max-width: 100%; }
 .intro {
   position: fixed; inset: 0; z-index: 1000;
   display: grid; place-items: center;
-  background: var(--bg);
   overflow: hidden;
   transition: opacity 0.9s var(--ease-out), transform 0.9s var(--ease-out), filter 0.9s var(--ease-out);
 }
 .intro.out { opacity: 0; transform: scale(1.05); filter: blur(12px); pointer-events: none; }
 .intro.out.fast { transition-duration: 0.42s; transform: scale(1.02); filter: blur(6px); }
+
+/* The ground behind the stage. On exit its canvas opens like an aperture
+   from the centre (intro.jsx) and the light above it fades, onto the site
+   coming into focus under .intro-focus. Only opacities and one small
+   canvas change: nothing here is repainted frame by frame. */
+.intro-backdrop, .intro-light { position: absolute; inset: 0; }
+.intro-ground { position: absolute; inset: 0; width: 100%; height: 100%; background: var(--bg); }
+.intro-light { transition: opacity 0.7s var(--ease-out); }
+.intro-focus {
+  position: absolute; inset: 0; visibility: hidden;
+  -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+}
+.intro.exit { pointer-events: none; }
+.intro.exit .intro-light { opacity: 0; }
+/* The blur holds while the aperture opens, then lets go: the focus pull. */
+.intro.exit .intro-focus { visibility: visible; animation: intro-focus 1.7s cubic-bezier(0.45, 0, 0.25, 1) both; }
+@keyframes intro-focus { 0%, 30% { opacity: 1; } 100% { opacity: 0; } }
+.intro.exit .intro-foot { opacity: 0; transition: opacity 0.3s var(--ease-out); }
+.intro.exit .intro-sheen { display: none; }
+.intro.exit .intro-stage::before,
+.intro.exit .intro-stage::after,
+.intro.exit .intro-stage > .bk::before,
+.intro.exit .intro-stage > .bk::after { opacity: 0 !important; transition-duration: 0.3s; }
+/* The nav's own logo waits for the monogram to land in its place. */
+body.intro-lock .nav-logo svg { opacity: 0; }
 
 /* Light: a horizon above, and a halo that swells as the logo resolves. */
 .intro-sky {
