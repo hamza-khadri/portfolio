@@ -14,14 +14,14 @@ const page = (id, title, slug, extra = {}) => ({
     'Description SEO': { rich_text: [t(extra.desc ?? 'Une description courte.')] },
     'Mots-clés': { multi_select: [{ name: 'IA' }, { name: 'No-code' }] }, Catégorie: { select: { name: 'Tutoriel' } },
     Langue: { select: { name: extra.lang ?? 'FR' } },
-    'Version anglaise': { relation: (extra.en ?? []).map((id) => ({ id })) }, 'Version française': { relation: (extra.fr ?? []).map((id) => ({ id })) }, 'Date de publication': { date: { start: extra.date ?? '2026-10-05' } },
+    'Version anglaise': { relation: (extra.en ?? []).map((id) => ({ id })) }, 'Articles liés': { relation: (extra.rel ?? []).map((id) => ({ id })) }, 'Version française': { relation: (extra.fr ?? []).map((id) => ({ id })) }, 'Date de publication': { date: { start: extra.date ?? '2026-10-05' } },
     'Image de couverture': { files: extra.cover ? [{ type: 'file', file: { url: 'http://localhost:4010/img/cover.png' } }] : [] },
     'Texte alternatif couverture': { rich_text: [t('Couverture de test')] },
   },
 })
 
 const pages = [
-  page('p1', 'Mon premier article <test> & "quotes"', 'mon-premier-article', { cover: true, en: ['p5'] }),
+  page('p1', 'Mon premier article <test> & "quotes"', 'mon-premier-article', { cover: true, en: ['p5'], rel: ['p2', 'p1', 'p5', 'p6', 'p3', 'p2'] }),
   page('p2', 'Deuxième article', 'deuxieme-article', { date: '2026-10-08', desc: '' }),
   page('p3', 'Slug cassé', 'Slug Cassé !'),
   page('p4', 'Doublon', 'deuxieme-article'),
