@@ -73,7 +73,7 @@ Sans `NOTION_TOKEN`, un blog vide est généré. En CI, un token manquant fait �
 Test sans token : `node scripts/dev/mock-notion.mjs &` puis
 `NOTION_API_BASE=http://localhost:4010/v1 NOTION_TOKEN=x npm run sync`.
 
-Fichiers générés (ignorés par git) : `public/blog.html`, `public/blog/`, `public/rss.xml`, `public/sitemap.xml`.
+Fichiers générés (ignorés par git) : `public/blog.html`, `public/blog/`, `public/en/`, `public/rss.xml`, `public/sitemap.xml`.
 Le sitemap part de `scripts/sitemap.base.xml` (la page d'accueil) : édite celui-ci, pas `public/sitemap.xml`.
 
 ## Réglages dans le code
@@ -81,3 +81,25 @@ Le sitemap part de `scripts/sitemap.base.xml` (la page d'accueil) : édite celui
 - Textes de la page `/blog`, CTA de fin d'article, CSS : `scripts/blog/templates.mjs`
 - Rendu des blocs : `scripts/blog/render.mjs`
 - Version de l'API Notion : variable `NOTION_VERSION` (défaut `2022-06-28`)
+
+## Bilingue FR / EN
+
+**Une entrée Notion par langue et par article.** Chaque entrée a sa propre `Langue`, son `Slug`, sa description et son contenu.
+
+| Langue | Index | Article | RSS |
+|---|---|---|---|
+| FR | `/blog` | `/blog/<slug>` | `/rss.xml` |
+| EN | `/en/blog` | `/en/blog/<slug>` | `/en/rss.xml` |
+
+**Lier les deux versions** : sur l'entrée FR, remplis `Version anglaise` avec l'entrée EN. Notion remplit `Version française` sur l'entrée EN tout seul (relations synchronisées).
+
+Quand les deux versions sont **publiées** :
+- balises `hreflang` (+ `x-default` = FR) dans la page et dans `sitemap.xml`
+- bouton "English version" / "Version française" dans l'en-tête de l'article
+
+Sans version liée (ou version non publiée) : pas de hreflang, le bouton renvoie vers l'index de l'autre langue. Rien ne casse.
+
+Règles :
+- Le même slug peut exister en FR et en EN, pas deux fois dans la même langue.
+- Une relation vers une entrée de la même langue est ignorée (avertissement dans les logs du build).
+- La page de blog mémorise sa langue (`hk_lang`) : un clic sur "Accueil" ouvre la page d'accueil dans la bonne langue.
