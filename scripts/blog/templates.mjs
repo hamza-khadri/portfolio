@@ -15,7 +15,7 @@ const T = {
     indexDesc: "Articles sur l'IA, l'automatisation, le no-code et le product, par Hamza Khadri.",
     indexH1: 'Blog', indexLead: "IA, automatisation, no-code et product : ce que je construis et ce que j'en apprends.",
     cta: 'Un process à automatiser ?', ctaText: "Parlons-en : je repère les opportunités IA dans vos process et je les concrétise.", ctaBtn: 'Me contacter',
-    rss: 'Flux RSS', rights: 'Tous droits réservés',
+    rss: 'Flux RSS', rights: 'Tous droits réservés', switchLabel: 'English version', switchIndex: 'English', switchAria: 'Read this article in English', otherLang: 'en',
   },
   en: {
     home: 'Home', blog: 'Blog', contact: 'Contact', read: 'min read', back: '← All articles',
@@ -24,8 +24,25 @@ const T = {
     indexDesc: 'Articles on AI, automation, no-code and product, by Hamza Khadri.',
     indexH1: 'Blog', indexLead: 'AI, automation, no-code and product: what I build and what I learn from it.',
     cta: 'A process to automate?', ctaText: 'Let’s talk: I spot AI opportunities in your processes and make them real.', ctaBtn: 'Get in touch',
-    rss: 'RSS feed', rights: 'All rights reserved',
+    rss: 'RSS feed', rights: 'All rights reserved', switchLabel: 'Version française', switchIndex: 'Français', switchAria: 'Lire cet article en français', otherLang: 'fr',
   },
+}
+
+
+export const LANGS = ['fr', 'en']
+/** Path prefix of the blog for a language: FR keeps /blog, EN lives under /en/blog. */
+export const blogPath = (lang) => (lang === 'en' ? '/en/blog' : '/blog')
+export const postPath = (lang, slug) => `${blogPath(lang)}/${slug}`
+export const rssPath = (lang) => (lang === 'en' ? '/en/rss.xml' : '/rss.xml')
+const HREFLANG = { fr: 'fr-BE', en: 'en' }
+
+/** <link rel=alternate hreflang> set for a page and its translation (same set used in the sitemap). */
+export function alternates(entries) {
+  // entries: [{ lang, url }]
+  if (entries.length < 2) return ''
+  const fr = entries.find((e) => e.lang === 'fr')
+  return entries.map((e) => `<link rel="alternate" hreflang="${HREFLANG[e.lang]}" href="${esc(e.url)}">\n`).join('') +
+    (fr ? `<link rel="alternate" hreflang="x-default" href="${esc(fr.url)}">\n` : '')
 }
 
 const CSS = `
@@ -70,6 +87,7 @@ details{margin:1rem 0;border:1px solid var(--line);border-radius:12px;padding:.8
 .back{display:inline-block;margin-bottom:2rem;color:var(--ink-2);text-decoration:none;font-size:.92rem}
 footer.site{border-top:1px solid var(--line);padding:1.8rem var(--gutter);color:var(--ink-3);font-size:.88rem;display:flex;flex-wrap:wrap;gap:.5rem 1.5rem;justify-content:space-between}
 footer.site a{color:var(--ink-3)}
+header.site .lang{border:1px solid var(--line);border-radius:999px;padding:.1rem .8rem;font-size:.82rem;color:var(--ink-2);text-decoration:none}header.site .lang:hover{border-color:var(--accent);color:#fff}
 @media (max-width:560px){header.site nav{gap:1rem}}
 `
 
@@ -82,7 +100,7 @@ const absolute = (u) => (u.startsWith('http') ? u : `${SITE}${u}`)
 const fmtDate = (iso, lang) =>
   new Intl.DateTimeFormat(lang === 'en' ? 'en-GB' : 'fr-BE', { dateStyle: 'long', timeZone: 'UTC' }).format(new Date(iso))
 
-function layout({ lang, title, description, canonical, ogImage, ogType = 'website', ld = [], body, current, extraHead = '' }) {
+function layout({ lang, title, description, canonical, ogImage, ogType = 'website', ld = [], body, current, extraHead = '', switchTo = null }) {
   const t = T[lang]
   return `<!DOCTYPE html>
 <html lang="${lang}">
@@ -95,7 +113,7 @@ function layout({ lang, title, description, canonical, ogImage, ogType = 'websit
 <meta name="author" content="${AUTHOR}">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <link rel="canonical" href="${esc(canonical)}">
-<link rel="alternate" type="application/rss+xml" title="Blog ${AUTHOR}" href="${SITE}/rss.xml">
+<link rel="alternate" type="application/rss+xml" title="Blog ${AUTHOR}" href="${SITE}${rssPath(lang)}">
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
@@ -114,16 +132,17 @@ ${extraHead}${ld.map(jsonLd).join('\n')}
 <link rel="preconnect" href="https://api.fontshare.com">
 <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
 <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@500,700,800&f[]=satoshi@400,500,600,700&display=swap" rel="stylesheet">
+<script>try{localStorage.setItem("hk_lang","${lang}")}catch(e){}</script>
 <style>${CSS}</style>
 </head>
 <body>
-<a class="skip" href="#main">Skip to content</a>
+<a class="skip" href="#main">${lang === 'en' ? 'Skip to content' : 'Aller au contenu'}</a>
 <header class="site">
 <a href="/" aria-label="${AUTHOR}">${LOGO}</a>
-<nav aria-label="Navigation"><a href="/">${t.home}</a><a href="/blog"${current === 'blog' ? ' aria-current="page"' : ''}>${t.blog}</a><a href="/#contact">${t.contact}</a></nav>
+<nav aria-label="Navigation"><a href="/">${t.home}</a><a href="${blogPath(lang)}"${current === 'blog' ? ' aria-current="page"' : ''}>${t.blog}</a><a href="/#contact">${t.contact}</a>${switchTo ? `<a class="lang" href="${esc(switchTo.href)}" hreflang="${t.otherLang}" lang="${t.otherLang}" aria-label="${esc(switchTo.aria)}">${esc(switchTo.label)}</a>` : ''}</nav>
 </header>
 ${body}
-<footer class="site"><span>© ${new Date().getUTCFullYear()} ${AUTHOR}. ${t.rights}.</span><a href="/rss.xml">${t.rss}</a></footer>
+<footer class="site"><span>© ${new Date().getUTCFullYear()} ${AUTHOR}. ${t.rights}.</span><a href="${rssPath(lang)}">${t.rss}</a></footer>
 </body>
 </html>
 `
@@ -131,7 +150,8 @@ ${body}
 
 export function articlePage(post, bodyHtml) {
   const t = T[post.lang]
-  const url = `${SITE}/blog/${post.slug}`
+  const url = `${SITE}${postPath(post.lang, post.slug)}`
+  const alt = post.alt || null
   const image = post.cover ? absolute(post.cover) : DEFAULT_OG
   const modified = post.updated > post.published ? post.updated : post.published
   const ld = [
@@ -148,14 +168,14 @@ export function articlePage(post, bodyHtml) {
       '@context': 'https://schema.org', '@type': 'BreadcrumbList',
       itemListElement: [
         { '@type': 'ListItem', position: 1, name: t.home, item: SITE },
-        { '@type': 'ListItem', position: 2, name: t.blog, item: `${SITE}/blog` },
+        { '@type': 'ListItem', position: 2, name: t.blog, item: `${SITE}${blogPath(post.lang)}` },
         { '@type': 'ListItem', position: 3, name: post.title, item: url },
       ],
     },
   ]
   const showUpdated = post.updated.slice(0, 10) > post.published.slice(0, 10)
   const body = `<main id="main">
-<a class="back" href="/blog">${t.back}</a>
+<a class="back" href="${blogPath(post.lang)}">${t.back}</a>
 <article>
 <h1>${esc(post.title)}</h1>
 <div class="meta"><time datetime="${post.published}">${fmtDate(post.published, post.lang)}</time>${showUpdated ? `<span>${t.updated} <time datetime="${post.updated}">${fmtDate(post.updated, post.lang)}</time></span>` : ''}<span>${post.readingMinutes} ${t.read}</span>${post.category ? `<span>${esc(post.category)}</span>` : ''}</div>
@@ -166,46 +186,58 @@ ${post.tags.length ? `<ul class="tags" aria-label="Tags">${post.tags.map((x) => 
 <section class="cta"><h2>${t.cta}</h2><p>${t.ctaText}</p><a class="btn" href="/#contact">${t.ctaBtn}</a></section>
 </main>`
   return layout({ lang: post.lang, title: `${post.title} | ${AUTHOR}`, description: post.description, canonical: url, ogImage: image, ogType: 'article', ld, body, current: 'blog',
-    extraHead: `<meta property="article:published_time" content="${post.published}">\n<meta property="article:modified_time" content="${modified}">\n` })
+    switchTo: alt
+      ? { href: postPath(alt.lang, alt.slug), label: t.switchLabel, aria: t.switchAria }
+      : { href: blogPath(t.otherLang), label: t.switchIndex, aria: t.switchIndex },
+    extraHead: alternates(alt ? [post, alt].map((x) => ({ lang: x.lang, url: `${SITE}${postPath(x.lang, x.slug)}` })) : []) +
+      `<meta property="article:published_time" content="${post.published}">\n<meta property="article:modified_time" content="${modified}">\n` })
 }
 
-export function indexPage(posts) {
-  const lang = 'fr'
+export function indexPage(posts, lang) {
   const t = T[lang]
+  const base = `${SITE}${blogPath(lang)}`
   const ld = [
-    { '@context': 'https://schema.org', '@type': 'Blog', name: 'Blog Hamza Khadri', url: `${SITE}/blog`, inLanguage: lang,
+    { '@context': 'https://schema.org', '@type': 'Blog', name: 'Blog Hamza Khadri', url: base, inLanguage: lang,
       author: { '@type': 'Person', name: AUTHOR, url: SITE },
-      blogPost: posts.map((p) => ({ '@type': 'BlogPosting', headline: p.title, url: `${SITE}/blog/${p.slug}`, datePublished: p.published })) },
+      blogPost: posts.map((p) => ({ '@type': 'BlogPosting', headline: p.title, url: `${SITE}${postPath(lang, p.slug)}`, datePublished: p.published })) },
     { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
       { '@type': 'ListItem', position: 1, name: t.home, item: SITE },
-      { '@type': 'ListItem', position: 2, name: t.blog, item: `${SITE}/blog` } ] },
+      { '@type': 'ListItem', position: 2, name: t.blog, item: base } ] },
   ]
-  const cards = posts.map((p) => `<li class="card"><a href="/blog/${esc(p.slug)}"${p.lang !== lang ? ` hreflang="${p.lang}" lang="${p.lang}"` : ''}>
+  const cards = posts.map((p) => `<li class="card"><a href="${postPath(lang, esc(p.slug))}">
 ${p.cover ? `<img src="${esc(p.cover)}" alt="" width="1200" height="630" loading="lazy" decoding="async">` : ''}
-<div class="meta"><time datetime="${p.published}">${fmtDate(p.published, p.lang)}</time><span>${p.readingMinutes} ${T[p.lang].read}</span>${p.category ? `<span>${esc(p.category)}</span>` : ''}</div>
+<div class="meta"><time datetime="${p.published}">${fmtDate(p.published, lang)}</time><span>${p.readingMinutes} ${t.read}</span>${p.category ? `<span>${esc(p.category)}</span>` : ''}</div>
 <h2>${esc(p.title)}</h2><p>${esc(p.description)}</p></a></li>`).join('\n')
   const body = `<main id="main" class="wide">
 <h1>${t.indexH1}</h1><p class="lead">${t.indexLead}</p>
 ${posts.length ? `<ul class="cards">\n${cards}\n</ul>` : `<p>${t.empty}</p>`}
 </main>`
-  return layout({ lang, title: t.indexTitle, description: t.indexDesc, canonical: `${SITE}/blog`, ogImage: DEFAULT_OG, ld, body, current: 'blog' })
+  return layout({ lang, title: t.indexTitle, description: t.indexDesc, canonical: base, ogImage: DEFAULT_OG, ld, body, current: 'blog',
+    switchTo: { href: blogPath(t.otherLang), label: t.switchIndex, aria: t.switchIndex },
+    extraHead: alternates(LANGS.map((l) => ({ lang: l, url: `${SITE}${blogPath(l)}` }))) })
 }
 
 const xml = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 
-export function rssFeed(posts) {
-  const items = posts.map((p) => `<item><title>${xml(p.title)}</title><link>${SITE}/blog/${p.slug}</link><guid isPermaLink="true">${SITE}/blog/${p.slug}</guid><pubDate>${new Date(p.published).toUTCString()}</pubDate><description>${xml(p.description)}</description>${p.category ? `<category>${xml(p.category)}</category>` : ''}</item>`).join('\n')
+export function rssFeed(posts, lang) {
+  const t = T[lang]
+  const items = posts.map((p) => `<item><title>${xml(p.title)}</title><link>${SITE}${postPath(lang, p.slug)}</link><guid isPermaLink="true">${SITE}${postPath(lang, p.slug)}</guid><pubDate>${new Date(p.published).toUTCString()}</pubDate><description>${xml(p.description)}</description>${p.category ? `<category>${xml(p.category)}</category>` : ''}</item>`).join('\n')
   return `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel>
-<title>Blog ${AUTHOR}</title><link>${SITE}/blog</link><description>${xml(T.fr.indexDesc)}</description><language>fr</language>
-<atom:link href="${SITE}/rss.xml" rel="self" type="application/rss+xml"/>
+<title>Blog ${AUTHOR}</title><link>${SITE}${blogPath(lang)}</link><description>${xml(t.indexDesc)}</description><language>${lang}</language>
+<atom:link href="${SITE}${rssPath(lang)}" rel="self" type="application/rss+xml"/>
 ${items}
 </channel></rss>
 `
 }
 
+/** posts: all published posts (both languages). Each with .alt (translation) when linked. */
 export function sitemapUrls(posts) {
-  const entry = (loc, lastmod, freq, prio) => `  <url>\n    <loc>${loc}</loc>\n    <lastmod>${lastmod.slice(0, 10)}</lastmod>\n    <changefreq>${freq}</changefreq>\n    <priority>${prio}</priority>\n  </url>\n`
-  const newest = posts.length ? posts.map((p) => p.updated).sort().at(-1) : new Date().toISOString()
-  return entry(`${SITE}/blog`, newest, 'weekly', '0.8') + posts.map((p) => entry(`${SITE}/blog/${p.slug}`, p.updated, 'monthly', '0.7')).join('')
+  const entry = (loc, lastmod, freq, prio, alts = []) => `  <url>\n    <loc>${loc}</loc>\n    <lastmod>${lastmod.slice(0, 10)}</lastmod>\n    <changefreq>${freq}</changefreq>\n    <priority>${prio}</priority>\n${alts.map((a) => `    <xhtml:link rel="alternate" hreflang="${HREFLANG[a.lang]}" href="${a.url}"/>\n`).join('')}  </url>\n`
+  const newest = (list) => (list.length ? list.map((p) => p.updated).sort().at(-1) : new Date().toISOString())
+  const idx = LANGS.map((l) => entry(`${SITE}${blogPath(l)}`, newest(posts.filter((p) => p.lang === l)), 'weekly', '0.8',
+    LANGS.map((x) => ({ lang: x, url: `${SITE}${blogPath(x)}` })))).join('')
+  const arts = posts.map((p) => entry(`${SITE}${postPath(p.lang, p.slug)}`, p.updated, 'monthly', '0.7',
+    p.alt ? [p, p.alt].map((x) => ({ lang: x.lang, url: `${SITE}${postPath(x.lang, x.slug)}` })) : [])).join('')
+  return idx + arts
 }

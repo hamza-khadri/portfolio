@@ -20,3 +20,4 @@ public/sitemap.xml
 
 # build output
 dist/
+public/en/

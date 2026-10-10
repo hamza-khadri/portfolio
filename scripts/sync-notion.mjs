@@ -1,9 +1,13 @@
 #!/usr/bin/env node
 // Notion "Blog HKcom" database -> static pages in public/ (copied as-is into dist by Vite).
-//   public/blog.html            -> /blog
+//   public/blog.html            -> /blog              (FR)
 //   public/blog/<slug>.html     -> /blog/<slug>
+//   public/en/blog.html         -> /en/blog           (EN)
+//   public/en/blog/<slug>.html  -> /en/blog/<slug>
+// Each article = one Notion entry per language, linked by the relations
+// "Version anglaise" / "Version française" (hreflang + language switcher).
 //   public/blog/images/*        -> images downloaded from Notion (their URLs expire after ~1h)
-//   public/rss.xml, public/sitemap.xml
+//   public/rss.xml, public/en/rss.xml, public/sitemap.xml
 // Only pages with "Publié" ticked are generated; untick = gone at next deploy.
 // Required env: NOTION_TOKEN. Optional: NOTION_DATABASE_ID, SITE_URL.
 
@@ -13,11 +17,12 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { createClient } from './blog/notion.mjs'
 import { plain, renderBlocks, slugify } from './blog/render.mjs'
-import { articlePage, indexPage, rssFeed, sitemapUrls } from './blog/templates.mjs'
+import { LANGS, articlePage, indexPage, rssFeed, sitemapUrls } from './blog/templates.mjs'
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const PUBLIC = path.join(ROOT, 'public')
 const BLOG_DIR = path.join(PUBLIC, 'blog')
+const EN_DIR = path.join(PUBLIC, 'en')
 const IMG_DIR = path.join(BLOG_DIR, 'images')
 const DATABASE_ID = process.env.NOTION_DATABASE_ID || '2946cd44-3872-4074-bbdd-343dcc9ebcae'
 const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
@@ -70,8 +75,29 @@ function toPost(page) {
     tags: (p['Mots-clés']?.multi_select || []).map((o) => o.name),
     category: p['Catégorie']?.select?.name || '',
     lang: p['Langue']?.select?.name === 'EN' ? 'en' : 'fr',
+    relIds: [...(p['Version anglaise']?.relation || []), ...(p['Version française']?.relation || [])].map((r) => r.id),
     coverFile: p['Image de couverture']?.files?.[0] || null,
     coverAlt: plain(p['Texte alternatif couverture']?.rich_text).trim() || title,
+  }
+}
+
+/** Pair FR/EN entries through the relations (either side may hold the link). Only published, opposite-language posts count. */
+function linkTranslations(posts) {
+  const byId = new Map(posts.map((p) => [p.id, p]))
+  const pair = (a, b) => { if (!a.alt) a.alt = b; if (!b.alt) b.alt = a }
+  for (const p of posts) {
+    for (const id of p.relIds) {
+      const other = byId.get(id)
+      if (!other) continue // unpublished or unknown target: no link, no dead hreflang
+      if (other.lang === p.lang) {
+        skipped.push(`"${p.title}": la version liée "${other.title}" est dans la même langue (${p.lang.toUpperCase()}), lien ignoré`)
+        continue
+      }
+      pair(p, other)
+    }
+  }
+  for (const p of posts) {
+    if (p.alt && p.alt.alt !== p) skipped.push(`"${p.title}": relation non réciproque avec "${p.alt.title}"`)
   }
 }
 
@@ -119,31 +145,40 @@ async function main() {
   }
 
   await rm(BLOG_DIR, { recursive: true, force: true })
+  await rm(EN_DIR, { recursive: true, force: true })
   await rm(path.join(PUBLIC, 'blog.html'), { force: true })
   await mkdir(BLOG_DIR, { recursive: true })
+  await mkdir(path.join(EN_DIR, 'blog'), { recursive: true })
 
   const seen = new Set()
   const built = []
   for (const page of pages) {
     const post = toPost(page)
     if (!post) continue
-    if (seen.has(post.slug)) {
-      skipped.push(`"${post.title}": slug en double "${post.slug}"`)
+    const key = `${post.lang}/${post.slug}`
+    if (seen.has(key)) {
+      skipped.push(`"${post.title}": slug en double "${post.slug}" (${post.lang.toUpperCase()})`)
       continue
     }
-    seen.add(post.slug)
+    seen.add(key)
     built.push(await buildPost(post, client))
   }
   built.sort((a, b) => b.post.published.localeCompare(a.post.published))
   const posts = built.map((b) => b.post)
+  linkTranslations(posts)
 
-  for (const { post, bodyHtml } of built) await writeFile(path.join(BLOG_DIR, `${post.slug}.html`), articlePage(post, bodyHtml))
-  await writeFile(path.join(PUBLIC, 'blog.html'), indexPage(posts))
-  await writeFile(path.join(PUBLIC, 'rss.xml'), rssFeed(posts))
+  const dirOf = (lang) => (lang === 'en' ? path.join(EN_DIR, 'blog') : BLOG_DIR)
+  for (const { post, bodyHtml } of built) await writeFile(path.join(dirOf(post.lang), `${post.slug}.html`), articlePage(post, bodyHtml))
+  for (const lang of LANGS) {
+    const list = posts.filter((p) => p.lang === lang)
+    await writeFile(lang === 'en' ? path.join(EN_DIR, 'blog.html') : path.join(PUBLIC, 'blog.html'), indexPage(list, lang))
+    await writeFile(lang === 'en' ? path.join(EN_DIR, 'rss.xml') : path.join(PUBLIC, 'rss.xml'), rssFeed(list, lang))
+  }
   const base = await readFile(path.join(ROOT, 'scripts', 'sitemap.base.xml'), 'utf8')
-  await writeFile(path.join(PUBLIC, 'sitemap.xml'), base.replace('</urlset>', `${sitemapUrls(posts)}</urlset>`))
+  const withNs = base.replace('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">')
+  await writeFile(path.join(PUBLIC, 'sitemap.xml'), withNs.replace('</urlset>', `${sitemapUrls(posts)}</urlset>`))
 
-  console.log(`Blog: ${posts.length} article(s) publié(s)${posts.length ? ' -> ' + posts.map((p) => p.slug).join(', ') : ''}`)
+  console.log(`Blog: ${posts.length} article(s) publié(s)${posts.length ? ' -> ' + posts.map((p) => `${p.lang}:${p.slug}`).join(', ') : ''}`)
   for (const s of skipped) console.warn(`  ! ${s}`)
 }
 

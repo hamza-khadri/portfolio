@@ -13,17 +13,20 @@ const page = (id, title, slug, extra = {}) => ({
     Titre: { title: [t(title)] }, Slug: { rich_text: [t(slug)] }, Publié: { checkbox: true },
     'Description SEO': { rich_text: [t(extra.desc ?? 'Une description courte.')] },
     'Mots-clés': { multi_select: [{ name: 'IA' }, { name: 'No-code' }] }, Catégorie: { select: { name: 'Tutoriel' } },
-    Langue: { select: { name: 'FR' } }, 'Date de publication': { date: { start: extra.date ?? '2026-10-05' } },
+    Langue: { select: { name: extra.lang ?? 'FR' } },
+    'Version anglaise': { relation: (extra.en ?? []).map((id) => ({ id })) }, 'Version française': { relation: (extra.fr ?? []).map((id) => ({ id })) }, 'Date de publication': { date: { start: extra.date ?? '2026-10-05' } },
     'Image de couverture': { files: extra.cover ? [{ type: 'file', file: { url: 'http://localhost:4010/img/cover.png' } }] : [] },
     'Texte alternatif couverture': { rich_text: [t('Couverture de test')] },
   },
 })
 
 const pages = [
-  page('p1', 'Mon premier article <test> & "quotes"', 'mon-premier-article', { cover: true }),
+  page('p1', 'Mon premier article <test> & "quotes"', 'mon-premier-article', { cover: true, en: ['p5'] }),
   page('p2', 'Deuxième article', 'deuxieme-article', { date: '2026-10-08', desc: '' }),
   page('p3', 'Slug cassé', 'Slug Cassé !'),
   page('p4', 'Doublon', 'deuxieme-article'),
+  page('p5', 'My first article', 'my-first-article', { lang: 'EN', fr: ['p1'], date: '2026-10-06' }),
+  page('p6', 'English only', 'english-only', { lang: 'EN', date: '2026-10-07' }),
 ]
 const blocks = {
   p1: [
@@ -38,6 +41,8 @@ const blocks = {
     { id: 'b9', type: 'heading_2', heading_2: { rich_text: [t('Intro')] } },
     { id: 'b10', type: 'weird_block', weird_block: {} },
   ],
+  p5: [{ id: 'e1', type: 'paragraph', paragraph: { rich_text: [t('An English paragraph.')] } }],
+  p6: [{ id: 'f1', type: 'paragraph', paragraph: { rich_text: [t('English only article.')] } }],
   p2: [{ id: 'c1', type: 'paragraph', paragraph: { rich_text: [t('Juste un paragraphe sans description SEO, assez long pour tester l extrait automatique et le temps de lecture.')] } }],
   b3: [{ id: 'n1', type: 'bulleted_list_item', bulleted_list_item: { rich_text: [t('enfant')] } }],
   b7: [
