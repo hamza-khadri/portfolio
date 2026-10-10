@@ -1,11 +1,13 @@
 {
   "name": "hamzas-portfolio",
   "private": true,
+  "engines": { "node": ">=20" },
   "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "sync": "node scripts/sync-notion.mjs",
+    "build": "npm run sync && vite build",
     "preview": "npm run build && wrangler dev",
     "deploy": "npm run build && wrangler deploy"
   },

@@ -14,6 +14,8 @@ function pageRewrite() {
       server.middlewares.use((req, _res, next) => {
         const name = req.url?.replace(/^\/|\/$/g, '')
         if (PAGES.includes(name)) req.url = `/${name}.html`
+        /* Generated blog pages live in public/ (see scripts/sync-notion.mjs). */
+        else if (name === 'blog' || name?.startsWith('blog/')) req.url = `/${name}.html`
         next()
       })
     },

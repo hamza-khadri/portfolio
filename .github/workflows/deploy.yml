@@ -1,0 +1,52 @@
+name: Deploy site
+
+# Rebuilds the site from Notion ("Blog HKcom") and deploys it to Cloudflare.
+# Triggers:
+#   - push on main (code changes)
+#   - workflow_dispatch (manual button, and the API call Make sends when a post is published/unpublished)
+#   - repository_dispatch "notion-blog-update" (alternative trigger)
+#   - nightly cron: safety net if a trigger was missed or an article was edited without a trigger
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  repository_dispatch:
+    types: [notion-blog-update]
+  schedule:
+    - cron: '17 3 * * *'
+
+# One deploy at a time. A running deploy is never cancelled; only the newest waiting one is kept,
+# so the live site always ends up matching the latest state of Notion.
+concurrency:
+  group: deploy-site
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # Syncs Notion -> public/ then runs vite build. Fails (no deploy) if Notion is unreachable.
+      - name: Build
+        run: npm run build
+        env:
+          CI: 'true'
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+
+      - name: Deploy to Cloudflare
+        run: npx wrangler deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
