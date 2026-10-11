@@ -67,10 +67,12 @@ function toPost(page) {
   if (!slug) return skip(page, `"${title}": slug vide`)
   if (!SLUG_RE.test(slug)) return skip(page, `"${title}": slug invalide "${slug}" (minuscules, chiffres et tirets seulement)`)
   const date = (k) => p[k]?.date?.start || null
+  // Publication date = the "Date de publication" property. Never the edit date; falls back to the creation date.
+  if (!date('Date de publication')) skipped.push(`"${title}": "Date de publication" vide, date de création utilisée (${page.created_time.slice(0, 10)})`)
   const published = new Date(date('Date de publication') || page.created_time).toISOString()
   const updated = new Date([date('Dernière publication'), page.last_edited_time, published].filter(Boolean).sort().at(-1)).toISOString()
   return {
-    id: page.id, title, slug, published, updated,
+    id: page.id, title, slug, published, updated, created: page.created_time,
     description: plain(p['Description SEO']?.rich_text).trim(),
     tags: (p['Mots-clés']?.multi_select || []).map((o) => o.name),
     category: p['Catégorie']?.select?.name || '',
@@ -187,7 +189,8 @@ async function main() {
     seen.add(key)
     built.push(await buildPost(post, client))
   }
-  built.sort((a, b) => b.post.published.localeCompare(a.post.published))
+  // Newest publication first; same day -> most recently created first (stable, independent of Notion's query order).
+  built.sort((a, b) => b.post.published.localeCompare(a.post.published) || b.post.created.localeCompare(a.post.created))
   const posts = built.map((b) => b.post)
   linkTranslations(posts)
   linkRelated(posts)

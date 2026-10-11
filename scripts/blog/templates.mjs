@@ -15,7 +15,7 @@ const T = {
     indexDesc: "Articles sur l'IA, l'automatisation, le no-code et le product, par Hamza Khadri.",
     indexH1: 'Blog', indexLead: "IA, automatisation, no-code et product : ce que je construis et ce que j'en apprends.",
     cta: 'Un process à automatiser ?', ctaText: "Parlons-en : je repère les opportunités IA dans vos process et je les concrétise.", ctaBtn: 'Me contacter',
-    rss: 'Flux RSS', rights: 'Tous droits réservés', seeAlso: 'Voir aussi', switchLabel: 'English version', switchIndex: 'English', switchAria: 'Read this article in English', otherLang: 'en',
+    rss: 'Flux RSS', rights: 'Tous droits réservés', published: 'Publié le', seeAlso: 'Voir aussi', switchLabel: 'English version', switchIndex: 'English', switchAria: 'Read this article in English', otherLang: 'en',
   },
   en: {
     home: 'Home', blog: 'Blog', contact: 'Contact', read: 'min read', back: '← All articles',
@@ -24,7 +24,7 @@ const T = {
     indexDesc: 'Articles on AI, automation, no-code and product, by Hamza Khadri.',
     indexH1: 'Blog', indexLead: 'AI, automation, no-code and product: what I build and what I learn from it.',
     cta: 'A process to automate?', ctaText: 'Let’s talk: I spot AI opportunities in your processes and make them real.', ctaBtn: 'Get in touch',
-    rss: 'RSS feed', rights: 'All rights reserved', seeAlso: 'See also', switchLabel: 'Version française', switchIndex: 'Français', switchAria: 'Lire cet article en français', otherLang: 'fr',
+    rss: 'RSS feed', rights: 'All rights reserved', published: 'Published on', seeAlso: 'See also', switchLabel: 'Version française', switchIndex: 'Français', switchAria: 'Lire cet article en français', otherLang: 'fr',
   },
 }
 
@@ -99,7 +99,7 @@ function cardList(posts, lang, heading = 'h2') {
   const t = T[lang]
   return posts.map((p) => `<li class="card"><a href="${postPath(lang, esc(p.slug))}">
 ${p.cover ? `<img src="${esc(p.cover)}" alt="" width="1200" height="630" loading="lazy" decoding="async">` : ''}
-<div class="meta"><time datetime="${p.published}">${fmtDate(p.published, lang)}</time><span>${p.readingMinutes} ${t.read}</span>${p.category ? `<span>${esc(p.category)}</span>` : ''}</div>
+<div class="meta"><span>${t.published} <time datetime="${p.published}">${fmtDate(p.published, lang)}</time></span><span>${p.readingMinutes} ${t.read}</span>${p.category ? `<span>${esc(p.category)}</span>` : ''}</div>
 <${heading}>${esc(p.title)}</${heading}><p>${esc(p.description)}</p></a></li>`).join('\n')
 }
 
@@ -188,7 +188,7 @@ export function articlePage(post, bodyHtml) {
 <a class="back" href="${blogPath(post.lang)}">${t.back}</a>
 <article>
 <h1>${esc(post.title)}</h1>
-<div class="meta"><time datetime="${post.published}">${fmtDate(post.published, post.lang)}</time>${showUpdated ? `<span>${t.updated} <time datetime="${post.updated}">${fmtDate(post.updated, post.lang)}</time></span>` : ''}<span>${post.readingMinutes} ${t.read}</span>${post.category ? `<span>${esc(post.category)}</span>` : ''}</div>
+<div class="meta"><span>${t.published} <time datetime="${post.published}">${fmtDate(post.published, post.lang)}</time></span>${showUpdated ? `<span>${t.updated} <time datetime="${post.updated}">${fmtDate(post.updated, post.lang)}</time></span>` : ''}<span>${post.readingMinutes} ${t.read}</span>${post.category ? `<span>${esc(post.category)}</span>` : ''}</div>
 ${post.cover ? `<figure class="cover"><img src="${esc(post.cover)}" alt="${esc(post.coverAlt)}" width="1200" height="630" decoding="async"></figure>` : ''}
 ${bodyHtml}
 </article>
