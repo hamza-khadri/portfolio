@@ -103,3 +103,12 @@ Règles :
 - Le même slug peut exister en FR et en EN, pas deux fois dans la même langue.
 - Une relation vers une entrée de la même langue est ignorée (avertissement dans les logs du build).
 - La page de blog mémorise sa langue (`hk_lang`) : un clic sur "Accueil" ouvre la page d'accueil dans la bonne langue.
+
+## Voir aussi (articles liés)
+
+Propriété **Articles liés** (relation vers la même base, à sens unique). Choisis jusqu'à **3 articles** : ils s'affichent en cartes sous l'article, avant le bloc contact.
+
+- Seuls les articles **publiés** et de la **même langue** apparaissent (un lien vers l'autre langue est ignoré, avec un avertissement dans les logs).
+- Au-delà de 3, seuls les 3 premiers sont gardés. L'article lui-même et les doublons sont ignorés.
+- Aucun article lié = pas de bloc "Voir aussi".
+- Un article lié que tu dépublies disparaît du bloc au déploiement suivant.

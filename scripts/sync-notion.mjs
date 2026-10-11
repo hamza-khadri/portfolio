@@ -76,6 +76,7 @@ function toPost(page) {
     category: p['Catégorie']?.select?.name || '',
     lang: p['Langue']?.select?.name === 'EN' ? 'en' : 'fr',
     relIds: [...(p['Version anglaise']?.relation || []), ...(p['Version française']?.relation || [])].map((r) => r.id),
+    relatedIds: (p['Articles liés']?.relation || []).map((r) => r.id),
     coverFile: p['Image de couverture']?.files?.[0] || null,
     coverAlt: plain(p['Texte alternatif couverture']?.rich_text).trim() || title,
   }
@@ -98,6 +99,29 @@ function linkTranslations(posts) {
   }
   for (const p of posts) {
     if (p.alt && p.alt.alt !== p) skipped.push(`"${p.title}": relation non réciproque avec "${p.alt.title}"`)
+  }
+}
+
+const MAX_RELATED = 3
+
+/** "Articles liés" -> post.related: published, same language, not itself, no duplicates, max 3 (extra ones are ignored). */
+function linkRelated(posts) {
+  const byId = new Map(posts.map((p) => [p.id, p]))
+  for (const p of posts) {
+    p.related = []
+    for (const id of p.relatedIds) {
+      const other = byId.get(id)
+      if (!other || other === p || p.related.includes(other)) continue // unpublished / unknown / self / duplicate
+      if (other.lang !== p.lang) {
+        skipped.push(`"${p.title}": l'article lié "${other.title}" est dans l'autre langue, ignoré (Voir aussi = même langue)`)
+        continue
+      }
+      p.related.push(other)
+    }
+    if (p.related.length > MAX_RELATED) {
+      skipped.push(`"${p.title}": ${p.related.length} articles liés, seuls les ${MAX_RELATED} premiers sont affichés`)
+      p.related = p.related.slice(0, MAX_RELATED)
+    }
   }
 }
 
@@ -166,6 +190,7 @@ async function main() {
   built.sort((a, b) => b.post.published.localeCompare(a.post.published))
   const posts = built.map((b) => b.post)
   linkTranslations(posts)
+  linkRelated(posts)
 
   const dirOf = (lang) => (lang === 'en' ? path.join(EN_DIR, 'blog') : BLOG_DIR)
   for (const { post, bodyHtml } of built) await writeFile(path.join(dirOf(post.lang), `${post.slug}.html`), articlePage(post, bodyHtml))

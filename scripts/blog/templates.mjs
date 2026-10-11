@@ -15,7 +15,7 @@ const T = {
     indexDesc: "Articles sur l'IA, l'automatisation, le no-code et le product, par Hamza Khadri.",
     indexH1: 'Blog', indexLead: "IA, automatisation, no-code et product : ce que je construis et ce que j'en apprends.",
     cta: 'Un process à automatiser ?', ctaText: "Parlons-en : je repère les opportunités IA dans vos process et je les concrétise.", ctaBtn: 'Me contacter',
-    rss: 'Flux RSS', rights: 'Tous droits réservés', switchLabel: 'English version', switchIndex: 'English', switchAria: 'Read this article in English', otherLang: 'en',
+    rss: 'Flux RSS', rights: 'Tous droits réservés', seeAlso: 'Voir aussi', switchLabel: 'English version', switchIndex: 'English', switchAria: 'Read this article in English', otherLang: 'en',
   },
   en: {
     home: 'Home', blog: 'Blog', contact: 'Contact', read: 'min read', back: '← All articles',
@@ -24,7 +24,7 @@ const T = {
     indexDesc: 'Articles on AI, automation, no-code and product, by Hamza Khadri.',
     indexH1: 'Blog', indexLead: 'AI, automation, no-code and product: what I build and what I learn from it.',
     cta: 'A process to automate?', ctaText: 'Let’s talk: I spot AI opportunities in your processes and make them real.', ctaBtn: 'Get in touch',
-    rss: 'RSS feed', rights: 'All rights reserved', switchLabel: 'Version française', switchIndex: 'Français', switchAria: 'Lire cet article en français', otherLang: 'fr',
+    rss: 'RSS feed', rights: 'All rights reserved', seeAlso: 'See also', switchLabel: 'Version française', switchIndex: 'Français', switchAria: 'Lire cet article en français', otherLang: 'fr',
   },
 }
 
@@ -81,6 +81,7 @@ details{margin:1rem 0;border:1px solid var(--line);border-radius:12px;padding:.8
 .card a{display:block;text-decoration:none;color:inherit;border:1px solid var(--line);border-radius:18px;padding:1.5rem;background:var(--surface);transition:border-color .2s,transform .2s}
 .card a:hover{border-color:var(--accent);transform:translateY(-2px)}.card h2{margin:.2rem 0 .6rem;font-size:1.45rem}.card p{margin:0;color:var(--ink-2)}
 .card .meta{margin:0}.card img{width:100%;aspect-ratio:1200/630;object-fit:cover;margin-bottom:1rem}
+.related{margin-top:3.5rem}.related h2{margin:0 0 .5rem;font-size:1.4rem}.related .card h3{margin:.2rem 0 .6rem;font-size:1.25rem}
 .cta{margin-top:4rem;border:1px solid var(--line);border-radius:18px;padding:1.8rem;background:var(--surface)}
 .cta h2{margin:0 0 .5rem;font-size:1.4rem}.cta p{margin:0 0 1.2rem;color:var(--ink-2)}
 .btn{display:inline-block;background:var(--accent);color:#07080A;font-weight:700;text-decoration:none;border-radius:999px;padding:.7rem 1.4rem}.btn:hover{color:#000;filter:brightness(1.1)}
@@ -92,6 +93,15 @@ header.site .lang{border:1px solid var(--line);border-radius:999px;padding:.1rem
 `
 
 const LOGO = `<svg width="46" height="30" viewBox="0 0 77 50" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M0 0H15.4V24.9691H0V0Z" fill="white"/><path d="M30.8 0H46.2V50H30.8V0Z" fill="white"/><path d="M15.4 25H30.8L15.4 49.9691H0L15.4 25Z" fill="white"/><path d="M61.6 0H77L61.6 24.9691H46.2L61.6 0Z" fill="white"/><path d="M61.6 25H77V49.9691H61.6V25Z" fill="white"/></svg>`
+
+/** Card list shared by the index and the "See also" block. */
+function cardList(posts, lang, heading = 'h2') {
+  const t = T[lang]
+  return posts.map((p) => `<li class="card"><a href="${postPath(lang, esc(p.slug))}">
+${p.cover ? `<img src="${esc(p.cover)}" alt="" width="1200" height="630" loading="lazy" decoding="async">` : ''}
+<div class="meta"><time datetime="${p.published}">${fmtDate(p.published, lang)}</time><span>${p.readingMinutes} ${t.read}</span>${p.category ? `<span>${esc(p.category)}</span>` : ''}</div>
+<${heading}>${esc(p.title)}</${heading}><p>${esc(p.description)}</p></a></li>`).join('\n')
+}
 
 const jsonLd = (o) => `<script type="application/ld+json">${JSON.stringify(o).replace(/</g, '\\u003c')}</script>`
 
@@ -183,6 +193,7 @@ ${post.cover ? `<figure class="cover"><img src="${esc(post.cover)}" alt="${esc(p
 ${bodyHtml}
 </article>
 ${post.tags.length ? `<ul class="tags" aria-label="Tags">${post.tags.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>` : ''}
+${post.related?.length ? `<section class="related" aria-labelledby="see-also"><h2 id="see-also">${t.seeAlso}</h2><ul class="cards">\n${cardList(post.related, post.lang, 'h3')}\n</ul></section>` : ''}
 <section class="cta"><h2>${t.cta}</h2><p>${t.ctaText}</p><a class="btn" href="/#contact">${t.ctaBtn}</a></section>
 </main>`
   return layout({ lang: post.lang, title: `${post.title} | ${AUTHOR}`, description: post.description, canonical: url, ogImage: image, ogType: 'article', ld, body, current: 'blog',
@@ -204,10 +215,7 @@ export function indexPage(posts, lang) {
       { '@type': 'ListItem', position: 1, name: t.home, item: SITE },
       { '@type': 'ListItem', position: 2, name: t.blog, item: base } ] },
   ]
-  const cards = posts.map((p) => `<li class="card"><a href="${postPath(lang, esc(p.slug))}">
-${p.cover ? `<img src="${esc(p.cover)}" alt="" width="1200" height="630" loading="lazy" decoding="async">` : ''}
-<div class="meta"><time datetime="${p.published}">${fmtDate(p.published, lang)}</time><span>${p.readingMinutes} ${t.read}</span>${p.category ? `<span>${esc(p.category)}</span>` : ''}</div>
-<h2>${esc(p.title)}</h2><p>${esc(p.description)}</p></a></li>`).join('\n')
+  const cards = cardList(posts, lang)
   const body = `<main id="main" class="wide">
 <h1>${t.indexH1}</h1><p class="lead">${t.indexLead}</p>
 ${posts.length ? `<ul class="cards">\n${cards}\n</ul>` : `<p>${t.empty}</p>`}
