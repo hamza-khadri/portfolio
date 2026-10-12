@@ -3,12 +3,15 @@ import posthog from '../../posthog.js';
 import { track } from '../lib/hooks.js';
 import { Burger, Close, ArrowUpRight } from '../lib/icons.jsx';
 
+/* Blog is another page (static, per language): the link leaves with the page transition. */
 const ITEMS = [
   { key: 'work',     href: '#work' },
   { key: 'about',    href: '#about' },
   { key: 'services', href: '#services' },
+  { key: 'blog',     href: (lang) => (lang === 'fr' ? '/blog' : '/en/blog') },
   { key: 'contact',  href: '#contact' },
 ];
+const hrefOf = (item, lang) => (typeof item.href === 'function' ? item.href(lang) : item.href);
 
 export default function Nav({ t, lang, setLang, active }) {
   const [compact, setCompact] = useState(false);
@@ -64,7 +67,7 @@ export default function Nav({ t, lang, setLang, active }) {
 
           <div className="nav-links">
             {ITEMS.map(item => (
-              <a key={item.key} href={item.href} className={`nav-link${navActive(item.key) ? ' active' : ''}`} onClick={() => onNav(item.key)}>
+              <a key={item.key} href={hrefOf(item, lang)} className={`nav-link${navActive(item.key) ? ' active' : ''}`} onClick={() => onNav(item.key)}>
                 {t.nav[item.key]}
                 <span className="dot" aria-hidden="true" />
               </a>
@@ -90,7 +93,7 @@ export default function Nav({ t, lang, setLang, active }) {
 
       <div className={`menu-sheet${open ? ' open' : ''}`} aria-hidden={!open}>
         {ITEMS.map((item, i) => (
-          <a key={item.key} href={item.href} onClick={() => onNav(item.key)} tabIndex={open ? 0 : -1}>
+          <a key={item.key} href={hrefOf(item, lang)} onClick={() => onNav(item.key)} tabIndex={open ? 0 : -1}>
             <span className="label">{String(i + 1).padStart(2, '0')}</span>
             {t.nav[item.key]}
             <ArrowUpRight style={{ width: 22, height: 22, marginLeft: 'auto', color: 'var(--ink-3)' }} />

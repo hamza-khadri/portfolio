@@ -1,15 +1,17 @@
 #!/usr/bin/env node
-// Notion "Blog HKcom" database -> static pages in public/ (copied as-is into dist by Vite).
-//   public/blog.html            -> /blog              (FR)
-//   public/blog/<slug>.html     -> /blog/<slug>
-//   public/en/blog.html         -> /en/blog           (EN)
-//   public/en/blog/<slug>.html  -> /en/blog/<slug>
+// Notion "Blog HKcom" database -> static HTML pages at the project root, built by Vite as
+// extra inputs (vite.config.js) so they share the homepage's CSS/JS (v2/blog.jsx):
+//   blog.html                   -> /blog              (FR)
+//   blog/<slug>.html            -> /blog/<slug>
+//   en/blog.html                -> /en/blog           (EN)
+//   en/blog/<slug>.html         -> /en/blog/<slug>
 // Each article = one Notion entry per language, linked by the relations
 // "Version anglaise" / "Version française" (hreflang + language switcher).
 //   public/blog/images/*        -> images downloaded from Notion (their URLs expire after ~1h)
 //   public/rss.xml, public/en/rss.xml, public/sitemap.xml
 // Only pages with "Publié" ticked are generated; untick = gone at next deploy.
 // Required env: NOTION_TOKEN. Optional: NOTION_DATABASE_ID, SITE_URL.
+// BLOG_MOCK=1: fake articles from scripts/dev/mock-blog.mjs instead of Notion (local UI work, refused in CI).
 
 import { createHash } from 'node:crypto'
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises'
@@ -21,9 +23,9 @@ import { LANGS, articlePage, indexPage, rssFeed, sitemapUrls } from './blog/temp
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const PUBLIC = path.join(ROOT, 'public')
-const BLOG_DIR = path.join(PUBLIC, 'blog')
-const EN_DIR = path.join(PUBLIC, 'en')
-const IMG_DIR = path.join(BLOG_DIR, 'images')
+const BLOG_DIR = path.join(ROOT, 'blog')
+const EN_DIR = path.join(ROOT, 'en')
+const IMG_DIR = path.join(PUBLIC, 'blog', 'images')
 const DATABASE_ID = process.env.NOTION_DATABASE_ID || '2946cd44-3872-4074-bbdd-343dcc9ebcae'
 const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
 
@@ -161,7 +163,13 @@ async function main() {
   const token = process.env.NOTION_TOKEN
   let pages = []
   let client
-  if (token) {
+  if (process.env.BLOG_MOCK) {
+    if (process.env.CI) throw new Error('BLOG_MOCK interdit en CI: ce serait déployer de faux articles.')
+    const { createMockClient } = await import('./dev/mock-blog.mjs')
+    client = createMockClient()
+    pages = await client.queryPublished()
+    console.warn('BLOG_MOCK: articles fictifs (scripts/dev/mock-blog.mjs), pas Notion.')
+  } else if (token) {
     client = createClient(token)
     pages = await client.queryPublished(DATABASE_ID)
   } else if (process.env.CI) {
@@ -170,11 +178,13 @@ async function main() {
     console.warn('NOTION_TOKEN absent: blog vide généré (normal en local sans token).')
   }
 
-  await rm(BLOG_DIR, { recursive: true, force: true })
-  await rm(EN_DIR, { recursive: true, force: true })
-  await rm(path.join(PUBLIC, 'blog.html'), { force: true })
+  // Everything here is generated (git-ignored): start clean so unpublished posts disappear.
+  for (const p of [BLOG_DIR, EN_DIR, path.join(ROOT, 'blog.html'), path.join(PUBLIC, 'blog'), path.join(PUBLIC, 'en'), path.join(PUBLIC, 'blog.html')]) {
+    await rm(p, { recursive: true, force: true })
+  }
   await mkdir(BLOG_DIR, { recursive: true })
   await mkdir(path.join(EN_DIR, 'blog'), { recursive: true })
+  await mkdir(path.join(PUBLIC, 'en'), { recursive: true })
 
   const seen = new Set()
   const built = []
@@ -199,8 +209,8 @@ async function main() {
   for (const { post, bodyHtml } of built) await writeFile(path.join(dirOf(post.lang), `${post.slug}.html`), articlePage(post, bodyHtml))
   for (const lang of LANGS) {
     const list = posts.filter((p) => p.lang === lang)
-    await writeFile(lang === 'en' ? path.join(EN_DIR, 'blog.html') : path.join(PUBLIC, 'blog.html'), indexPage(list, lang))
-    await writeFile(lang === 'en' ? path.join(EN_DIR, 'rss.xml') : path.join(PUBLIC, 'rss.xml'), rssFeed(list, lang))
+    await writeFile(lang === 'en' ? path.join(EN_DIR, 'blog.html') : path.join(ROOT, 'blog.html'), indexPage(list, lang))
+    await writeFile(lang === 'en' ? path.join(PUBLIC, 'en', 'rss.xml') : path.join(PUBLIC, 'rss.xml'), rssFeed(list, lang))
   }
   const base = await readFile(path.join(ROOT, 'scripts', 'sitemap.base.xml'), 'utf8')
   const withNs = base.replace('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">')

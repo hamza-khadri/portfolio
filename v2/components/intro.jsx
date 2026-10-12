@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { prefersReducedMotion } from '../lib/hooks.js';
+import { arrivedByTransition } from '../lib/page-transition.js';
 
 /* ── The original intro, restored on the v2 surface ───────────────
    assets/logo-intro.json is the file the old site played: a pointer
@@ -149,6 +150,8 @@ function prepare(data) {
 export const introPending = (() => {
   if (typeof window === 'undefined') return false;
   if (prefersReducedMotion()) return false;
+  /* Coming back from the blog: the page transition is the entrance. */
+  if (arrivedByTransition()) return false;
   try { return localStorage.getItem(VISIT_KEY) !== '1'; } catch (_) { return true; }
 })();
 

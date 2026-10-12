@@ -98,7 +98,11 @@
     /* Paint the ground before the bundle lands: no white flash, no layout jump. */
     html { background: #07080A; color-scheme: dark; }
     body { margin: 0; background: #07080A; }
+    /* The page-transition veil, before the stylesheet lands (dev injects it late). */
+    html.pt-enter body::after { content: ""; position: fixed; inset: 0; z-index: 98; background: #07080A; }
   </style>
+  <!-- Arriving from the blog: start under the page-transition veil (same as PT_HEAD_SCRIPT in v2/lib/page-transition.js). -->
+  <script>try{var t=+sessionStorage.getItem('hk_pt');sessionStorage.removeItem('hk_pt');if(t&&Date.now()-t<4000&&!matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('pt-enter')}catch(e){}</script>
 </head>
 <body>
   <div id="root"></div>

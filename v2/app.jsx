@@ -5,6 +5,7 @@ import './styles.css';
 import STRINGS from './strings.js';
 import CONTENT from '../content.js';
 import { useActiveSection, useGlassPointer, useReveal } from './lib/hooks.js';
+import { installPageTransitions, revealPage } from './lib/page-transition.js';
 
 import Background from './components/background.jsx';
 import Cursor from './components/cursor.jsx';
@@ -47,6 +48,17 @@ function App() {
     document.documentElement.lang = lang;
     try { localStorage.setItem('hk_lang', lang); } catch (_) {}
   }, [lang]);
+
+  /* Page transition to/from the blog. Arriving on /#section (from the blog
+     nav), the section only exists once React has rendered: jump to it, then
+     lift the veil. */
+  useEffect(() => {
+    const id = decodeURIComponent(location.hash.slice(1));
+    const target = id && document.getElementById(id);
+    if (target) target.scrollIntoView({ behavior: 'instant', block: 'start' });
+    revealPage();
+    return installPageTransitions();
+  }, []);
 
   useReveal(lang, ready);
   useGlassPointer();

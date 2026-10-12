@@ -1,7 +1,12 @@
-// HTML templates for /blog and /blog/<slug>. Standalone pages (no React),
-// styled with the same tokens as the homepage (v2/styles.css).
+// HTML templates for /blog and /blog/<slug>. Static pages (SEO: content and nav are in
+// the markup), built by Vite as extra inputs so they share the homepage's system:
+// v2/styles.css (tokens, glass, nav, rows, footer…) + v2/blog.css (index, article, prose),
+// and v2/blog.jsx for the light grid, cursor, reveals and the page transition.
 
-import { esc } from './render.mjs'
+import { esc, slugify } from './render.mjs'
+import STRINGS from '../../v2/strings.js'
+import { PT_HEAD_SCRIPT } from '../../v2/lib/page-transition.js'
+import { fold, pagerHtml } from '../../v2/lib/blog-index.js'
 
 export const SITE = (process.env.SITE_URL || 'https://hamzakhadri.com').replace(/\/$/, '')
 export const AUTHOR = 'Hamza Khadri'
@@ -9,22 +14,32 @@ export const DEFAULT_OG = `${SITE}/assets/og-image.png`
 
 const T = {
   fr: {
-    home: 'Accueil', blog: 'Blog', contact: 'Contact', read: 'min de lecture', back: '← Tous les articles',
-    empty: 'Les premiers articles arrivent bientôt.', updated: 'Mis à jour le',
+    home: 'Accueil', blog: 'Blog', read: 'min de lecture', readShort: 'min', back: 'Tous les articles',
+    empty: 'Les premiers articles arrivent bientôt.', updated: 'Mis à jour le', updatedShort: 'Mis à jour',
     indexTitle: 'Blog | Hamza Khadri',
     indexDesc: "Articles sur l'IA, l'automatisation, le no-code et le product, par Hamza Khadri.",
-    indexH1: 'Blog', indexLead: "IA, automatisation, no-code et product : ce que je construis et ce que j'en apprends.",
-    cta: 'Un process à automatiser ?', ctaText: "Parlons-en : je repère les opportunités IA dans vos process et je les concrétise.", ctaBtn: 'Me contacter',
-    rss: 'Flux RSS', rights: 'Tous droits réservés', published: 'Publié le', seeAlso: 'Voir aussi', switchLabel: 'English version', switchIndex: 'English', switchAria: 'Read this article in English', otherLang: 'en',
+    indexLabel: 'BLOG — IA, NO-CODE, PRODUCT', indexH1: ['Ce que je construis,', "ce que j'en apprends."],
+    indexLead: "IA, automatisation, no-code et product : ce que je construis et ce que j'en apprends.",
+    cta: 'Un process à automatiser ?', ctaLabel: 'PARLONS-EN', ctaText: "Parlons-en : je repère les opportunités IA dans vos process et je les concrétise.", ctaBtn: 'Me contacter',
+    rss: 'Flux RSS', published: 'Publié le', publishedShort: 'Publié', reading: 'Lecture', category: 'Catégorie',
+    seeAlso: 'Voir aussi', seeAlsoLabel: 'À LIRE ENSUITE', switchAria: 'Lire cet article en français', switchIndexAria: 'Blog en français',
+    toc: 'Sommaire', tags: 'Mots-clés', readLabel: 'Lire', skip: 'Aller au contenu',
+    search: 'Rechercher un article', searchPh: 'Rechercher : IA, Figma, no-code…', filters: 'Catégories', all: 'Tous',
+    noMatch: 'Aucun article ne correspond.', reset: 'Tout afficher', pager: 'Pagination', prev: 'Page précédente', next: 'Page suivante', page: 'Page',
   },
   en: {
-    home: 'Home', blog: 'Blog', contact: 'Contact', read: 'min read', back: '← All articles',
-    empty: 'First articles coming soon.', updated: 'Updated',
+    home: 'Home', blog: 'Blog', read: 'min read', readShort: 'min', back: 'All articles',
+    empty: 'First articles coming soon.', updated: 'Updated', updatedShort: 'Updated',
     indexTitle: 'Blog | Hamza Khadri',
     indexDesc: 'Articles on AI, automation, no-code and product, by Hamza Khadri.',
-    indexH1: 'Blog', indexLead: 'AI, automation, no-code and product: what I build and what I learn from it.',
-    cta: 'A process to automate?', ctaText: 'Let’s talk: I spot AI opportunities in your processes and make them real.', ctaBtn: 'Get in touch',
-    rss: 'RSS feed', rights: 'All rights reserved', published: 'Published on', seeAlso: 'See also', switchLabel: 'Version française', switchIndex: 'Français', switchAria: 'Lire cet article en français', otherLang: 'fr',
+    indexLabel: 'BLOG — AI, NO-CODE, PRODUCT', indexH1: ['What I build,', 'what I learn from it.'],
+    indexLead: 'AI, automation, no-code and product: what I build and what I learn from it.',
+    cta: 'A process to automate?', ctaLabel: "LET'S TALK", ctaText: 'Let’s talk: I spot AI opportunities in your processes and make them real.', ctaBtn: 'Get in touch',
+    rss: 'RSS feed', published: 'Published on', publishedShort: 'Published', reading: 'Reading', category: 'Category',
+    seeAlso: 'See also', seeAlsoLabel: 'READ NEXT', switchAria: 'Read this article in English', switchIndexAria: 'Blog in English',
+    toc: 'Contents', tags: 'Tags', readLabel: 'Read', skip: 'Skip to content',
+    search: 'Search articles', searchPh: 'Search: AI, Figma, no-code…', filters: 'Categories', all: 'All',
+    noMatch: 'No article matches.', reset: 'Show all', pager: 'Pagination', prev: 'Previous page', next: 'Next page', page: 'Page',
   },
 }
 
@@ -45,62 +60,80 @@ export function alternates(entries) {
     (fr ? `<link rel="alternate" hreflang="x-default" href="${esc(fr.url)}">\n` : '')
 }
 
-const CSS = `
-:root{--bg:#07080A;--ink:#ECEEF1;--ink-2:#B4B8C0;--ink-3:#7E838D;--line:rgba(255,255,255,.075);--accent:#8B7BFF;--surface:#0E1014;
---font-display:'Cabinet Grotesk','Satoshi',system-ui,sans-serif;--font-body:'Satoshi',system-ui,-apple-system,sans-serif;--gutter:clamp(1.25rem,4vw,3.5rem)}
-*{box-sizing:border-box}html{background:var(--bg);color-scheme:dark;-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:1.0625rem;line-height:1.7;-webkit-font-smoothing:antialiased}
-a{color:var(--accent);text-underline-offset:.2em}a:hover{color:#fff}
-.skip{position:absolute;left:-999px}.skip:focus{left:1rem;top:1rem;background:var(--accent);color:#000;padding:.5rem 1rem;border-radius:6px;z-index:9}
-header.site{display:flex;align-items:center;justify-content:space-between;padding:1.4rem var(--gutter);border-bottom:1px solid var(--line)}
-header.site nav{display:flex;gap:1.6rem;font-size:.92rem}header.site nav a{color:var(--ink-2);text-decoration:none}header.site nav a:hover,header.site nav a[aria-current]{color:#fff}
-main{max-width:46rem;margin:0 auto;padding:3.5rem var(--gutter) 5rem}
-.wide{max-width:64rem}
-h1,h2,h3,h4{font-family:var(--font-display);line-height:1.15;letter-spacing:-.01em;color:#fff}
-h1{font-size:clamp(2.1rem,5vw,3.2rem);font-weight:800;margin:0 0 1rem}
-h2{font-size:1.75rem;margin:3rem 0 1rem}h3{font-size:1.3rem;margin:2.2rem 0 .8rem}h4{font-size:1.1rem;margin:1.8rem 0 .6rem}
-.meta{display:flex;flex-wrap:wrap;gap:.4rem 1rem;color:var(--ink-3);font-size:.9rem;margin-bottom:2rem}
-.tags{display:flex;flex-wrap:wrap;gap:.5rem;margin:0 0 2rem;padding:0;list-style:none}
-.tags li{border:1px solid var(--line);border-radius:999px;padding:.15rem .8rem;font-size:.8rem;color:var(--ink-2)}
-.lead{font-size:1.2rem;color:var(--ink-2)}
-article p,article li{color:#D5D8DE}article ul,article ol{padding-left:1.4rem}article li{margin:.3rem 0}
-article img{max-width:100%;height:auto;border-radius:14px;display:block}
-figure{margin:2rem 0}figcaption{color:var(--ink-3);font-size:.88rem;margin-top:.6rem}
-blockquote{margin:1.8rem 0;padding:.2rem 0 .2rem 1.2rem;border-left:3px solid var(--accent);color:var(--ink)}
-hr{border:0;border-top:1px solid var(--line);margin:2.5rem 0}
-code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.9em;background:var(--surface);border:1px solid var(--line);padding:.1em .35em;border-radius:5px}
-pre{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:1rem 1.2rem;overflow-x:auto;line-height:1.5}pre code{background:none;border:0;padding:0}
-.callout{display:flex;gap:.8rem;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:1rem 1.2rem;margin:1.8rem 0}.callout p{margin:0}
-details{margin:1rem 0;border:1px solid var(--line);border-radius:12px;padding:.8rem 1.2rem}summary{cursor:pointer;font-weight:600}
-.table-wrap{overflow-x:auto;margin:1.8rem 0}table{border-collapse:collapse;width:100%;font-size:.95rem}th,td{border:1px solid var(--line);padding:.55rem .8rem;text-align:left}th{background:var(--surface);color:#fff}
-.todos{list-style:none;padding-left:0}.todo.done{color:var(--ink-3)}
-.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(14rem,1fr));gap:1.5rem}
-.link-card a{word-break:break-all}
-.cover{margin:0 0 2.5rem}.cover img{width:100%;aspect-ratio:1200/630;object-fit:cover}
-.cards{display:grid;gap:1.2rem;margin-top:2.5rem;padding:0;list-style:none}
-.card a{display:block;text-decoration:none;color:inherit;border:1px solid var(--line);border-radius:18px;padding:1.5rem;background:var(--surface);transition:border-color .2s,transform .2s}
-.card a:hover{border-color:var(--accent);transform:translateY(-2px)}.card h2{margin:.2rem 0 .6rem;font-size:1.45rem}.card p{margin:0;color:var(--ink-2)}
-.card .meta{margin:0}.card img{width:100%;aspect-ratio:1200/630;object-fit:cover;margin-bottom:1rem}
-.related{margin-top:3.5rem}.related h2{margin:0 0 .5rem;font-size:1.4rem}.related .card h3{margin:.2rem 0 .6rem;font-size:1.25rem}
-.cta{margin-top:4rem;border:1px solid var(--line);border-radius:18px;padding:1.8rem;background:var(--surface)}
-.cta h2{margin:0 0 .5rem;font-size:1.4rem}.cta p{margin:0 0 1.2rem;color:var(--ink-2)}
-.btn{display:inline-block;background:var(--accent);color:#07080A;font-weight:700;text-decoration:none;border-radius:999px;padding:.7rem 1.4rem}.btn:hover{color:#000;filter:brightness(1.1)}
-.back{display:inline-block;margin-bottom:2rem;color:var(--ink-2);text-decoration:none;font-size:.92rem}
-footer.site{border-top:1px solid var(--line);padding:1.8rem var(--gutter);color:var(--ink-3);font-size:.88rem;display:flex;flex-wrap:wrap;gap:.5rem 1.5rem;justify-content:space-between}
-footer.site a{color:var(--ink-3)}
-header.site .lang{border:1px solid var(--line);border-radius:999px;padding:.1rem .8rem;font-size:.82rem;color:var(--ink-2);text-decoration:none}header.site .lang:hover{border-color:var(--accent);color:#fff}
-@media (max-width:560px){header.site nav{gap:1rem}}
-`
+/* Icons: the same 1.5px line set as v2/lib/icons.jsx. */
+const icon = (d, cls = 'ico') => `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`
+const ARROW_UR = '<path d="M7 17 17 7M8 7h9v9"/>'
+const ARROW_L = '<path d="M19 12H5M11 6l-6 6 6 6"/>'
+const BURGER = '<path d="M4 8h16M4 16h16"/>'
+const CLOSE = '<path d="M6 6l12 12M18 6 6 18"/>'
 
-const LOGO = `<svg width="46" height="30" viewBox="0 0 77 50" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M0 0H15.4V24.9691H0V0Z" fill="white"/><path d="M30.8 0H46.2V50H30.8V0Z" fill="white"/><path d="M15.4 25H30.8L15.4 49.9691H0L15.4 25Z" fill="white"/><path d="M61.6 0H77L61.6 24.9691H46.2L61.6 0Z" fill="white"/><path d="M61.6 25H77V49.9691H61.6V25Z" fill="white"/></svg>`
+const LOGO = `<svg viewBox="0 0 77 50" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M0 0H15.4V24.9691H0V0Z" fill="currentColor"/><path d="M30.8 0H46.2V50H30.8V0Z" fill="currentColor"/><path d="M15.4 25H30.8L15.4 49.9691H0L15.4 25Z" fill="currentColor"/><path d="M61.6 0H77L61.6 24.9691H46.2L61.6 0Z" fill="currentColor"/><path d="M61.6 25H77V49.9691H61.6V25Z" fill="currentColor"/></svg>`
 
-/** Card list shared by the index and the "See also" block. */
-function cardList(posts, lang, heading = 'h2') {
+const pad = (n) => String(n).padStart(2, '0')
+
+/** Button with the home's sheen + rolling label. */
+const btn = (href, label, cls = 'btn glass') =>
+  `<a class="${cls}" href="${esc(href)}"><span class="btn-sheen" aria-hidden="true"></span><span class="btn-txt"><span>${esc(label)}</span><span aria-hidden="true">${esc(label)}</span></span>${icon(ARROW_UR)}</a>`
+
+/** Split-line display title (same markup as SectionHead), revealed line by line. */
+const lines = (arr) => arr.map((l, i) => `<span class="ln"><span class="ln-in" style="--li:${i}">${esc(l)}</span></span>`).join('')
+
+/** Posts per page on the index (search, filters and pages run client-side: v2/lib/blog-index.js). */
+export const PAGE_SIZE = 6
+
+/** Post rows: the home's work list. The whole row is the link (stretched title link).
+    With `index`, rows carry what the search/filters need, and rows past the first page start hidden. */
+function postRows(posts, lang, heading = 'h2', index = false) {
   const t = T[lang]
-  return posts.map((p) => `<li class="card"><a href="${postPath(lang, esc(p.slug))}">
-${p.cover ? `<img src="${esc(p.cover)}" alt="" width="1200" height="630" loading="lazy" decoding="async">` : ''}
-<div class="meta"><span>${t.published} <time datetime="${p.published}">${fmtDate(p.published, lang)}</time></span><span>${p.readingMinutes} ${t.read}</span>${p.category ? `<span>${esc(p.category)}</span>` : ''}</div>
-<${heading}>${esc(p.title)}</${heading}><p>${esc(p.description)}</p></a></li>`).join('\n')
+  const data = (p, i) => index
+    ? ` data-cat="${esc(slugify(p.category))}" data-search="${esc(fold([p.title, p.description, p.category, ...p.tags].join(' ')))}"`
+    : ''
+  return posts.map((p, i) => `<li class="work-row post-row${index && i >= PAGE_SIZE ? ' is-off' : ''}" data-reveal="up" style="--i:${Math.min(i % PAGE_SIZE, 5)}" data-cursor="label:${t.readLabel}"${data(p, i)}${p.cover ? ` data-preview="${i}" data-label="${esc(p.category || t.blog)}"` : ''}>
+<span class="num">${pad(i + 1)}</span>
+<div class="main">
+<div class="title-line"><${heading} class="name"><a class="row-link" href="${postPath(lang, esc(p.slug))}">${esc(p.title)}</a></${heading}></div>
+<p class="desc">${esc(p.description)}</p>
+${p.category || p.tags.length ? `<div class="tags">${p.category ? `<span class="tag tag-cat">${esc(p.category)}</span>` : ''}${p.tags.map((x) => `<span class="tag">${esc(x)}</span>`).join('')}</div>` : ''}
+</div>
+<div class="side"><time class="year" datetime="${p.published}">${fmtShort(p.published, lang)}</time><span class="mins">${p.readingMinutes} ${t.readShort}</span><span class="arrow" aria-hidden="true">${icon(ARROW_UR, '')}</span></div>
+${p.cover ? `<div class="thumb glass"><img src="${esc(p.cover)}" alt="" width="1200" height="630" loading="lazy" decoding="async"></div>` : ''}
+</li>`).join('\n')
+}
+
+/** Floating cover that follows the pointer over the rows (desktop). */
+const previewFor = (posts) => posts.some((p) => p.cover)
+  ? `<div class="work-preview glass" aria-hidden="true">${posts.map((p, i) => p.cover ? `<img data-i="${i}" src="${esc(p.cover)}" alt="" loading="lazy">` : '').join('')}<span class="lbl"></span></div>`
+  : ''
+
+const postList = (posts, lang, heading, index = false) =>
+  `<div class="work-list" data-reveal="line"></div>\n<ol class="work-list post-list">\n${postRows(posts, lang, heading, index)}\n</ol>`
+
+const CHEVRON = '<path d="m6 9 6 6 6-6"/>'
+const CHECK = '<path d="m5 12 4.5 4.5L19 7"/>'
+const SEARCH = '<circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.4-4.4"/>'
+
+/** Search field + category dropdown. The state lives in the URL (?q=&cat=&page=). */
+function postTools(posts, lang) {
+  const t = T[lang]
+  const cats = new Map()
+  for (const p of posts) if (p.category) cats.set(p.category, (cats.get(p.category) || 0) + 1)
+  const opts = [['', t.all, posts.length], ...[...cats].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).map(([c, n]) => [slugify(c), c, n])]
+  const option = ([slug, label, n], i) => `<li id="post-cat-${i}" role="option" class="post-filter-opt" data-cat="${esc(slug)}" data-label="${esc(label)}" aria-selected="${i === 0}"><span>${esc(label)}</span><span class="n tnum">${n}</span>${icon(CHECK, 'tick')}</li>`
+  const filter = `<div class="post-filter">
+<button type="button" class="post-filter-btn glass" aria-haspopup="listbox" aria-expanded="false" aria-controls="post-cat-list" aria-labelledby="post-cat-k post-cat-v">
+<span class="k" id="post-cat-k">${t.category}</span><span class="v" id="post-cat-v">${esc(t.all)}</span><span class="n tnum">${posts.length}</span>${icon(CHEVRON, 'chev')}
+</button>
+<ul id="post-cat-list" class="post-filter-list glass" role="listbox" aria-label="${t.filters}" tabindex="-1" hidden>${opts.map(option).join('')}</ul>
+</div>`
+  return `<div class="post-tools" data-reveal="up">
+<form class="post-search glass" role="search" action="" data-pt="off">
+${icon(SEARCH)}<label class="sr-only" for="post-q">${t.search}</label>
+<input id="post-q" name="q" type="search" placeholder="${esc(t.searchPh)}" autocomplete="off" spellcheck="false" enterkeyhint="search">
+<kbd aria-hidden="true">/</kbd>
+</form>
+${cats.size > 1 ? filter : ''}
+</div>
+<p class="post-status label" aria-live="polite"></p>`
 }
 
 const jsonLd = (o) => `<script type="application/ld+json">${JSON.stringify(o).replace(/</g, '\\u003c')}</script>`
@@ -109,9 +142,59 @@ const absolute = (u) => (u.startsWith('http') ? u : `${SITE}${u}`)
 
 const fmtDate = (iso, lang) =>
   new Intl.DateTimeFormat(lang === 'en' ? 'en-GB' : 'fr-BE', { dateStyle: 'long', timeZone: 'UTC' }).format(new Date(iso))
+const fmtShort = (iso, lang) =>
+  new Intl.DateTimeFormat(lang === 'en' ? 'en-GB' : 'fr-BE', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }).format(new Date(iso))
 
-function layout({ lang, title, description, canonical, ogImage, ogType = 'website', ld = [], body, current, extraHead = '', switchTo = null }) {
+/** The home's nav, as static markup. Section links go back to the home (/#work…), Blog is lit. */
+function nav(lang, switchTo, self) {
+  const s = STRINGS[lang]
+  const items = [
+    ['work', '/#work'], ['about', '/#about'], ['services', '/#services'], ['blog', blogPath(lang)], ['contact', '/#contact'],
+  ]
+  const langLink = (l) => l === lang
+    ? `<a href="${esc(self)}" class="on" aria-current="true" lang="${l}">${l}</a>`
+    : `<a href="${esc(switchTo.href)}" hreflang="${l}" lang="${l}" aria-label="${esc(switchTo.aria)}">${l}</a>`
+  return `<div class="nav-progress" aria-hidden="true"></div>
+<div class="nav-wrap">
+<nav class="nav glass" aria-label="Primary">
+<a href="/" class="nav-logo" aria-label="${AUTHOR} — ${T[lang].home}">${LOGO}<span class="nav-name">${AUTHOR}</span></a>
+<div class="nav-links">${items.map(([k, href]) => `<a href="${href}" class="nav-link${k === 'blog' ? ' active' : ''}"${k === 'blog' ? ' aria-current="page"' : ''}>${esc(s.nav[k])}<span class="dot" aria-hidden="true"></span></a>`).join('')}</div>
+<div class="nav-right">
+<div class="lang ${lang}" role="group" aria-label="Language"><span class="lang-thumb" aria-hidden="true"></span>${['en', 'fr'].map(langLink).join('')}</div>
+<button class="btn btn-icon glass nav-burger" type="button" aria-label="${esc(s.menu)}" aria-expanded="false" data-menu="${esc(s.menu)}" data-close="${esc(s.close)}">${icon(BURGER, 'ico ico-burger')}${icon(CLOSE, 'ico ico-close').replace('<svg', '<svg style="display:none"')}</button>
+</div>
+</nav>
+</div>
+<div class="menu-sheet" aria-hidden="true">${items.map(([k, href], i) => `<a href="${href}" tabindex="-1"${k === 'blog' ? ' aria-current="page"' : ''}><span class="label">${pad(i + 1)}</span>${esc(s.nav[k])}${icon(ARROW_UR, 'sheet-arrow')}</a>`).join('')}</div>`
+}
+
+/** Closing CTA (the home's contact section) + the home's footer. */
+function closing(lang) {
   const t = T[lang]
+  const s = STRINGS[lang]
+  return `<section id="contact" class="section blog-cta">
+<div class="wrap">
+<div class="sec-label label" data-reveal="fade">${t.ctaLabel}</div>
+<h2 class="display contact-title lines">${lines([t.cta])}</h2>
+<p class="lead cta-lead" data-reveal="up" style="--i:1">${esc(t.ctaText)}</p>
+<div class="cta-actions" data-reveal="up" style="--i:2">${btn('/#contact', t.ctaBtn, 'btn btn-primary glass')}<a class="mail" href="mailto:${esc(s.contactEmail)}" data-pt="off">${esc(s.contactEmail)}</a></div>
+</div>
+</section>`
+}
+
+function footer(lang) {
+  const t = T[lang]
+  const s = STRINGS[lang]
+  return `<footer class="footer">
+<div class="wrap cols">
+<div><span class="label">${esc(s.footer)}</span><span class="note">${esc(s.footerNote)}</span></div>
+<div class="clock glass"><span class="led" aria-hidden="true"></span><span class="label tnum">${esc(s.localTime)} <span data-clock></span></span></div>
+<div><span class="label">${esc(s.roleLine)}</span> · <a class="label rss" href="${rssPath(lang)}">${t.rss}</a></div>
+</div>
+</footer>`
+}
+
+function layout({ lang, title, description, canonical, ogImage, ogType = 'website', ld = [], body, extraHead = '', switchTo, rail = '', preview = '' }) {
   return `<!DOCTYPE html>
 <html lang="${lang}">
 <head>
@@ -142,26 +225,40 @@ ${extraHead}${ld.map(jsonLd).join('\n')}
 <link rel="preconnect" href="https://api.fontshare.com">
 <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
 <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@500,700,800&f[]=satoshi@400,500,600,700&display=swap" rel="stylesheet">
-<script>try{localStorage.setItem("hk_lang","${lang}")}catch(e){}</script>
-<style>${CSS}</style>
+<style>html{background:#07080A;color-scheme:dark}body{margin:0;background:#07080A}html.pt-enter body::after{content:"";position:fixed;inset:0;z-index:98;background:#07080A}</style>
+<script>${PT_HEAD_SCRIPT}try{localStorage.setItem("hk_lang","${lang}")}catch(e){}</script>
+<link rel="stylesheet" href="/v2/styles.css">
+<link rel="stylesheet" href="/v2/blog.css">
 </head>
-<body>
-<a class="skip" href="#main">${lang === 'en' ? 'Skip to content' : 'Aller au contenu'}</a>
-<header class="site">
-<a href="/" aria-label="${AUTHOR}">${LOGO}</a>
-<nav aria-label="Navigation"><a href="/">${t.home}</a><a href="${blogPath(lang)}"${current === 'blog' ? ' aria-current="page"' : ''}>${t.blog}</a><a href="/#contact">${t.contact}</a>${switchTo ? `<a class="lang" href="${esc(switchTo.href)}" hreflang="${t.otherLang}" lang="${t.otherLang}" aria-label="${esc(switchTo.aria)}">${esc(switchTo.label)}</a>` : ''}</nav>
-</header>
+<body class="blog">
+<div id="chrome"></div>
+<a class="skip" href="#main">${T[lang].skip}</a>
+${nav(lang, switchTo, new URL(canonical).pathname)}
+${rail}
+<main id="main">
 ${body}
-<footer class="site"><span>© ${new Date().getUTCFullYear()} ${AUTHOR}. ${t.rights}.</span><a href="${rssPath(lang)}">${t.rss}</a></footer>
+${closing(lang)}
+</main>
+${footer(lang)}
+${preview}
+<script type="module" src="/v2/blog.jsx"></script>
 </body>
 </html>
 `
+}
+
+/** Section headings of the article (h2) for the side rail. */
+function railFor(bodyHtml, lang) {
+  const heads = [...bodyHtml.matchAll(/<h2 id="([^"]+)">([\s\S]*?)<\/h2>/g)].map((m) => ({ id: m[1], text: m[2].replace(/<[^>]+>/g, '') }))
+  if (heads.length < 2) return ''
+  return `<nav class="rail post-rail" aria-label="${T[lang].toc}">${heads.map((h, i) => `<a href="#${h.id}"><span class="tick"></span><span class="lbl">${pad(i + 1)} ${h.text}</span></a>`).join('')}</nav>`
 }
 
 export function articlePage(post, bodyHtml) {
   const t = T[post.lang]
   const url = `${SITE}${postPath(post.lang, post.slug)}`
   const alt = post.alt || null
+  const other = post.lang === 'en' ? 'fr' : 'en'
   const image = post.cover ? absolute(post.cover) : DEFAULT_OG
   const modified = post.updated > post.published ? post.updated : post.published
   const ld = [
@@ -184,28 +281,53 @@ export function articlePage(post, bodyHtml) {
     },
   ]
   const showUpdated = post.updated.slice(0, 10) > post.published.slice(0, 10)
-  const body = `<main id="main">
-<a class="back" href="${blogPath(post.lang)}">${t.back}</a>
-<article>
-<h1>${esc(post.title)}</h1>
-<div class="meta"><span>${t.published} <time datetime="${post.published}">${fmtDate(post.published, post.lang)}</time></span>${showUpdated ? `<span>${t.updated} <time datetime="${post.updated}">${fmtDate(post.updated, post.lang)}</time></span>` : ''}<span>${post.readingMinutes} ${t.read}</span>${post.category ? `<span>${esc(post.category)}</span>` : ''}</div>
-${post.cover ? `<figure class="cover"><img src="${esc(post.cover)}" alt="${esc(post.coverAlt)}" width="1200" height="630" decoding="async"></figure>` : ''}
+  const row = (k, v) => `<div class="row"><span class="k">${k}</span><span class="v">${v}</span></div>`
+  const body = `<section id="blog-head" class="section post-head">
+<div class="wrap">
+<a class="back label" href="${blogPath(post.lang)}" data-reveal="fade">${icon(ARROW_L)}${t.back}</a>
+<div class="post-head-grid">
+<div class="post-head-copy">
+${post.category ? `<div class="sec-label label" data-reveal="fade">${esc(post.category.toUpperCase())}</div>` : ''}
+<h1 class="display post-title lines"><span class="ln"><span class="ln-in">${esc(post.title)}</span></span></h1>
+<p class="lead" data-reveal="up" style="--i:2">${esc(post.description)}</p>
+</div>
+<aside class="hero-meta-card glass post-meta" data-reveal="blur" style="--i:3">
+${row(t.publishedShort, `<time datetime="${post.published}">${fmtDate(post.published, post.lang)}</time>`)}
+${showUpdated ? row(t.updatedShort, `<time datetime="${post.updated}">${fmtDate(post.updated, post.lang)}</time>`) : ''}
+${row(t.reading, `${post.readingMinutes} ${t.read}`)}
+${post.category ? row(t.category, esc(post.category)) : ''}
+</aside>
+</div>
+${post.cover ? `<figure class="post-cover glass" data-reveal="scale" style="--i:3"><img src="${esc(post.cover)}" alt="${esc(post.coverAlt)}" width="1200" height="630" decoding="async"></figure>` : ''}
+</div>
+</section>
+<section id="article" class="section post-body">
+<div class="wrap">
+<article class="prose">
 ${bodyHtml}
 </article>
-${post.tags.length ? `<ul class="tags" aria-label="Tags">${post.tags.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>` : ''}
-${post.related?.length ? `<section class="related" aria-labelledby="see-also"><h2 id="see-also">${t.seeAlso}</h2><ul class="cards">\n${cardList(post.related, post.lang, 'h3')}\n</ul></section>` : ''}
-<section class="cta"><h2>${t.cta}</h2><p>${t.ctaText}</p><a class="btn" href="/#contact">${t.ctaBtn}</a></section>
-</main>`
-  return layout({ lang: post.lang, title: `${post.title} | ${AUTHOR}`, description: post.description, canonical: url, ogImage: image, ogType: 'article', ld, body, current: 'blog',
+${post.tags.length ? `<ul class="post-tags" aria-label="${t.tags}">${post.tags.map((x) => `<li class="tag">${esc(x)}</li>`).join('')}</ul>` : ''}
+</div>
+</section>
+${post.related?.length ? `<section id="related" class="section">
+<div class="wrap">
+<header class="sec-head"><div class="sec-label label" data-reveal="fade">${t.seeAlsoLabel}</div><h2 class="display h-1 lines" id="see-also">${lines([t.seeAlso])}</h2></header>
+${postList(post.related, post.lang, 'h3')}
+</div>
+</section>` : ''}`
+  return layout({ lang: post.lang, title: `${post.title} | ${AUTHOR}`, description: post.description, canonical: url, ogImage: image, ogType: 'article', ld, body,
+    rail: railFor(bodyHtml, post.lang),
+    preview: post.related?.length ? previewFor(post.related) : '',
     switchTo: alt
-      ? { href: postPath(alt.lang, alt.slug), label: t.switchLabel, aria: t.switchAria }
-      : { href: blogPath(t.otherLang), label: t.switchIndex, aria: t.switchIndex },
+      ? { href: postPath(alt.lang, alt.slug), aria: T[other].switchAria }
+      : { href: blogPath(other), aria: T[other].switchIndexAria },
     extraHead: alternates(alt ? [post, alt].map((x) => ({ lang: x.lang, url: `${SITE}${postPath(x.lang, x.slug)}` })) : []) +
       `<meta property="article:published_time" content="${post.published}">\n<meta property="article:modified_time" content="${modified}">\n` })
 }
 
 export function indexPage(posts, lang) {
   const t = T[lang]
+  const other = lang === 'en' ? 'fr' : 'en'
   const base = `${SITE}${blogPath(lang)}`
   const ld = [
     { '@context': 'https://schema.org', '@type': 'Blog', name: 'Blog Hamza Khadri', url: base, inLanguage: lang,
@@ -215,13 +337,30 @@ export function indexPage(posts, lang) {
       { '@type': 'ListItem', position: 1, name: t.home, item: SITE },
       { '@type': 'ListItem', position: 2, name: t.blog, item: base } ] },
   ]
-  const cards = cardList(posts, lang)
-  const body = `<main id="main" class="wide">
-<h1>${t.indexH1}</h1><p class="lead">${t.indexLead}</p>
-${posts.length ? `<ul class="cards">\n${cards}\n</ul>` : `<p>${t.empty}</p>`}
-</main>`
-  return layout({ lang, title: t.indexTitle, description: t.indexDesc, canonical: base, ogImage: DEFAULT_OG, ld, body, current: 'blog',
-    switchTo: { href: blogPath(t.otherLang), label: t.switchIndex, aria: t.switchIndex },
+  const body = `<section id="blog-head" class="section blog-head">
+<div class="wrap">
+<header class="sec-head">
+<div>
+<div class="sec-label label" data-reveal="fade">${t.indexLabel}</div>
+<h1 class="display h-1 lines" style="max-width:16ch">${lines(t.indexH1)}</h1>
+<p class="lead blog-lead" data-reveal="up" style="--i:2">${esc(t.indexLead)}</p>
+</div>
+<div class="sec-index" aria-hidden="true" data-reveal="fade">blog</div>
+</header>
+</div>
+</section>
+<section id="posts" class="section blog-posts">
+<div class="wrap">
+${posts.length ? `${postTools(posts, lang)}
+${postList(posts, lang, 'h2', true)}
+<div class="post-empty" hidden><p class="lead">${t.noMatch}</p>${btn('#posts', t.reset, 'btn glass post-reset')}</div>
+<nav class="pager" aria-label="${t.pager}" data-size="${PAGE_SIZE}" data-labels="${esc(JSON.stringify({ page: t.page, prev: t.prev, next: t.next }))}">${pagerHtml(1, Math.ceil(posts.length / PAGE_SIZE), { page: t.page, prev: t.prev, next: t.next })}</nav>
+<noscript><style>.post-row.is-off{display:grid!important}.pager,.post-tools{display:none!important}</style></noscript>` : `<p class="lead">${t.empty}</p>`}
+</div>
+</section>`
+  return layout({ lang, title: t.indexTitle, description: t.indexDesc, canonical: base, ogImage: DEFAULT_OG, ld, body,
+    preview: previewFor(posts),
+    switchTo: { href: blogPath(other), aria: T[other].switchIndexAria },
     extraHead: alternates(LANGS.map((l) => ({ lang: l, url: `${SITE}${blogPath(l)}` }))) })
 }
 

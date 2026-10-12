@@ -1,6 +1,6 @@
 const TRANSLATIONS = {
   en: {
-    nav: { work: 'Work', about: 'About', services: 'Services', contact: 'Contact' },
+    nav: { work: 'Work', about: 'About', services: 'Services', blog: 'Blog', contact: 'Contact' },
     availability: 'Available for 2027, open to Product Owner roles & freelance product missions',
     heroPrefix: 'I',
     heroWords: ['lead', 'design', 'build', 'ship', 'dream'],
@@ -62,7 +62,7 @@ const TRANSLATIONS = {
     tweakGrainContrast: 'Contrast',
   },
   fr: {
-    nav: { work: 'Projets', about: 'À propos', services: 'Services', contact: 'Contact' },
+    nav: { work: 'Projets', about: 'À propos', services: 'Services', blog: 'Blog', contact: 'Contact' },
     availability: 'Disponible pour 2027, ouvert aux postes Product Owner & missions freelance',
     heroPrefix: 'Je',
     heroWords: ['pilote', 'design', 'build', 'livre', 'rêve'],

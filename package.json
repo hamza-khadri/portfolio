@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:blog": "BLOG_MOCK=1 vite",
     "sync": "node scripts/sync-notion.mjs",
     "build": "npm run sync && vite build",
     "preview": "npm run build && wrangler dev",
