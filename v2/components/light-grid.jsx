@@ -45,6 +45,11 @@ const SPOTS = {
   services:     { x: 0.82, y: 0.58, c: VIOLET, k: 0.85 },
   testimonials: { x: 0.5,  y: 0.36, c: PALE,   k: 0.7 },
   contact:      { x: 0.5,  y: 0.95, c: SIGNAL, k: 0.75 },
+  /* Blog pages (scripts/blog/templates.mjs) */
+  'blog-head':  { x: 0.3,  y: -0.05, c: VIOLET, k: 0.9 },
+  posts:        { x: 0.86, y: 0.32, c: VIOLET, k: 0.85 },
+  article:      { x: 0.14, y: 0.4,  c: BLUE,   k: 0.7 },
+  related:      { x: 0.82, y: 0.5,  c: PALE,   k: 0.7 },
 };
 
 const VERT = `#version 300 es

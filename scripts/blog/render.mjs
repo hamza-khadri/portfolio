@@ -72,7 +72,7 @@ export async function renderBlocks(blocks, ctx) {
       let items = ''
       while (i < blocks.length && blocks[i].type === 'to_do') {
         const t = blocks[i].to_do
-        items += `<li class="todo${t.checked ? ' done' : ''}"><span aria-hidden="true">${t.checked ? '☑' : '☐'}</span> ${richText(t.rich_text)}${await children(blocks[i], ctx)}</li>`
+        items += `<li class="todo${t.checked ? ' done' : ''}"><span class="check" aria-hidden="true"></span><span>${richText(t.rich_text)}${await children(blocks[i], ctx)}</span></li>`
         i++
       }
       html += `<ul class="todos">${items}</ul>`

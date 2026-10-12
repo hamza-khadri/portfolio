@@ -65,20 +65,30 @@ Les images sont **téléchargées au build** et servies depuis `/blog/images/` (
 ## En local
 
 ```bash
-npm run sync            # lit Notion (NOTION_TOKEN dans l'environnement), écrit public/blog*
+npm run sync            # lit Notion (NOTION_TOKEN dans l'environnement), écrit blog.html, blog/, en/ à la racine
 npm run preview         # build + wrangler dev
 ```
+
+**Travailler l'interface du blog** : `npm run dev:blog` puis `http://localhost:5173/blog`.
+Articles fictifs (FR + EN, avec et sans couverture, sans description SEO, tous les types de blocs) définis dans
+`scripts/dev/mock-blog.mjs`, sans Notion ni réseau. Chaque modif de `scripts/blog/*` ou des articles fictifs
+régénère le blog et recharge la page. `BLOG_MOCK` est refusé en CI.
 
 Sans `NOTION_TOKEN`, un blog vide est généré. En CI, un token manquant fait échouer le build.
 Test sans token : `node scripts/dev/mock-notion.mjs &` puis
 `NOTION_API_BASE=http://localhost:4010/v1 NOTION_TOKEN=x npm run sync`.
 
-Fichiers générés (ignorés par git) : `public/blog.html`, `public/blog/`, `public/en/`, `public/rss.xml`, `public/sitemap.xml`.
+Fichiers générés (ignorés par git) : `blog.html`, `blog/`, `en/` (pages HTML, à la racine : Vite les construit comme la home),
+`public/blog/images/`, `public/rss.xml`, `public/en/rss.xml`, `public/sitemap.xml`.
 Le sitemap part de `scripts/sitemap.base.xml` (la page d'accueil) : édite celui-ci, pas `public/sitemap.xml`.
 
 ## Réglages dans le code
 
-- Textes de la page `/blog`, CTA de fin d'article, CSS : `scripts/blog/templates.mjs`
+- Textes et structure HTML de `/blog` et des articles : `scripts/blog/templates.mjs` (même balisage que la home : nav, lignes de projets, footer)
+- Styles : `v2/styles.css` (partagé avec la home) + `v2/blog.css` (en-tête d'article, colonne de lecture, blocs Notion)
+- Comportements (fond lumineux, curseur, apparitions, nav, sommaire latéral) : `v2/blog.jsx`
+- Recherche, filtres par catégorie et pagination de `/blog` : `v2/lib/blog-index.js` (côté navigateur, état dans l'URL `?q=&cat=&page=` ; tous les articles restent dans le HTML pour le SEO). Articles par page : `PAGE_SIZE` dans `scripts/blog/templates.mjs`
+- Transition de page home ⇄ blog : `v2/lib/page-transition.js` (+ le voile en CSS dans `v2/styles.css`)
 - Rendu des blocs : `scripts/blog/render.mjs`
 - Version de l'API Notion : variable `NOTION_VERSION` (défaut `2022-06-28`)
 
