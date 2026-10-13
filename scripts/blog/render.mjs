@@ -93,8 +93,9 @@ async function renderBlock(b, ctx) {
     }
     case 'heading_1':
     case 'heading_2':
-    case 'heading_3': {
-      const level = { heading_1: 2, heading_2: 3, heading_3: 4 }[b.type]
+    case 'heading_3':
+    case 'heading_4': {
+      const level = { heading_1: 2, heading_2: 3, heading_3: 4, heading_4: 5 }[b.type]
       const id = ctx.headingId(plain(d.rich_text))
       return `<h${level} id="${esc(id)}">${richText(d.rich_text)}</h${level}>`
     }

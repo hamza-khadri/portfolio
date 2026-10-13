@@ -742,6 +742,7 @@ img { display: block; max-width: 100%; }
   .work-preview { display: none; }
   .footer .cols { grid-template-columns: 1fr; text-align: left; gap: 1rem; }
   .footer .cols > :last-child { text-align: left; }
+  .footer .clock { justify-self: start; }
   .drawer .two, .drawer .meta { grid-template-columns: 1fr; }
   .sec-head { grid-template-columns: 1fr; }
   .sec-index { font-size: 26vw; top: 0.5rem; -webkit-text-stroke-width: 1.5px; }

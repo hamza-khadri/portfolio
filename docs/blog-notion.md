@@ -52,7 +52,7 @@ change (bouton "Mettre à jour").
 | Slug | `[a-z0-9-]`, ne plus le changer une fois publié |
 | Description SEO | meta description (160 caractères max conseillé, sinon extrait automatique) |
 | Mots-clés, Catégorie, Langue | tags affichés, `keywords` JSON-LD, `lang` de la page |
-| Image de couverture + Texte alternatif | image de l'article, aperçu OG, cartes de la liste |
+| Image de couverture + Texte alternatif | image de l'article, aperçu de partage (recadré en 1200×630 au build, zone centrale conservée), cartes de la liste |
 | Date de publication | date affichée, tri, sitemap |
 | Dernière publication | `dateModified` / lastmod, sert de déclencheur "Mettre à jour" |
 
@@ -86,8 +86,8 @@ Le sitemap part de `scripts/sitemap.base.xml` (la page d'accueil) : édite celui
 
 - Textes et structure HTML de `/blog` et des articles : `scripts/blog/templates.mjs` (même balisage que la home : nav, lignes de projets, footer)
 - Styles : `v2/styles.css` (partagé avec la home) + `v2/blog.css` (en-tête d'article, colonne de lecture, blocs Notion)
-- Comportements (fond lumineux, curseur, apparitions, nav, sommaire latéral) : `v2/blog.jsx`
-- Recherche, filtres par catégorie et pagination de `/blog` : `v2/lib/blog-index.js` (côté navigateur, état dans l'URL `?q=&cat=&page=` ; tous les articles restent dans le HTML pour le SEO). Articles par page : `PAGE_SIZE` dans `scripts/blog/templates.mjs`
+- Comportements (fond lumineux, curseur, apparitions, nav, sommaire des articles : colonne sticky à gauche du texte dès 1100px, sinon carte sous la couverture + bouton flottant) : `v2/blog.jsx`
+- Recherche, filtres par catégorie et pagination de `/blog` : `v2/lib/blog-index.js` (côté navigateur, état dans l'URL `?q=&cat=&page=` ; tous les articles restent dans le HTML pour le SEO). Articles par page : `PAGE_SIZE` dans `scripts/blog/templates.mjs`. Vue liste ou 3 colonnes au choix du lecteur (mémorisée dans son navigateur, `hk_blog_view`), sauf en mobile (640px et moins) : toujours en cartes sur 1 colonne, sans sélecteur ; le bloc « Voir aussi » est toujours en colonnes. Styles des cartes : `.is-grid` dans `v2/blog.css`
 - Transition de page home ⇄ blog : `v2/lib/page-transition.js` (+ le voile en CSS dans `v2/styles.css`)
 - Rendu des blocs : `scripts/blog/render.mjs`
 - Version de l'API Notion : variable `NOTION_VERSION` (défaut `2022-06-28`)

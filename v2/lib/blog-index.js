@@ -3,12 +3,18 @@
    Every post is in the static HTML (crawlers and no-JS readers see them
    all, see the <noscript> in the template); this only decides which rows
    show. The state lives in the URL (?q=&cat=&page=) so a filtered view can
-   be shared and survives a reload or a back navigation.
+   be shared and survives a reload or a back navigation. The list/columns
+   choice is a reader's preference instead: kept in localStorage (hk_blog_view)
+   and applied before the first paint by the inline script after the list.
+   On mobile (VIEW_MOBILE) there is no choice: always the cards, in one column.
 
    `pagerHtml` is also imported by scripts/blog/templates.mjs, so the first
    page is rendered at build time exactly as the script would render it. */
 
 const pad = (n) => String(n).padStart(2, '0');
+
+/** Below this width the index is always in cards and the switch is hidden (same breakpoint in blog.css). */
+export const VIEW_MOBILE = '(max-width: 640px)';
 const ico = (d) => `<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
 const ARROW_L = '<path d="M19 12H5M11 6l-6 6 6 6"/>';
 const ARROW_R = '<path d="M5 12h14M13 6l6 6-6 6"/>';
@@ -178,6 +184,26 @@ export function initPostIndex() {
     }
   };
 
+  /* List or columns: the reader's choice, except on mobile where it is always the cards.
+     The class may already be on the list (inline script in the template). */
+  const viewBtns = Array.from(document.querySelectorAll('.post-view-btn'));
+  const mobile = window.matchMedia(VIEW_MOBILE);
+  let view = 'list';
+  try { if (localStorage.getItem('hk_blog_view') === 'grid') view = 'grid'; } catch { /* private mode: list */ }
+  const applyView = (animate = true) => {
+    const grid = mobile.matches || view === 'grid';
+    const changed = list.classList.contains('is-grid') !== grid;
+    list.classList.toggle('is-grid', grid);
+    viewBtns.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.view === view)));
+    if (animate && changed) replay(rows.filter((row) => !row.classList.contains('is-off')));
+  };
+  const onView = (e) => {
+    view = e.currentTarget.dataset.view;
+    try { localStorage.setItem('hk_blog_view', view); } catch { /* private mode: the choice lasts for this page */ }
+    applyView();
+  };
+  const onMobile = () => applyView(false);
+
   let timer = 0;
   const onInput = () => {
     clearTimeout(timer);
@@ -211,7 +237,10 @@ export function initPostIndex() {
   pager.addEventListener('click', onPager);
   empty.querySelector('.post-reset')?.addEventListener('click', onReset);
   document.addEventListener('keydown', onKey);
+  viewBtns.forEach((b) => b.addEventListener('click', onView));
+  mobile.addEventListener('change', onMobile);
 
+  applyView(false);
   render({ animate: false });
 
   return () => {
@@ -222,5 +251,7 @@ export function initPostIndex() {
     pager.removeEventListener('click', onPager);
     empty.querySelector('.post-reset')?.removeEventListener('click', onReset);
     document.removeEventListener('keydown', onKey);
+    viewBtns.forEach((b) => b.removeEventListener('click', onView));
+    mobile.removeEventListener('change', onMobile);
   };
 }
