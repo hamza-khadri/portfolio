@@ -8,6 +8,7 @@
 // Each article = one Notion entry per language, linked by the relations
 // "Version anglaise" / "Version française" (hreflang + language switcher).
 //   public/blog/images/*        -> images downloaded from Notion (their URLs expire after ~1h)
+//   public/blog/images/*-og.jpg -> 1200x630 link-preview version of each cover (og:image)
 //   public/rss.xml, public/en/rss.xml, public/sitemap.xml
 // Only pages with "Publié" ticked are generated; untick = gone at next deploy.
 // Required env: NOTION_TOKEN. Optional: NOTION_DATABASE_ID, SITE_URL.
@@ -17,6 +18,7 @@ import { createHash } from 'node:crypto'
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import sharp from 'sharp'
 import { createClient } from './blog/notion.mjs'
 import { plain, renderBlocks, slugify } from './blog/render.mjs'
 import { LANGS, articlePage, indexPage, rssFeed, sitemapUrls } from './blog/templates.mjs'
@@ -58,6 +60,24 @@ async function resolveFile(fileObj) {
   } catch (err) {
     if (fileObj.type === 'external' && url.startsWith('https://')) return url
     throw new Error(`téléchargement d'image impossible: ${err.message}`)
+  }
+}
+
+/** Link-preview image (og:image) from a downloaded cover: 1200x630 JPEG, a few hundred KB at most.
+    Full-size covers (several MB) are dropped by WhatsApp and slow or cropped elsewhere. */
+async function ogImage(post) {
+  if (!post.cover?.startsWith('/blog/images/')) return null // no cover, or external URL used as-is
+  const name = `${path.basename(post.cover).replace(/\.\w+$/, '')}-og.jpg`
+  try {
+    await sharp(path.join(PUBLIC, post.cover))
+      .resize(1200, 630, { fit: 'cover' })
+      .flatten({ background: '#07080A' })
+      .jpeg({ quality: 82, mozjpeg: true })
+      .toFile(path.join(IMG_DIR, name))
+    return `/blog/images/${name}`
+  } catch (err) {
+    skipped.push(`"${post.title}": image de partage non générée (${err.message}), couverture d'origine utilisée`)
+    return null
   }
 }
 
@@ -156,6 +176,7 @@ async function buildPost(post, client) {
     skipped.push(`"${post.title}": Description SEO de ${post.description.length} caractères (160 max conseillé)`)
   }
   post.cover = post.coverFile ? await resolveFile(post.coverFile) : null
+  post.og = await ogImage(post)
   return { post, bodyHtml }
 }
 

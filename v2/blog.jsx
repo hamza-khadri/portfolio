@@ -11,7 +11,7 @@ import Cursor from './components/cursor.jsx';
    content and the nav are in the markup, and the stylesheets are linked
    from it (styles.css + blog.css) so nothing waits on this script. This entry adds what the home has
    on top: the ground of light, the cursor, the reveals, the glass sheen,
-   and the behaviours of the nav, the article rail and the post previews. */
+   and the behaviours of the nav, the article's table of contents and the post previews. */
 
 /* Nav: compact past the top, scroll progress, mobile sheet. Same as nav.jsx. */
 function useNav() {
@@ -54,28 +54,70 @@ function useNav() {
   }, []);
 }
 
-/* Article rail: the section headings, the one being read lit. Same as useActiveSection. */
-function useRail() {
+/* Table of contents: the heading being read is lit (in the list next to the text and in the
+   floating panel). On mobile, the button shows once the list is scrolled past and opens the panel. */
+function useToc() {
   useEffect(() => {
-    const links = Array.from(document.querySelectorAll('.rail a[href^="#"]'));
-    const heads = links.map((a) => document.getElementById(decodeURIComponent(a.hash.slice(1))));
-    if (!links.length) return;
-    let ticking = false;
+    const toc = document.querySelector('.toc');
+    const links = Array.from(document.querySelectorAll('.toc-list a[href^="#"]'));
+    if (!toc || !links.length) return;
+    const idOf = (a) => decodeURIComponent(a.hash.slice(1));
+    const heads = Array.from(new Set(links.map(idOf))).map((id) => document.getElementById(id)).filter(Boolean);
+    const article = document.getElementById('article');
+    const float = document.querySelector('.toc-float');
+    const sheet = float.querySelector('.toc-sheet');
+    const fab = float.querySelector('.toc-fab');
+
+    const setOpen = (open) => {
+      sheet.hidden = !open;
+      fab.setAttribute('aria-expanded', String(open));
+      fab.setAttribute('aria-label', open ? fab.dataset.close : fab.dataset.open);
+      fab.querySelector('.ico-list').style.display = open ? 'none' : '';
+      fab.querySelector('.ico-close').style.display = open ? '' : 'none';
+      if (open) sheet.querySelector('a.on')?.scrollIntoView({ block: 'center' });
+    };
+
+    let ticking = false, current;
     const update = () => {
       ticking = false;
       const line = window.innerHeight * 0.4;
-      let cur = -1;
-      heads.forEach((h, i) => { if (h && h.getBoundingClientRect().top <= line) cur = i; });
-      links.forEach((a, i) => {
-        a.classList.toggle('on', i === cur);
-        if (i === cur) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current');
-      });
+      let cur = null;
+      heads.forEach((h) => { if (h.getBoundingClientRect().top <= line) cur = h.id; });
+      if (cur !== current) {
+        current = cur;
+        links.forEach((a) => {
+          const on = idOf(a) === cur;
+          a.classList.toggle('on', on);
+          if (on) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current');
+        });
+        // A long list scrolls inside its sticky column: keep the lit entry in view.
+        const lit = toc.querySelector('a.on');
+        if (lit && toc.scrollHeight > toc.clientHeight) toc.scrollTo({ top: lit.offsetTop - toc.clientHeight / 2, behavior: 'smooth' });
+      }
+      const show = toc.getBoundingClientRect().bottom < 0 && article.getBoundingClientRect().bottom > window.innerHeight * 0.5;
+      float.classList.toggle('show', show);
+      if (!show && !sheet.hidden) setOpen(false);
     };
     const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
+    const onFab = () => setOpen(sheet.hidden);
+    const onPick = (e) => { if (e.target.closest('a')) setOpen(false); };
+    const onKey = (e) => { if (e.key === 'Escape' && !sheet.hidden) { setOpen(false); fab.focus(); } };
+    const onOutside = (e) => { if (!sheet.hidden && !float.contains(e.target)) setOpen(false); };
     update();
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll);
-    return () => { window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onScroll); };
+    fab.addEventListener('click', onFab);
+    sheet.addEventListener('click', onPick);
+    document.addEventListener('keydown', onKey);
+    document.addEventListener('pointerdown', onOutside);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      fab.removeEventListener('click', onFab);
+      sheet.removeEventListener('click', onPick);
+      document.removeEventListener('keydown', onKey);
+      document.removeEventListener('pointerdown', onOutside);
+    };
   }, []);
 }
 
@@ -88,6 +130,7 @@ function usePreview() {
     const imgs = Array.from(el.querySelectorAll('img'));
     const lbl = el.querySelector('.lbl');
     const enter = (row) => () => {
+      if (row.closest('.is-grid')) return; // cards already show their cover
       const i = Number(row.dataset.preview);
       imgs.forEach((img) => img.classList.toggle('on', Number(img.dataset.i) === i));
       lbl.textContent = row.dataset.label || '';
@@ -150,7 +193,7 @@ function BlogChrome() {
   useEffect(initPostIndex, []);
   useProseReveal();
   useNav();
-  useRail();
+  useToc();
   usePreview();
   useClock();
   useReveal(true);

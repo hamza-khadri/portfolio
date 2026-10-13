@@ -6,7 +6,7 @@
 import { esc, slugify } from './render.mjs'
 import STRINGS from '../../v2/strings.js'
 import { PT_HEAD_SCRIPT } from '../../v2/lib/page-transition.js'
-import { fold, pagerHtml } from '../../v2/lib/blog-index.js'
+import { VIEW_MOBILE, fold, pagerHtml } from '../../v2/lib/blog-index.js'
 
 export const SITE = (process.env.SITE_URL || 'https://hamzakhadri.com').replace(/\/$/, '')
 export const AUTHOR = 'Hamza Khadri'
@@ -23,7 +23,8 @@ const T = {
     cta: 'Un process à automatiser ?', ctaLabel: 'PARLONS-EN', ctaText: "Parlons-en : je repère les opportunités IA dans vos process et je les concrétise.", ctaBtn: 'Me contacter',
     rss: 'Flux RSS', published: 'Publié le', publishedShort: 'Publié', reading: 'Lecture', category: 'Catégorie',
     seeAlso: 'Voir aussi', seeAlsoLabel: 'À LIRE ENSUITE', switchAria: 'Lire cet article en français', switchIndexAria: 'Blog en français',
-    toc: 'Sommaire', tags: 'Mots-clés', readLabel: 'Lire', skip: 'Aller au contenu',
+    toc: 'Sommaire', tocOpen: 'Ouvrir le sommaire', tocClose: 'Fermer le sommaire', tags: 'Mots-clés', readLabel: 'Lire', skip: 'Aller au contenu',
+    view: 'Affichage', viewList: 'Vue liste', viewGrid: 'Vue 3 colonnes',
     search: 'Rechercher un article', searchPh: 'Rechercher : IA, Figma, no-code…', filters: 'Catégories', all: 'Tous',
     noMatch: 'Aucun article ne correspond.', reset: 'Tout afficher', pager: 'Pagination', prev: 'Page précédente', next: 'Page suivante', page: 'Page',
   },
@@ -37,7 +38,8 @@ const T = {
     cta: 'A process to automate?', ctaLabel: "LET'S TALK", ctaText: 'Let’s talk: I spot AI opportunities in your processes and make them real.', ctaBtn: 'Get in touch',
     rss: 'RSS feed', published: 'Published on', publishedShort: 'Published', reading: 'Reading', category: 'Category',
     seeAlso: 'See also', seeAlsoLabel: 'READ NEXT', switchAria: 'Read this article in English', switchIndexAria: 'Blog in English',
-    toc: 'Contents', tags: 'Tags', readLabel: 'Read', skip: 'Skip to content',
+    toc: 'Contents', tocOpen: 'Open contents', tocClose: 'Close contents', tags: 'Tags', readLabel: 'Read', skip: 'Skip to content',
+    view: 'Layout', viewList: 'List view', viewGrid: '3-column view',
     search: 'Search articles', searchPh: 'Search: AI, Figma, no-code…', filters: 'Categories', all: 'All',
     noMatch: 'No article matches.', reset: 'Show all', pager: 'Pagination', prev: 'Previous page', next: 'Next page', page: 'Page',
   },
@@ -66,6 +68,7 @@ const ARROW_UR = '<path d="M7 17 17 7M8 7h9v9"/>'
 const ARROW_L = '<path d="M19 12H5M11 6l-6 6 6 6"/>'
 const BURGER = '<path d="M4 8h16M4 16h16"/>'
 const CLOSE = '<path d="M6 6l12 12M18 6 6 18"/>'
+const LIST = '<path d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01"/>'
 
 const LOGO = `<svg viewBox="0 0 77 50" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M0 0H15.4V24.9691H0V0Z" fill="currentColor"/><path d="M30.8 0H46.2V50H30.8V0Z" fill="currentColor"/><path d="M15.4 25H30.8L15.4 49.9691H0L15.4 25Z" fill="currentColor"/><path d="M61.6 0H77L61.6 24.9691H46.2L61.6 0Z" fill="currentColor"/><path d="M61.6 25H77V49.9691H61.6V25Z" fill="currentColor"/></svg>`
 
@@ -82,6 +85,8 @@ const lines = (arr) => arr.map((l, i) => `<span class="ln"><span class="ln-in" s
 export const PAGE_SIZE = 6
 
 /** Post rows: the home's work list. The whole row is the link (stretched title link).
+    The same markup lays out as a list or as cards in columns (.post-list.is-grid, v2/blog.css);
+    a post without a cover gets a placeholder that only the cards show.
     With `index`, rows carry what the search/filters need, and rows past the first page start hidden. */
 function postRows(posts, lang, heading = 'h2', index = false) {
   const t = T[lang]
@@ -91,12 +96,12 @@ function postRows(posts, lang, heading = 'h2', index = false) {
   return posts.map((p, i) => `<li class="work-row post-row${index && i >= PAGE_SIZE ? ' is-off' : ''}" data-reveal="up" style="--i:${Math.min(i % PAGE_SIZE, 5)}" data-cursor="label:${t.readLabel}"${data(p, i)}${p.cover ? ` data-preview="${i}" data-label="${esc(p.category || t.blog)}"` : ''}>
 <span class="num">${pad(i + 1)}</span>
 <div class="main">
-<div class="title-line"><${heading} class="name"><a class="row-link" href="${postPath(lang, esc(p.slug))}">${esc(p.title)}</a></${heading}></div>
+<div class="title-line"><${heading} class="name"><a class="row-link" href="${postPath(lang, esc(p.slug))}"><span>${esc(p.title)}</span></a></${heading}></div>
 <p class="desc">${esc(p.description)}</p>
 ${p.category || p.tags.length ? `<div class="tags">${p.category ? `<span class="tag tag-cat">${esc(p.category)}</span>` : ''}${p.tags.map((x) => `<span class="tag">${esc(x)}</span>`).join('')}</div>` : ''}
 </div>
 <div class="side"><time class="year" datetime="${p.published}">${fmtShort(p.published, lang)}</time><span class="mins">${p.readingMinutes} ${t.readShort}</span><span class="arrow" aria-hidden="true">${icon(ARROW_UR, '')}</span></div>
-${p.cover ? `<div class="thumb glass"><img src="${esc(p.cover)}" alt="" width="1200" height="630" loading="lazy" decoding="async"></div>` : ''}
+${p.cover ? `<div class="thumb glass"><img src="${esc(p.cover)}" alt="" width="1200" height="630" loading="lazy" decoding="async"></div>` : `<div class="thumb thumb-empty glass" aria-hidden="true">${LOGO}</div>`}
 </li>`).join('\n')
 }
 
@@ -105,14 +110,20 @@ const previewFor = (posts) => posts.some((p) => p.cover)
   ? `<div class="work-preview glass" aria-hidden="true">${posts.map((p, i) => p.cover ? `<img data-i="${i}" src="${esc(p.cover)}" alt="" loading="lazy">` : '').join('')}<span class="lbl"></span></div>`
   : ''
 
-const postList = (posts, lang, heading, index = false) =>
-  `<div class="work-list" data-reveal="line"></div>\n<ol class="work-list post-list">\n${postRows(posts, lang, heading, index)}\n</ol>`
+/* Runs right after the index list, before the first paint: mobile readers and those who chose the columns get the cards without a flash of the list. */
+const VIEW_SCRIPT = `<script>try{if(matchMedia("${VIEW_MOBILE}").matches||localStorage.getItem("hk_blog_view")==="grid")document.currentScript.previousElementSibling.classList.add("is-grid")}catch(e){}</script>`
+
+/** `index`: the blog index (search data, pages, list/columns choice). `grid`: always in columns ("See also"). */
+const postList = (posts, lang, heading, { index = false, grid = false } = {}) =>
+  `<div class="work-list" data-reveal="line"></div>\n<ol class="work-list post-list${grid ? ' is-grid' : ''}">\n${postRows(posts, lang, heading, index)}\n</ol>${index ? VIEW_SCRIPT : ''}`
 
 const CHEVRON = '<path d="m6 9 6 6 6-6"/>'
 const CHECK = '<path d="m5 12 4.5 4.5L19 7"/>'
 const SEARCH = '<circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.4-4.4"/>'
+const VIEW_LIST = '<path d="M4 6h16M4 12h16M4 18h16"/>'
+const VIEW_GRID = '<rect x="3.5" y="5" width="4.5" height="14" rx="1"/><rect x="9.75" y="5" width="4.5" height="14" rx="1"/><rect x="16" y="5" width="4.5" height="14" rx="1"/>'
 
-/** Search field + category dropdown. The state lives in the URL (?q=&cat=&page=). */
+/** Search field + category dropdown (state in the URL: ?q=&cat=&page=) and the list/columns switch (remembered in the browser). */
 function postTools(posts, lang) {
   const t = T[lang]
   const cats = new Map()
@@ -132,6 +143,10 @@ ${icon(SEARCH)}<label class="sr-only" for="post-q">${t.search}</label>
 <kbd aria-hidden="true">/</kbd>
 </form>
 ${cats.size > 1 ? filter : ''}
+<div class="post-view glass" role="group" aria-label="${t.view}">
+<button type="button" class="post-view-btn" data-view="list" aria-pressed="true" aria-label="${t.viewList}" title="${t.viewList}">${icon(VIEW_LIST)}</button>
+<button type="button" class="post-view-btn" data-view="grid" aria-pressed="false" aria-label="${t.viewGrid}" title="${t.viewGrid}">${icon(VIEW_GRID)}</button>
+</div>
 </div>
 <p class="post-status label" aria-live="polite"></p>`
 }
@@ -194,7 +209,7 @@ function footer(lang) {
 </footer>`
 }
 
-function layout({ lang, title, description, canonical, ogImage, ogType = 'website', ld = [], body, extraHead = '', switchTo, rail = '', preview = '' }) {
+function layout({ lang, title, description, canonical, ogImage, ogAlt = AUTHOR, ogSized = true, ogType = 'website', ld = [], body, extraHead = '', switchTo, floating = '', preview = '' }) {
   return `<!DOCTYPE html>
 <html lang="${lang}">
 <head>
@@ -216,11 +231,13 @@ function layout({ lang, title, description, canonical, ogImage, ogType = 'websit
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(description)}">
 <meta property="og:image" content="${esc(ogImage)}">
+${ogSized ? `<meta property="og:image:width" content="1200">\n<meta property="og:image:height" content="630">\n` : ''}<meta property="og:image:alt" content="${esc(ogAlt)}">
 <meta property="og:locale" content="${lang === 'en' ? 'en_US' : 'fr_BE'}">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="${esc(title)}">
 <meta name="twitter:description" content="${esc(description)}">
 <meta name="twitter:image" content="${esc(ogImage)}">
+<meta name="twitter:image:alt" content="${esc(ogAlt)}">
 ${extraHead}${ld.map(jsonLd).join('\n')}
 <link rel="preconnect" href="https://api.fontshare.com">
 <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
@@ -234,12 +251,12 @@ ${extraHead}${ld.map(jsonLd).join('\n')}
 <div id="chrome"></div>
 <a class="skip" href="#main">${T[lang].skip}</a>
 ${nav(lang, switchTo, new URL(canonical).pathname)}
-${rail}
 <main id="main">
 ${body}
 ${closing(lang)}
 </main>
 ${footer(lang)}
+${floating}
 ${preview}
 <script type="module" src="/v2/blog.jsx"></script>
 </body>
@@ -247,11 +264,24 @@ ${preview}
 `
 }
 
-/** Section headings of the article (h2) for the side rail. */
-function railFor(bodyHtml, lang) {
-  const heads = [...bodyHtml.matchAll(/<h2 id="([^"]+)">([\s\S]*?)<\/h2>/g)].map((m) => ({ id: m[1], text: m[2].replace(/<[^>]+>/g, '') }))
-  if (heads.length < 2) return ''
-  return `<nav class="rail post-rail" aria-label="${T[lang].toc}">${heads.map((h, i) => `<a href="#${h.id}"><span class="tick"></span><span class="lbl">${pad(i + 1)} ${h.text}</span></a>`).join('')}</nav>`
+/** Table of contents: every heading of the article (h2 to h6), in reading order. Top-level ones are numbered,
+    the others indented under them. Rendered twice: next to the text (sticky on desktop, under the cover on mobile)
+    and in the floating panel mobile readers open once they have scrolled past it. */
+function tocFor(bodyHtml, lang) {
+  const t = T[lang]
+  const heads = [...bodyHtml.matchAll(/<h([2-6]) id="([^"]+)">([\s\S]*?)<\/h\1>/g)].map((m) => ({ level: Number(m[1]), id: m[2], text: m[3].replace(/<[^>]+>/g, '') }))
+  if (heads.length < 2) return { inline: '', floating: '' }
+  const top = Math.min(...heads.map((h) => h.level))
+  let n = 0
+  const list = `<ol class="toc-list">${heads.map((h) => `<li><a href="#${h.id}" style="--d:${h.level - top}">${h.level === top ? `<span class="n tnum">${pad(++n)}</span>` : ''}<span>${h.text}</span></a></li>`).join('')}</ol>`
+  const title = `<div class="toc-title label">${t.toc}</div>`
+  return {
+    inline: `<nav class="toc" aria-label="${t.toc}">${title}${list}</nav>`,
+    floating: `<div class="toc-float">
+<nav class="toc-sheet glass" id="toc-sheet" aria-label="${t.toc}" hidden><div class="toc-sheet-scroll">${title}${list}</div></nav>
+<button class="btn btn-icon glass toc-fab" type="button" aria-controls="toc-sheet" aria-expanded="false" aria-label="${t.tocOpen}" data-open="${t.tocOpen}" data-close="${t.tocClose}">${icon(LIST, 'ico ico-list')}${icon(CLOSE, 'ico ico-close').replace('<svg', '<svg style="display:none"')}</button>
+</div>`,
+  }
 }
 
 export function articlePage(post, bodyHtml) {
@@ -259,7 +289,9 @@ export function articlePage(post, bodyHtml) {
   const url = `${SITE}${postPath(post.lang, post.slug)}`
   const alt = post.alt || null
   const other = post.lang === 'en' ? 'fr' : 'en'
-  const image = post.cover ? absolute(post.cover) : DEFAULT_OG
+  // Link preview: the 1200x630 version of the cover, else the translation's, else the site default.
+  const shared = [post, alt].find((x) => x?.og || x?.cover)
+  const image = shared ? absolute(shared.og || shared.cover) : DEFAULT_OG
   const modified = post.updated > post.published ? post.updated : post.published
   const ld = [
     {
@@ -281,6 +313,7 @@ export function articlePage(post, bodyHtml) {
     },
   ]
   const showUpdated = post.updated.slice(0, 10) > post.published.slice(0, 10)
+  const toc = tocFor(bodyHtml, post.lang)
   const row = (k, v) => `<div class="row"><span class="k">${k}</span><span class="v">${v}</span></div>`
   const body = `<section id="blog-head" class="section post-head">
 <div class="wrap">
@@ -302,22 +335,24 @@ ${post.cover ? `<figure class="post-cover glass" data-reveal="scale" style="--i:
 </div>
 </section>
 <section id="article" class="section post-body">
-<div class="wrap">
+<div class="wrap post-layout${toc.inline ? ' has-toc' : ''}">
+${toc.inline}
+<div class="post-main">
 <article class="prose">
 ${bodyHtml}
 </article>
 ${post.tags.length ? `<ul class="post-tags" aria-label="${t.tags}">${post.tags.map((x) => `<li class="tag">${esc(x)}</li>`).join('')}</ul>` : ''}
 </div>
+</div>
 </section>
 ${post.related?.length ? `<section id="related" class="section">
 <div class="wrap">
 <header class="sec-head"><div class="sec-label label" data-reveal="fade">${t.seeAlsoLabel}</div><h2 class="display h-1 lines" id="see-also">${lines([t.seeAlso])}</h2></header>
-${postList(post.related, post.lang, 'h3')}
+${postList(post.related, post.lang, 'h3', { grid: true })}
 </div>
 </section>` : ''}`
-  return layout({ lang: post.lang, title: `${post.title} | ${AUTHOR}`, description: post.description, canonical: url, ogImage: image, ogType: 'article', ld, body,
-    rail: railFor(bodyHtml, post.lang),
-    preview: post.related?.length ? previewFor(post.related) : '',
+  return layout({ lang: post.lang, title: `${post.title} | ${AUTHOR}`, description: post.description, canonical: url, ogImage: image, ogAlt: shared ? shared.coverAlt : AUTHOR, ogSized: !shared || !!shared.og, ogType: 'article', ld, body,
+    floating: toc.floating,
     switchTo: alt
       ? { href: postPath(alt.lang, alt.slug), aria: T[other].switchAria }
       : { href: blogPath(other), aria: T[other].switchIndexAria },
@@ -352,7 +387,7 @@ export function indexPage(posts, lang) {
 <section id="posts" class="section blog-posts">
 <div class="wrap">
 ${posts.length ? `${postTools(posts, lang)}
-${postList(posts, lang, 'h2', true)}
+${postList(posts, lang, 'h2', { index: true })}
 <div class="post-empty" hidden><p class="lead">${t.noMatch}</p>${btn('#posts', t.reset, 'btn glass post-reset')}</div>
 <nav class="pager" aria-label="${t.pager}" data-size="${PAGE_SIZE}" data-labels="${esc(JSON.stringify({ page: t.page, prev: t.prev, next: t.next }))}">${pagerHtml(1, Math.ceil(posts.length / PAGE_SIZE), { page: t.page, prev: t.prev, next: t.next })}</nav>
 <noscript><style>.post-row.is-off{display:grid!important}.pager,.post-tools{display:none!important}</style></noscript>` : `<p class="lead">${t.empty}</p>`}

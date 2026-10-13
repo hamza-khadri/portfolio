@@ -29,6 +29,10 @@
 .post-list { list-style: none; }
 /* The whole row is the title's link, stretched over it. */
 .post-row .row-link::after { content: ""; position: absolute; inset: 0; z-index: 1; }
+/* The hover slide is on the title's text, not on .name: a transformed ancestor would shrink the link's hit area to the title. */
+.post-row:hover .name { transform: none; }
+.post-row .row-link span { display: inline-block; transition: transform 0.6s var(--ease-out); }
+.post-row:hover .row-link span { transform: translateX(6px); }
 .post-row .row-link:focus-visible { outline: none; }
 .post-row:has(.row-link:focus-visible) { outline: 1.5px solid var(--accent); outline-offset: 4px; border-radius: var(--r-sm); }
 .post-row .name { font-size: clamp(1.3rem, 2.3vw, 2.05rem); line-height: 1.08; }
@@ -40,6 +44,45 @@
 .tag.tag-cat::before { content: ""; width: 4px; height: 4px; background: var(--accent); box-shadow: 0 0 6px rgba(var(--accent-rgb), 0.9); }
 .work-row:hover .tag.tag-cat { border-color: rgba(var(--accent-rgb), 0.7); background: rgba(var(--accent-rgb), 0.14); }
 .work-row .side .mins { font-family: var(--font-body); font-size: 0.78rem; font-weight: 500; color: var(--ink-3); }
+
+/* ─── Posts in columns ─────────────────────────────────────────────
+   The same rows as cards: cover on top, then category and tags, title, intro, date.
+   Chosen on the index (.post-view, remembered in the browser), always on under "See also". */
+.post-row .thumb.thumb-empty { display: none; }
+.post-list.is-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; padding-top: 1.5rem; }
+.is-grid .post-row {
+  display: flex; flex-direction: column; align-items: stretch; gap: 1.1rem; padding: 0.5rem 0.5rem 1.1rem;
+  border: 1px solid var(--line); border-radius: var(--r-md); background: rgba(255,255,255,0.02);
+  transition: background 0.5s var(--ease-out), border-color 0.4s, opacity var(--dur) var(--ease-out) var(--d), transform var(--dur) var(--ease-out) var(--d);
+}
+.is-grid .post-row:hover { padding-left: 0.5rem; background: rgba(255,255,255,0.045); border-color: var(--line-2); }
+.is-grid .post-row::before { display: none; }
+.is-grid .post-row.is-off { display: none; }
+.is-grid .post-row .num { display: none; }
+.is-grid .post-row .thumb { display: block; order: -1; --r: 9px; margin: 0; overflow: hidden; aspect-ratio: 1200 / 630; }
+.is-grid .post-row .thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.9s var(--ease-out); }
+.is-grid .post-row:hover .thumb img { transform: scale(1.04); }
+.is-grid .post-row .thumb.thumb-empty { display: grid; place-items: center; color: rgba(255,255,255,0.14); background: linear-gradient(140deg, rgba(var(--accent-rgb), 0.16), rgba(255,255,255,0.02) 60%); }
+.is-grid .post-row .thumb-empty svg { width: 3.2rem; }
+.is-grid .post-row .main { gap: 0.6rem; align-content: start; padding: 0 0.7rem; }
+.is-grid .post-row .tags { order: -1; margin: 0 0 0.3rem; }
+.is-grid .post-row .name { font-size: clamp(1.2rem, 1.6vw, 1.45rem); line-height: 1.15; }
+.is-grid .post-row:hover .row-link span { transform: none; }
+.is-grid .post-row .desc { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-clamp: 3; overflow: hidden; font-size: 0.88rem; }
+.is-grid .post-row .side { display: flex; align-items: center; justify-content: flex-start; gap: 0.9rem; margin-top: auto; padding: 0.3rem 0.7rem 0; text-align: left; }
+.is-grid .post-row .side .arrow { width: 32px; height: 32px; margin-left: auto; }
+@media (max-width: 1000px) { .post-list.is-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+/* Mobile: one column (lib/blog-index.js puts the index in cards there, and the switch is hidden). */
+@media (max-width: 640px) { .post-list.is-grid { grid-template-columns: minmax(0, 1fr); } }
+
+/* List / columns switch: a glass pill with two icon buttons, the chosen one lit. */
+.post-view { --r: var(--r-pill); display: inline-flex; gap: 0.15rem; margin-left: auto; padding: 0.3rem; }
+.post-view-btn { display: grid; place-items: center; width: 2.5rem; height: 2.5rem; border-radius: var(--r-pill); cursor: pointer; color: var(--ink-3); transition: color 0.3s, background 0.3s; }
+.post-view-btn .ico { width: 17px; height: 17px; }
+.post-view-btn:hover { color: var(--ink); }
+.post-view-btn[aria-pressed="true"] { color: var(--ink); background: rgba(255,255,255,0.1); }
+.post-view-btn:focus-visible { outline: 1.5px solid var(--accent); outline-offset: 1px; }
+@media (max-width: 640px) { .post-view { display: none; } }
 
 /* Search, filters, pages (lib/blog-index.js) */
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
@@ -143,7 +186,7 @@
 .post-meta .row { grid-template-columns: 6.2rem 1fr; }
 
 .post-cover { --r: var(--r-lg); margin-top: clamp(2.5rem, 5vw, 4rem); padding: 6px; }
-.post-cover img { width: 100%; aspect-ratio: 1200 / 630; object-fit: cover; border-radius: calc(var(--r-lg) - 6px); }
+.post-cover img { width: 100%; height: auto; aspect-ratio: 1200 / 630; object-fit: cover; border-radius: calc(var(--r-lg) - 6px); }
 
 /* ─── Reading column ───────────────────────────────────────────── */
 .section.post-body { padding-top: clamp(3rem, 6vw, 5rem); }
@@ -156,7 +199,7 @@
 .prose a:hover { color: var(--accent); text-decoration-color: var(--accent); }
 
 /* Headings: the home's section marker (a lit square) then display type. */
-.prose h2, .prose h3, .prose h4 { font-family: var(--font-display); color: var(--ink); scroll-margin-top: 7rem; }
+.prose h2, .prose h3, .prose h4, .prose h5, .prose h6 { font-family: var(--font-display); color: var(--ink); scroll-margin-top: 7rem; }
 .prose h2 { font-weight: 800; font-size: clamp(1.75rem, 3vw, 2.5rem); letter-spacing: -0.035em; line-height: 1.05; margin-top: 2.6em; }
 .prose h2::before {
   content: ""; display: block; width: 6px; height: 6px; margin-bottom: 1.1rem;
@@ -164,7 +207,9 @@
 }
 .prose h3 { font-weight: 700; font-size: clamp(1.3rem, 2vw, 1.6rem); letter-spacing: -0.025em; line-height: 1.15; margin-top: 2.2em; }
 .prose h4 { font-weight: 700; font-size: 1.15rem; letter-spacing: -0.015em; margin-top: 2em; }
-.prose h2 + *, .prose h3 + *, .prose h4 + * { margin-top: 0.8em; }
+.prose h5 { font-weight: 700; font-size: 1.02rem; letter-spacing: -0.01em; margin-top: 1.8em; }
+.prose h6 { font-family: var(--font-body); font-weight: 700; font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-2); margin-top: 1.8em; }
+.prose h2 + *, .prose h3 + *, .prose h4 + *, .prose h5 + *, .prose h6 + * { margin-top: 0.8em; }
 
 /* Lists: the marquee's lit diamond, and tabular numbers for ordered ones. */
 .prose ul, .prose ol { padding-left: 1.6rem; }
@@ -289,8 +334,56 @@
 
 .post-tags { list-style: none; display: flex; flex-wrap: wrap; gap: 0.45rem; margin-top: 3.5rem; padding-top: 2rem; border-top: 1px solid var(--line); }
 
-/* Article rail: the home's section index, listing the article's sections. */
-.post-rail .lbl { max-width: 15rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* ─── Table of contents ────────────────────────────────────────── */
+/* One column by default (the list sits in a card above the text); from 1100px the list
+   becomes a sticky column left of the text, which stays centred on the page. */
+.post-layout { display: grid; grid-template-columns: minmax(0, 1fr); row-gap: clamp(2.5rem, 6vw, 3.5rem); }
+.post-main { min-width: 0; }
+.toc {
+  width: 100%; max-width: 44rem; margin-inline: auto; padding: 1.3rem 1.3rem 1rem;
+  border: 1px solid var(--line); border-radius: var(--r-md); background: rgba(255,255,255,0.025);
+}
+.toc-title { margin-bottom: 0.9rem; color: var(--ink-3); }
+.toc-list { list-style: none; }
+.toc-list a {
+  display: flex; gap: 0.65rem; padding: 0.4rem 0 0.4rem calc(0.95rem + var(--d, 0) * 0.85rem);
+  border-left: 1px solid var(--line); font-size: 0.875rem; line-height: 1.35; color: var(--ink-2);
+  transition: color 0.3s, border-color 0.3s;
+}
+.toc-list a:not([style*="--d:0"]) { font-size: 0.825rem; color: var(--ink-3); }
+.toc-list .n { flex: none; padding-top: 0.2em; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.04em; color: var(--ink-3); transition: color 0.3s; }
+.toc-list a:hover { color: var(--ink); }
+.toc-list a.on { color: var(--ink); border-left-color: var(--accent); }
+.toc-list a.on .n { color: var(--accent); }
+
+/* Mobile: once the list is scrolled past, a button bottom right opens it in a small panel. */
+.toc-float {
+  position: fixed; z-index: 60; right: calc(1rem + env(safe-area-inset-right)); bottom: calc(1rem + env(safe-area-inset-bottom));
+  display: flex; flex-direction: column; align-items: flex-end; gap: 0.7rem; pointer-events: none;
+  opacity: 0; visibility: hidden; transform: translateY(10px);
+  transition: opacity 0.35s, transform 0.45s var(--ease-out), visibility 0s 0.35s;
+}
+.toc-float.show { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
+.toc-float.show > * { pointer-events: auto; }
+.toc-fab { width: 3rem; height: 3rem; background-color: rgba(9,11,14,0.72); }
+.toc-sheet {
+  --r: var(--r-md); width: min(20rem, calc(100vw - 2rem)); background-color: rgba(9,11,14,0.82);
+  transform-origin: bottom right; animation: toc-in 0.35s var(--ease-out);
+}
+.toc-sheet-scroll { max-height: min(60vh, 26rem); overflow-y: auto; overscroll-behavior: contain; padding: 1.1rem 1.1rem 0.8rem; }
+@keyframes toc-in { from { opacity: 0; transform: translateY(8px) scale(0.96); } }
+
+@media (min-width: 1100px) {
+  .post-layout.has-toc { grid-template-columns: minmax(13rem, 1fr) minmax(0, 44rem) minmax(0, 1fr); column-gap: 3rem; align-items: start; }
+  .toc {
+    position: sticky; top: 6.5rem; max-width: 17rem; margin: 0; padding: 0 0.5rem 0 0;
+    max-height: calc(100vh - 8.5rem); overflow-y: auto; overscroll-behavior: contain;
+    border: 0; border-radius: 0; background: none; scrollbar-width: none;
+  }
+  .toc::-webkit-scrollbar { display: none; }
+  .toc-float { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { .toc-sheet { animation: none; } }
 
 /* ─── Closing CTA ──────────────────────────────────────────────── */
 .blog-cta .contact-title { margin-top: 1.4rem; font-size: clamp(2.6rem, 7vw, 7rem); }
@@ -300,6 +393,8 @@
 .cta-actions .mail::after { content: ""; position: absolute; left: 0; right: 0; bottom: -0.15em; height: 1px; background: linear-gradient(90deg, var(--accent), rgba(255,255,255,0.4)); transform: scaleX(0); transform-origin: left; transition: transform 0.7s var(--ease-io); }
 .cta-actions .mail:hover { color: var(--ink); }
 .cta-actions .mail:hover::after { transform: scaleX(1); }
+/* Above the fixed ground of light (.bg), which otherwise paints over the footer's text: on the home, #root does this. */
+.blog .footer { position: relative; z-index: 1; }
 .footer .rss { color: var(--ink-3); transition: color 0.3s; }
 .footer .rss:hover { color: var(--ink); }
 
