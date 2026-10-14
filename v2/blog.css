@@ -17,6 +17,8 @@
 }
 .lang a:hover { color: var(--ink-2); }
 .lang a.on { color: var(--ink); }
+.lang a.off { opacity: 0.35; cursor: not-allowed; }
+.lang a.off:hover { color: var(--ink-3); }
 .menu-sheet .sheet-arrow { width: 22px; height: 22px; margin-left: auto; color: var(--ink-3); }
 .menu-sheet a[aria-current] { color: var(--accent); }
 
