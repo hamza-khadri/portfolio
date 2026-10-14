@@ -191,8 +191,10 @@
 .post-cover img { width: 100%; height: auto; aspect-ratio: 1200 / 630; object-fit: cover; border-radius: calc(var(--r-lg) - 6px); }
 
 /* ─── Reading column ───────────────────────────────────────────── */
-.section.post-body { padding-top: clamp(3rem, 6vw, 5rem); }
-.prose, .post-tags { max-width: 44rem; margin-inline: auto; }
+/* --read: width of the text column. Wider on desktop (from 1100px, next to the sticky table of contents). */
+.section.post-body { --read: 44rem; padding-top: clamp(3rem, 6vw, 5rem); }
+@media (min-width: 1100px) { .section.post-body { --read: 52rem; } }
+.prose, .post-tags { max-width: var(--read); margin-inline: auto; }
 .prose { font-size: 1.075rem; line-height: 1.8; color: rgba(236,238,241,0.78); }
 .prose > * + * { margin-top: 1.25em; }
 .prose strong { color: var(--ink); font-weight: 600; }
@@ -268,7 +270,7 @@
 .prose pre code { padding: 0; background: none; box-shadow: none; font-size: 0.88em; color: #D5D8DE; }
 
 /* Images */
-.prose figure { margin-block: 2.4em; max-width: var(--max, none); margin-inline: auto; }
+.prose figure { margin-block: 2.4em; max-width: var(--img-max, none); margin-inline: auto; }
 .prose figure img { width: 100%; height: auto; border-radius: var(--r-md); box-shadow: 0 0 0 1px var(--line), 0 24px 60px -24px rgba(0,0,0,0.75); }
 .prose figcaption {
   display: flex; align-items: center; gap: 0.6rem; margin-top: 0.9rem;
@@ -369,7 +371,7 @@
 .post-layout { display: grid; grid-template-columns: minmax(0, 1fr); row-gap: clamp(2.5rem, 6vw, 3.5rem); }
 .post-main { min-width: 0; }
 .toc {
-  width: 100%; max-width: 44rem; margin-inline: auto; padding: 1.3rem 1.3rem 1rem;
+  width: 100%; max-width: var(--read); margin-inline: auto; padding: 1.3rem 1.3rem 1rem;
   border: 1px solid var(--line); border-radius: var(--r-md); background: rgba(255,255,255,0.025);
 }
 .toc-title { margin-bottom: 0.9rem; color: var(--ink-3); }
@@ -403,7 +405,7 @@
 @keyframes toc-in { from { opacity: 0; transform: translateY(8px) scale(0.96); } }
 
 @media (min-width: 1100px) {
-  .post-layout.has-toc { grid-template-columns: minmax(13rem, 1fr) minmax(0, 44rem) minmax(0, 1fr); column-gap: 3rem; align-items: start; }
+  .post-layout.has-toc { grid-template-columns: minmax(13rem, 1fr) minmax(0, var(--read)) minmax(0, 1fr); column-gap: 3rem; align-items: start; }
   .toc {
     position: sticky; top: 6.5rem; max-width: 17rem; margin: 0; padding: 0 0.5rem 0 0;
     max-height: calc(100vh - 8.5rem); overflow-y: auto; overscroll-behavior: contain;
