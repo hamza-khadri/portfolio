@@ -147,6 +147,17 @@ async function renderBlock(b, ctx) {
       return `<aside class="callout">${icon}<div>${richText(d.rich_text)}${await children(b, ctx)}</div></aside>`
     }
     case 'code': {
+      if (d.language === 'mermaid' && ctx.mermaid) {
+        const svg = await ctx.mermaid(plain(d.rich_text))
+        if (svg) {
+          const cap = richText(d.caption)
+          const label = plain(d.caption).trim()
+          // Natural width (Mermaid's max-width): lets long diagrams scroll on phones instead of shrinking to unreadable.
+          const w = Number(svg.match(/max-width:\s*([\d.]+)px/)?.[1])
+          const attrs = `${w ? ` style="--w:${Math.round(w)}px"` : ''}${label ? ` role="img" aria-label="${esc(label)}"` : ''}`
+          return `<figure class="diagram"><div class="diagram-scroll"${attrs}>${svg}</div>${cap ? `<figcaption>${cap}</figcaption>` : ''}</figure>`
+        }
+      }
       const lang = (d.language || '').replace(/[^a-z0-9+#-]/gi, '')
       return `<pre><code${lang ? ` class="language-${esc(lang)}"` : ''}>${esc(plain(d.rich_text))}</code></pre>`
     }

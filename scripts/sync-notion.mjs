@@ -20,6 +20,7 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import sharp from 'sharp'
 import { createClient } from './blog/notion.mjs'
+import { createMermaidRenderer } from './blog/mermaid.mjs'
 import { plain, renderBlocks, slugify } from './blog/render.mjs'
 import { LANGS, articlePage, indexPage, rssFeed, sitemapUrls } from './blog/templates.mjs'
 
@@ -154,11 +155,23 @@ function skip(page, reason) {
   return null
 }
 
-async function buildPost(post, client) {
+async function buildPost(post, client, diagrams) {
   const blocks = await client.getBlocksDeep(post.id)
   const used = new Set()
   const ctx = {
     resolveFile,
+    /** Mermaid code block -> SVG, or null (bad syntax, no browser): the raw code is shown instead. */
+    async mermaid(code) {
+      try {
+        return await diagrams.render(code)
+      } catch (err) {
+        // "page.evaluate: Error: Parse error on line 2: …": keep the line number and what Mermaid expected.
+        const lines = String(err.message || err).replace(/^page\.evaluate:\s*(Error:\s*)?/, '').split('\n')
+        const msg = [lines[0], lines.find((l) => /^Expecting/.test(l))].filter(Boolean).join(' ').slice(0, 200)
+        skipped.push(`"${post.title}": diagramme Mermaid non dessiné, code affiché à la place (${msg})`)
+        return null
+      }
+    },
     /** Pixel size of a downloaded raster image (null for SVG or external URLs, which can scale freely). */
     async imageSize(src) {
       if (!src.startsWith('/blog/images/') || src.endsWith('.svg')) return null
@@ -219,16 +232,21 @@ async function main() {
 
   const seen = new Set()
   const built = []
-  for (const page of pages) {
-    const post = toPost(page)
-    if (!post) continue
-    const key = `${post.lang}/${post.slug}`
-    if (seen.has(key)) {
-      skipped.push(`"${post.title}": slug en double "${post.slug}" (${post.lang.toUpperCase()})`)
-      continue
+  const diagrams = createMermaidRenderer()
+  try {
+    for (const page of pages) {
+      const post = toPost(page)
+      if (!post) continue
+      const key = `${post.lang}/${post.slug}`
+      if (seen.has(key)) {
+        skipped.push(`"${post.title}": slug en double "${post.slug}" (${post.lang.toUpperCase()})`)
+        continue
+      }
+      seen.add(key)
+      built.push(await buildPost(post, client, diagrams))
     }
-    seen.add(key)
-    built.push(await buildPost(post, client))
+  } finally {
+    await diagrams.close()
   }
   // Newest publication first; same day -> most recently created first (stable, independent of Notion's query order).
   built.sort((a, b) => b.post.published.localeCompare(a.post.published) || b.post.created.localeCompare(a.post.created))

@@ -44,6 +44,7 @@ const quote = (s) => blk('quote', { rich_text: [t(s)] })
 const callout = (emoji, ...rt) => blk('callout', { icon: { type: 'emoji', emoji }, rich_text: rt })
 const code = (language, s) => blk('code', { language, rich_text: [t(s)] })
 const img = (f, caption) => blk('image', { ...f, caption: [t(caption)] })
+const diagram = (s, caption) => blk('code', { language: 'mermaid', rich_text: [t(s)], caption: caption ? [t(caption)] : [] })
 const hr = () => blk('divider', {})
 const toggle = (s, children) => blk('toggle', { rich_text: [t(s)] }, children)
 const table = (rows) => blk('table', { has_column_header: true }, rows.map((cells) => blk('table_row', { cells: cells.map((x) => [t(x)]) })))
@@ -129,6 +130,13 @@ const pages = [
     slug: 'images-redimensionnees-notion',
     date: '2026-07-31',
     desc: "Reproduit un article réel : une image réduite à la souris dans Notion, sans légende, au milieu du texte.",
+    tags: ['Notion'], category: 'Note',
+  }),
+  page('fr-mermaid', {
+    title: 'Diagrammes Mermaid dans un article',
+    slug: 'diagrammes-mermaid',
+    date: '2026-07-29',
+    desc: 'Blocs de code Mermaid dessinés en SVG au build : flux, séquence, et un diagramme invalide affiché en code.',
     tags: ['Notion'], category: 'Note',
   }),
   page('fr-court', {
@@ -277,6 +285,21 @@ const blocks = {
     p(b('Image de 240 px de large, sans légende : affichée à sa taille réelle, jamais agrandie (floue).')),
     blk('image', { ...icon, caption: [] }),
     p(t(lorem[2])),
+  ],
+  // Mermaid code blocks: drawn as SVG at build time (scripts/blog/mermaid.mjs), raw code if invalid.
+  'fr-mermaid': [
+    p(t(lorem[0])),
+    h1('Un flux'),
+    diagram('flowchart LR\n  A[Formulaire Google] --> B{Type de demande ?}\n  B -->|Devis| C[Base Notion]\n  B -->|Urgent| D[Notification]\n  C --> E[Mail d\'accusé de réception]', 'Scénario 1 : du formulaire à Notion'),
+    p(t(lorem[1])),
+    h1('Une séquence'),
+    diagram('sequenceDiagram\n  participant N as Notion\n  participant M as Make\n  participant G as GitHub\n  N->>M: Case « Publié » cochée\n  M->>G: workflow_dispatch\n  G-->>N: lit les articles\n  Note over G: build + déploiement'),
+    p(t(lorem[2])),
+    h1('Un diagramme long'),
+    diagram('flowchart LR\n  A[Idée] --> B[Brouillon] --> C[Relecture] --> D[Prêt] --> E[Publié] --> F[Partagé sur LinkedIn] --> G[Mis à jour]', 'Défile horizontalement sur mobile'),
+    h1('Un diagramme invalide'),
+    p(t('Erreur de syntaxe volontaire : le code brut doit s\'afficher, avec un avertissement dans les logs.')),
+    diagram('flowchart LR\n  A[Début --> B'),
   ],
   'fr-court': short(),
   'en-only': short(),

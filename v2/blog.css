@@ -290,6 +290,13 @@
   .prose figure.is-sized:not(.align-left, .align-right) { width: max(var(--w), 60%); }
 }
 
+/* Mermaid diagrams (SVG drawn at build, scripts/blog/mermaid.mjs). Never shrunk below 70 % of their
+   natural size (labels stay readable): wider than that = horizontal scroll. */
+.prose .diagram { max-width: none; padding: clamp(1rem, 3vw, 1.75rem); border-radius: var(--r-md); background: rgba(255,255,255,0.02); box-shadow: inset 0 0 0 1px var(--line); }
+.prose .diagram-scroll { overflow-x: auto; scrollbar-width: thin; }
+.prose .diagram svg { display: block; height: auto; margin-inline: auto; min-width: calc(var(--w, 0px) * 0.7); }
+.prose .diagram figcaption { margin-top: 1.1rem; }
+
 /* Tables: hairlines and section-marker headers. */
 .prose .table-wrap { margin-block: 2em; overflow-x: auto; border-radius: var(--r-md); box-shadow: inset 0 0 0 1px var(--line); }
 .prose table { width: 100%; border-collapse: collapse; font-size: 0.92rem; line-height: 1.5; }
