@@ -56,7 +56,7 @@ change (bouton "Mettre à jour").
 | Date de publication | date affichée, tri, sitemap |
 | Dernière publication | `dateModified` / lastmod, sert de déclencheur "Mettre à jour" |
 
-Blocs Notion gérés : paragraphes, titres, listes (imbriquées), cases à cocher, citations, callouts, code,
+Blocs Notion gérés : paragraphes, titres, listes (imbriquées), cases à cocher, citations, callouts, code, diagrammes Mermaid,
 images, tableaux, toggles, colonnes, séparateurs, liens/bookmarks, équations (texte).
 Les vidéos et fichiers hébergés par Notion sont ignorés (leurs liens expirent) : colle un lien externe.
 Les images sont **téléchargées au build** et servies depuis `/blog/images/` (les URLs Notion expirent après ~1h).
@@ -80,6 +80,15 @@ Sans balise : pleine largeur de la colonne, **même si l'image a été réduite 
 Une image n'est jamais agrandie au-delà de sa taille réelle en pixels (sinon elle devient floue). Un crochet qui n'est pas une balise (`[1]`, `[sic]`) reste dans la légende.
 En mobile (640px et moins), les images flottantes reprennent toute la largeur.
 Les titres, tableaux, code et images non flottantes passent toujours sous une image flottante.
+
+### Diagrammes Mermaid
+
+Un bloc **Code** dont le langage est **Mermaid** devient un vrai diagramme sur le site (SVG dessiné au build, aux couleurs du site,
+aucun script chargé chez le lecteur). La légende du bloc s'affiche sous le diagramme et sert de texte alternatif.
+Un diagramme plus large que la colonne défile horizontalement plutôt que de devenir illisible : pour les longues chaînes,
+préfère `flowchart TD` (vertical) à `flowchart LR`.
+Erreur de syntaxe : le code brut s'affiche à la place, avec un avertissement dans les logs du build (le build ne casse pas).
+Teste ton diagramme sur [mermaid.live](https://mermaid.live) avant de publier.
 
 **Colonnes** : si l'API renvoie la largeur des colonnes (`width_ratio`, versions récentes de l'API Notion), elle est respectée ;
 sinon les colonnes ont la même largeur.
@@ -111,7 +120,7 @@ Le sitemap part de `scripts/sitemap.base.xml` (la page d'accueil) : édite celui
 - Comportements (fond lumineux, curseur, apparitions, nav, sommaire des articles : colonne sticky à gauche du texte dès 1100px, sinon carte sous la couverture + bouton flottant) : `v2/blog.jsx`
 - Recherche, filtres par catégorie et pagination de `/blog` : `v2/lib/blog-index.js` (côté navigateur, état dans l'URL `?q=&cat=&page=` ; tous les articles restent dans le HTML pour le SEO). Articles par page : `PAGE_SIZE` dans `scripts/blog/templates.mjs`. Vue liste ou 3 colonnes au choix du lecteur (mémorisée dans son navigateur, `hk_blog_view`), sauf en mobile (640px et moins) : toujours en cartes sur 1 colonne, sans sélecteur ; le bloc « Voir aussi » est toujours en colonnes. Styles des cartes : `.is-grid` dans `v2/blog.css`
 - Transition de page home ⇄ blog : `v2/lib/page-transition.js` (+ le voile en CSS dans `v2/styles.css`)
-- Rendu des blocs : `scripts/blog/render.mjs`
+- Rendu des blocs : `scripts/blog/render.mjs` ; diagrammes Mermaid (thème, polices, espacements) : `scripts/blog/mermaid.mjs`
 - Version de l'API Notion : variable `NOTION_VERSION` (défaut `2022-06-28`)
 
 ## Bilingue FR / EN

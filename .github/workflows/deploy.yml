@@ -38,6 +38,19 @@ jobs:
 
       - run: npm ci
 
+      # Headless Chromium for Mermaid diagrams (scripts/blog/mermaid.mjs), cached per Playwright version.
+      - id: pw
+        run: echo "version=$(node -p "require('playwright/package.json').version")" >> "$GITHUB_OUTPUT"
+      - uses: actions/cache@v4
+        id: pw-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.pw.outputs.version }}
+      - run: npx playwright install --with-deps chromium-headless-shell
+        if: steps.pw-cache.outputs.cache-hit != 'true'
+      - run: npx playwright install-deps chromium-headless-shell
+        if: steps.pw-cache.outputs.cache-hit == 'true'
+
       # Syncs Notion -> public/ then runs vite build. Fails (no deploy) if Notion is unreachable.
       - name: Build
         run: npm run build
