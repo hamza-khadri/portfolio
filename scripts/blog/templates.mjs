@@ -22,7 +22,7 @@ const T = {
     indexLead: "IA, automatisation, no-code et product : ce que je construis et ce que j'en apprends.",
     cta: 'Un process à automatiser ?', ctaLabel: 'PARLONS-EN', ctaText: "Parlons-en : je repère les opportunités IA dans vos process et je les concrétise.", ctaBtn: 'Me contacter',
     rss: 'Flux RSS', published: 'Publié le', publishedShort: 'Publié', reading: 'Lecture', category: 'Catégorie',
-    seeAlso: 'Voir aussi', seeAlsoLabel: 'À LIRE ENSUITE', switchAria: 'Lire cet article en français', switchIndexAria: 'Blog en français',
+    seeAlso: 'Voir aussi', seeAlsoLabel: 'À LIRE ENSUITE', switchAria: 'Lire cet article en français', switchIndexAria: 'Blog en français', switchNone: 'Article non disponible en anglais',
     toc: 'Sommaire', tocOpen: 'Ouvrir le sommaire', tocClose: 'Fermer le sommaire', tags: 'Mots-clés', readLabel: 'Lire', skip: 'Aller au contenu',
     view: 'Affichage', viewList: 'Vue liste', viewGrid: 'Vue 3 colonnes',
     search: 'Rechercher un article', searchPh: 'Rechercher : IA, Figma, no-code…', filters: 'Catégories', all: 'Tous',
@@ -37,7 +37,7 @@ const T = {
     indexLead: 'AI, automation, no-code and product: what I build and what I learn from it.',
     cta: 'A process to automate?', ctaLabel: "LET'S TALK", ctaText: 'Let’s talk: I spot AI opportunities in your processes and make them real.', ctaBtn: 'Get in touch',
     rss: 'RSS feed', published: 'Published on', publishedShort: 'Published', reading: 'Reading', category: 'Category',
-    seeAlso: 'See also', seeAlsoLabel: 'READ NEXT', switchAria: 'Read this article in English', switchIndexAria: 'Blog in English',
+    seeAlso: 'See also', seeAlsoLabel: 'READ NEXT', switchAria: 'Read this article in English', switchIndexAria: 'Blog in English', switchNone: 'Article not available in French',
     toc: 'Contents', tocOpen: 'Open contents', tocClose: 'Close contents', tags: 'Tags', readLabel: 'Read', skip: 'Skip to content',
     view: 'Layout', viewList: 'List view', viewGrid: '3-column view',
     search: 'Search articles', searchPh: 'Search: AI, Figma, no-code…', filters: 'Categories', all: 'All',
@@ -168,7 +168,10 @@ function nav(lang, switchTo, self) {
   ]
   const langLink = (l) => l === lang
     ? `<a href="${esc(self)}" class="on" aria-current="true" lang="${l}">${l}</a>`
-    : `<a href="${esc(switchTo.href)}" hreflang="${l}" lang="${l}" aria-label="${esc(switchTo.aria)}">${l}</a>`
+    : switchTo.href
+      ? `<a href="${esc(switchTo.href)}" hreflang="${l}" lang="${l}" aria-label="${esc(switchTo.aria)}">${l}</a>`
+      // No translation: keep the option visible but inert (a link with no href is not focusable or clickable).
+      : `<a role="link" aria-disabled="true" class="off" lang="${l}" title="${esc(switchTo.aria)}" aria-label="${esc(switchTo.aria)}">${l}</a>`
   return `<div class="nav-progress" aria-hidden="true"></div>
 <div class="nav-wrap">
 <nav class="nav glass" aria-label="Primary">
@@ -355,7 +358,7 @@ ${postList(post.related, post.lang, 'h3', { grid: true })}
     floating: toc.floating,
     switchTo: alt
       ? { href: postPath(alt.lang, alt.slug), aria: T[other].switchAria }
-      : { href: blogPath(other), aria: T[other].switchIndexAria },
+      : { href: null, aria: t.switchNone },
     extraHead: alternates(alt ? [post, alt].map((x) => ({ lang: x.lang, url: `${SITE}${postPath(x.lang, x.slug)}` })) : []) +
       `<meta property="article:published_time" content="${post.published}">\n<meta property="article:modified_time" content="${modified}">\n` })
 }
