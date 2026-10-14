@@ -159,6 +159,16 @@ async function buildPost(post, client) {
   const used = new Set()
   const ctx = {
     resolveFile,
+    /** Pixel size of a downloaded raster image (null for SVG or external URLs, which can scale freely). */
+    async imageSize(src) {
+      if (!src.startsWith('/blog/images/') || src.endsWith('.svg')) return null
+      try {
+        const { width, height } = await sharp(path.join(PUBLIC, src)).metadata()
+        return width && height ? { width, height } : null
+      } catch {
+        return null
+      }
+    },
     headingId(text) {
       let id = slugify(text) || 'section'
       for (let n = 2; used.has(id); n++) id = `${slugify(text) || 'section'}-${n}`

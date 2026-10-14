@@ -159,9 +159,13 @@ async function renderBlock(b, ctx) {
       if (!src) return ''
       const { caption, width, align, hideCaption } = imageLayout(d.caption)
       const cap = hideCaption ? '' : richText(caption)
+      // Real pixel size: never upscaled past it (blurry), and width/height reserve the space while loading.
+      const size = await ctx.imageSize?.(src)
       const cls = [align && `align-${align}`, width && 'is-sized'].filter(Boolean).join(' ')
-      const attrs = `${cls ? ` class="${cls}"` : ''}${width ? ` style="--w:${width}%"` : ''}`
-      return `<figure${attrs}><img src="${esc(src)}" alt="${esc(plain(caption).trim())}" loading="lazy" decoding="async">${cap ? `<figcaption>${cap}</figcaption>` : ''}</figure>`
+      const style = [width && `--w:${width}%`, size && `--max:${size.width}px`].filter(Boolean).join(';')
+      const attrs = `${cls ? ` class="${cls}"` : ''}${style ? ` style="${style}"` : ''}`
+      const dims = size ? ` width="${size.width}" height="${size.height}"` : ''
+      return `<figure${attrs}><img src="${esc(src)}" alt="${esc(plain(caption).trim())}"${dims} loading="lazy" decoding="async">${cap ? `<figcaption>${cap}</figcaption>` : ''}</figure>`
     }
     case 'table': {
       const rows = (b.children || []).filter((r) => r.type === 'table_row')

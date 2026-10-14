@@ -268,7 +268,7 @@
 .prose pre code { padding: 0; background: none; box-shadow: none; font-size: 0.88em; color: #D5D8DE; }
 
 /* Images */
-.prose figure { margin-block: 2.4em; }
+.prose figure { margin-block: 2.4em; max-width: var(--max, none); margin-inline: auto; }
 .prose figure img { width: 100%; height: auto; border-radius: var(--r-md); box-shadow: 0 0 0 1px var(--line), 0 24px 60px -24px rgba(0,0,0,0.75); }
 .prose figcaption {
   display: flex; align-items: center; gap: 0.6rem; margin-top: 0.9rem;
@@ -286,7 +286,7 @@
 .prose :is(h2, h3, h4, h5, h6, hr, pre, figure:not(.align-left, .align-right), .table-wrap, .cols, details) { clear: both; }
 /* Small screens: no room to wrap text, floated images go back to the full column. */
 @media (max-width: 640px) {
-  .prose figure.align-left, .prose figure.align-right { float: none; width: 100%; margin: 2.4em 0; }
+  .prose figure.align-left, .prose figure.align-right { float: none; width: 100%; margin: 2.4em auto; }
   .prose figure.is-sized:not(.align-left, .align-right) { width: max(var(--w), 60%); }
 }
 
