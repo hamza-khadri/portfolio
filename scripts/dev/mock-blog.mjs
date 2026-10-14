@@ -18,6 +18,18 @@ function cover(from, to, label) {
   return { type: 'file', file: { url: `data:image/svg+xml;base64,${Buffer.from(svg).toString('base64')}` } }
 }
 
+/** Raster image (PNG, real pixel size) as a Notion "file" object: tests that small images are never upscaled. */
+async function raster(w, h, from, to, label) {
+  const { default: sharp } = await import('sharp')
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}"><rect width="${w}" height="${h}" fill="${from}"/>
+<circle cx="${w * 0.6}" cy="${h * 0.45}" r="${Math.min(w, h) * 0.32}" fill="${to}"/>
+<text x="${w * 0.08}" y="${h * 0.9}" font-family="system-ui, sans-serif" font-size="${Math.round(w / 9)}" font-weight="700" fill="#fff">${label}</text></svg>`
+  const png = await sharp(Buffer.from(svg)).png().toBuffer()
+  return { type: 'file', file: { url: `data:image/png;base64,${png.toString('base64')}` } }
+}
+const meme = await raster(700, 686, '#d9c9cf', '#8e8a96', 'no')
+const icon = await raster(240, 160, '#1e293b', '#6366f1', 'icon')
+
 let seq = 0
 const blk = (type, data, children) => ({ id: `mb${++seq}`, type, [type]: data, has_children: !!children, children })
 const p = (...rt) => blk('paragraph', { rich_text: rt })
@@ -111,6 +123,13 @@ const pages = [
     // no SEO description: tests the automatic excerpt
     tags: ['SEO', 'Lancement'], category: 'Checklist',
     cover: cover('#831843', '#f43f5e', 'Checklist'), alt: 'Dégradé rose avec le mot Checklist',
+  }),
+  page('fr-images-notion', {
+    title: 'Images redimensionnées dans Notion',
+    slug: 'images-redimensionnees-notion',
+    date: '2026-07-31',
+    desc: "Reproduit un article réel : une image réduite à la souris dans Notion, sans légende, au milieu du texte.",
+    tags: ['Notion'], category: 'Note',
   }),
   page('fr-court', {
     title: 'Note rapide : pourquoi je facture au projet',
@@ -242,6 +261,22 @@ const blocks = {
     p(t("Ce que je vérifie, dans l'ordre, avant de mettre un site en ligne. Cet article n'a pas de description SEO : l'extrait automatique est utilisé dans les cartes et les métas.")),
     h1('Technique'), todo('HTTPS et redirections', true), todo('404 personnalisée', true), todo('Sitemap et robots.txt', false),
     h1('Contenu'), todo('Titres uniques par page', false), todo('Textes alternatifs des images', false),
+  ],
+  // Real case (article Make, oct. 2026): image resized with the mouse in Notion, no caption.
+  // The API sends no width, so it shows full width unless the caption carries a tag.
+  'fr-images-notion': [
+    p(t("Parce que la vérité, c'est que le plan gratuit de Make a des plafonds. Tu montes cinq scénarios avec le sourire, tu en actives trois, et Make te dit poliment … ")),
+    blk('image', { ...meme, caption: [] }),
+    p(t('… non.')),
+    p(b('Même image, avec « [30%] [sans légende] Bugs Bunny qui dit non » dans la légende :')),
+    img(meme, '[30%] [sans légende] Bugs Bunny qui dit non'),
+    p(t('… non.')),
+    p(b('Avec « [petite gauche] Bugs Bunny qui dit non » : le texte passe à côté.')),
+    img(meme, '[petite gauche] Bugs Bunny qui dit non'),
+    p(t(lorem[0])), p(t(lorem[1])),
+    p(b('Image de 240 px de large, sans légende : affichée à sa taille réelle, jamais agrandie (floue).')),
+    blk('image', { ...icon, caption: [] }),
+    p(t(lorem[2])),
   ],
   'fr-court': short(),
   'en-only': short(),

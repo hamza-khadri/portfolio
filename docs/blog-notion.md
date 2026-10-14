@@ -76,7 +76,8 @@ entre crochets. Les balises sont retirées de la légende affichée et du texte 
 | `[sans légende]` | légende masquée, gardée comme texte alternatif (EN : `no caption`) |
 
 On peut combiner : `[moyenne droite] Ma légende`, `[30% gauche] [sans légende] Texte alternatif`.
-Sans balise : pleine largeur, comme avant. Un crochet qui n'est pas une balise (`[1]`, `[sic]`) reste dans la légende.
+Sans balise : pleine largeur de la colonne, **même si l'image a été réduite à la souris dans Notion** (cette taille n'est pas lisible par l'API).
+Une image n'est jamais agrandie au-delà de sa taille réelle en pixels (sinon elle devient floue). Un crochet qui n'est pas une balise (`[1]`, `[sic]`) reste dans la légende.
 En mobile (640px et moins), les images flottantes reprennent toute la largeur.
 Les titres, tableaux, code et images non flottantes passent toujours sous une image flottante.
 
