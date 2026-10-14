@@ -62,6 +62,27 @@ Les vidéos et fichiers hébergés par Notion sont ignorés (leurs liens expiren
 Les images sont **téléchargées au build** et servies depuis `/blog/images/` (les URLs Notion expirent après ~1h).
 **Mets une légende sous chaque image : elle sert de texte alternatif.**
 
+### Mise en page des images (taille, position, légende)
+
+L'API Notion ne transmet pas la taille ni l'alignement réglés dans l'éditeur : on les écrit **dans la légende**,
+entre crochets. Les balises sont retirées de la légende affichée et du texte alternatif.
+
+| Balise | Effet |
+|---|---|
+| `[petite]` `[moyenne]` `[grande]` | 33 %, 50 %, 75 % de la colonne de texte (EN : `small`, `medium`, `large`) |
+| `[40%]` | largeur libre, de 10 % à 100 % |
+| `[gauche]` `[droite]` | image flottante, le texte l'entoure (50 % par défaut sans taille) (EN : `left`, `right`) |
+| `[centre]` | centrée (c'est déjà le cas par défaut) |
+| `[sans légende]` | légende masquée, gardée comme texte alternatif (EN : `no caption`) |
+
+On peut combiner : `[moyenne droite] Ma légende`, `[30% gauche] [sans légende] Texte alternatif`.
+Sans balise : pleine largeur, comme avant. Un crochet qui n'est pas une balise (`[1]`, `[sic]`) reste dans la légende.
+En mobile (640px et moins), les images flottantes reprennent toute la largeur.
+Les titres, tableaux, code et images non flottantes passent toujours sous une image flottante.
+
+**Colonnes** : si l'API renvoie la largeur des colonnes (`width_ratio`, versions récentes de l'API Notion), elle est respectée ;
+sinon les colonnes ont la même largeur.
+
 ## En local
 
 ```bash

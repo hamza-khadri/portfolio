@@ -39,6 +39,47 @@ export function richText(rt = []) {
     .join('')
 }
 
+// Image layout. Notion's API doesn't return the width or alignment set in the editor, so it is
+// written in the caption as bracket tags, removed from the displayed caption and the alt text:
+//   "[moyenne droite] Ma légende", "[40% gauche]", "[petite] [sans légende] Texte alternatif"
+const SIZES = { petite: 33, small: 33, moyenne: 50, medium: 50, grande: 75, large: 75, pleine: 100, full: 100 }
+const ALIGNS = { gauche: 'left', left: 'left', droite: 'right', right: 'right', centre: 'center', center: 'center', centrée: 'center', centree: 'center' }
+const NO_CAPTION = /^(sans[- ]l[ée]gende|no[- ]caption)$/
+const TAG_RE = /\[([^\[\]]*)\]/g
+
+function parseTag(inner, out) {
+  const s = inner.trim().toLowerCase()
+  if (NO_CAPTION.test(s)) return (out.hideCaption = true)
+  const words = s.split(/[\s,]+/).filter(Boolean)
+  if (!words.length) return false
+  const next = { ...out }
+  for (const w of words) {
+    const pct = w.match(/^(\d{1,3})%$/)
+    if (pct && +pct[1] >= 10 && +pct[1] <= 100) next.width = +pct[1]
+    else if (SIZES[w]) next.width = SIZES[w]
+    else if (ALIGNS[w]) next.align = ALIGNS[w]
+    else return false // not a layout tag ("[1]", "[sic]"...): left in the caption
+  }
+  Object.assign(out, next)
+  return true
+}
+
+export function imageLayout(caption = []) {
+  const out = { width: null, align: null, hideCaption: false }
+  const cleaned = caption.map((t) => ({ ...t, plain_text: (t.plain_text ?? '').replace(TAG_RE, (m, inner) => (parseTag(inner, out) ? '' : m)) }))
+  // Tidy the spaces left by removed tags, then drop empty segments.
+  cleaned.forEach((t, i) => {
+    t.plain_text = t.plain_text.replace(/ {2,}/g, ' ')
+    if (i === 0) t.plain_text = t.plain_text.trimStart()
+    if (i === cleaned.length - 1) t.plain_text = t.plain_text.trimEnd()
+  })
+  if (out.width === 100) out.width = out.align = null // full width: nothing to size or float
+  if (out.align === 'center' && !out.width) out.align = null
+  // Left/right without a size: half width, otherwise the text would have no room to wrap.
+  if ((out.align === 'left' || out.align === 'right') && !out.width) out.width = 50
+  return { ...out, caption: cleaned.filter((t) => t.plain_text) }
+}
+
 const warned = new Set()
 const warnOnce = (msg) => {
   if (!warned.has(msg)) {
@@ -116,8 +157,11 @@ async function renderBlock(b, ctx) {
     case 'image': {
       const src = await ctx.resolveFile(d, b.id)
       if (!src) return ''
-      const cap = richText(d.caption)
-      return `<figure><img src="${esc(src)}" alt="${esc(plain(d.caption))}" loading="lazy" decoding="async">${cap ? `<figcaption>${cap}</figcaption>` : ''}</figure>`
+      const { caption, width, align, hideCaption } = imageLayout(d.caption)
+      const cap = hideCaption ? '' : richText(caption)
+      const cls = [align && `align-${align}`, width && 'is-sized'].filter(Boolean).join(' ')
+      const attrs = `${cls ? ` class="${cls}"` : ''}${width ? ` style="--w:${width}%"` : ''}`
+      return `<figure${attrs}><img src="${esc(src)}" alt="${esc(plain(caption).trim())}" loading="lazy" decoding="async">${cap ? `<figcaption>${cap}</figcaption>` : ''}</figure>`
     }
     case 'table': {
       const rows = (b.children || []).filter((r) => r.type === 'table_row')
@@ -151,8 +195,11 @@ async function renderBlock(b, ctx) {
       return `<pre class="equation">${esc(d.expression)}</pre>`
     case 'column_list':
       return `<div class="cols">${await children(b, ctx)}</div>`
-    case 'column':
-      return `<div>${await children(b, ctx)}</div>`
+    case 'column': {
+      // width_ratio is only sent by recent Notion API versions; without it, columns share the width.
+      const ratio = Number(d?.width_ratio)
+      return `<div${ratio > 0 ? ` style="--ratio:${Math.round(ratio * 1000) / 1000}"` : ''}>${await children(b, ctx)}</div>`
+    }
     case 'synced_block':
       return children(b, ctx)
     case 'table_of_contents':

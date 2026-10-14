@@ -36,7 +36,7 @@ const hr = () => blk('divider', {})
 const toggle = (s, children) => blk('toggle', { rich_text: [t(s)] }, children)
 const table = (rows) => blk('table', { has_column_header: true }, rows.map((cells) => blk('table_row', { cells: cells.map((x) => [t(x)]) })))
 const bookmark = (url) => blk('bookmark', { url, caption: [] })
-const columns = (...cols) => blk('column_list', {}, cols.map((col) => blk('column', {}, col)))
+const columns = (...cols) => blk('column_list', {}, cols.map((col) => blk('column', col.ratio ? { width_ratio: col.ratio } : {}, col)))
 
 function page(id, { title, slug, lang = 'FR', date, edited, desc = '', tags = [], category = '', cover: cv, alt, en, fr, related = [] }) {
   return {
@@ -180,6 +180,12 @@ const full = (lang) => {
     h2(en ? 'Components that earn their place' : 'Des composants qui méritent leur place'),
     p(t(lorem[0])),
     img(cover('#0f172a', '#334155', en ? 'Component map' : 'Carte des composants'), en ? 'Map of the components, grouped by usage frequency' : "Carte des composants, regroupés par fréquence d'usage"),
+    // Layout tags in the caption (scripts/blog/render.mjs: imageLayout)
+    img(cover('#3b0764', '#7c3aed', 'Tokens'), en ? '[medium right] Tokens, from primitives to semantic names' : '[moyenne droite] Les tokens, des primitives aux noms sémantiques'),
+    p(t(lorem[1])), p(t(lorem[2])),
+    img(cover('#064e3b', '#10b981', 'Figma'), en ? '[35% left] [no caption] Figma variables panel' : '[35% gauche] [sans légende] Panneau des variables Figma'),
+    p(t(lorem[0])), p(t(lorem[1])),
+    img(cover('#7c2d12', '#f97316', 'Grid'), en ? '[large] Centred image, 75% of the column' : '[grande] Image centrée, 75 % de la colonne'),
     ol(en ? 'Audit the existing screens' : "Faire l'inventaire des écrans existants"),
     ol(en ? 'Group what looks alike' : 'Regrouper ce qui se ressemble'),
     ol(en ? 'Build only what appears three times' : "Ne construire que ce qui apparaît trois fois"),
@@ -194,6 +200,10 @@ const full = (lang) => {
     columns(
       [h3(en ? 'Keep' : 'Je garde'), li('Tokens'), li('Boutons, champs'), li('Grille')],
       [h3(en ? 'Drop' : 'Je jette'), li(en ? 'Illustrations' : 'Illustrations'), li(en ? '12 button variants' : '12 variantes de bouton')],
+    ),
+    columns(
+      Object.assign([img(cover('#1e3a8a', '#3b82f6', '1/3'), en ? 'Column at 1/3 (width_ratio)' : 'Colonne à 1/3 (width_ratio)')], { ratio: 1 / 3 }),
+      Object.assign([p(t(lorem[2]))], { ratio: 2 / 3 }),
     ),
     hr(),
     h2('Checklist'),
