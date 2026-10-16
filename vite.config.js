@@ -62,8 +62,28 @@ function blogMock() {
   }
 }
 
+/* Build-only: put the Google tag right after `<head>` in every built page (homepage, extra pages, blog),
+   so local dev visits stay out of the stats. public/404.html isn't built by Vite and carries its own copy. */
+const GTAG = `<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XMWVTDHZ47"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-XMWVTDHZ47');
+</script>`
+
+function googleTag() {
+  return {
+    name: 'google-tag',
+    apply: 'build',
+    transformIndexHtml: (html) => html.replace(/<head[^>]*>/i, (head) => `${head}\n${GTAG}`),
+  }
+}
+
 export default defineConfig({
-  plugins: [pageRewrite(), blogMock(), react(), cloudflare()],
+  plugins: [pageRewrite(), blogMock(), googleTag(), react(), cloudflare()],
   build: {
     rollupOptions: {
       input: {
