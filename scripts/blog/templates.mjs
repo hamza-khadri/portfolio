@@ -207,7 +207,7 @@ function footer(lang) {
 <div class="wrap cols">
 <div><span class="label">${esc(s.footer)}</span><span class="note">${esc(s.footerNote)}</span></div>
 <div class="clock glass"><span class="led" aria-hidden="true"></span><span class="label tnum">${esc(s.localTime)} <span data-clock></span></span></div>
-<div><span class="label">${esc(s.roleLine)}</span> · <a class="label rss" href="${rssPath(lang)}">${t.rss}</a></div>
+<div><span class="label">${esc(s.roleLine)}</span> · <a class="label foot-link" href="${rssPath(lang)}">${t.rss}</a> · <button type="button" class="label foot-link" data-consent-open>Cookies</button></div>
 </div>
 </footer>`
 }

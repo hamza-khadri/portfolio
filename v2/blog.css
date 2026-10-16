@@ -424,10 +424,6 @@
 .cta-actions .mail::after { content: ""; position: absolute; left: 0; right: 0; bottom: -0.15em; height: 1px; background: linear-gradient(90deg, var(--accent), rgba(255,255,255,0.4)); transform: scaleX(0); transform-origin: left; transition: transform 0.7s var(--ease-io); }
 .cta-actions .mail:hover { color: var(--ink); }
 .cta-actions .mail:hover::after { transform: scaleX(1); }
-/* Above the fixed ground of light (.bg), which otherwise paints over the footer's text: on the home, #root does this. */
-.blog .footer { position: relative; z-index: 1; }
-.footer .rss { color: var(--ink-3); transition: color 0.3s; }
-.footer .rss:hover { color: var(--ink); }
 
 /* ─── Responsive ───────────────────────────────────────────────── */
 @media (max-width: 900px) {

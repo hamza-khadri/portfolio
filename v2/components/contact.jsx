@@ -4,7 +4,7 @@ import posthog from '../../posthog.js';
 import { track, useClock, useMagnetic } from '../lib/hooks.js';
 import { ArrowUpRight, Check, Copy, Mail } from '../lib/icons.jsx';
 
-export default function Contact({ t }) {
+export default function Contact({ t, lang }) {
   const [copied, setCopied] = useState(false);
   const time = useClock('Europe/Brussels');
   const magCopy = useMagnetic();
@@ -64,7 +64,10 @@ export default function Contact({ t }) {
             <span className="label tnum">{t.localTime} {time}</span>
           </div>
           <div>
+            {/* Same as the blog's footer (scripts/blog/templates.mjs). "Cookies" reopens the banner (public/consent.js). */}
             <span className="label">{t.roleLine}</span>
+            {' · '}<a className="label foot-link" href={lang === 'en' ? '/en/rss.xml' : '/rss.xml'}>{t.rss}</a>
+            {' · '}<button type="button" className="label foot-link" data-consent-open>Cookies</button>
           </div>
         </div>
       </footer>

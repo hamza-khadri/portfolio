@@ -27,6 +27,7 @@ const EXTRA = {
     stackCount: n => `${n} tools`,
     railLabels: { hero: 'Top', about: 'About', work: 'Work', approach: 'Approach', stack: 'Stack', services: 'Expertise', testimonials: 'Words', contact: 'Talk' },
     v1Link: 'Current site',
+    rss: 'RSS feed',
   },
   fr: {
     ctaWork: 'Voir les projets',
@@ -52,6 +53,7 @@ const EXTRA = {
     stackCount: n => `${n} outils`,
     railLabels: { hero: 'Haut', about: 'À propos', work: 'Projets', approach: 'Approche', stack: 'Outils', services: 'Expertises', testimonials: 'Avis', contact: 'Contact' },
     v1Link: 'Site actuel',
+    rss: 'Flux RSS',
   },
 };
 
