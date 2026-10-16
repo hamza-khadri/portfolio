@@ -79,7 +79,7 @@ function App() {
         {s.stack.isDisplay        && <Stack        t={t} />}
         {s.services.isDisplay     && <Services     t={t} lang={lang} />}
         {s.testimonials.isDisplay && <Testimonials t={t} lang={lang} />}
-        {s.contact.isDisplay      && <Contact      t={t} />}
+        {s.contact.isDisplay      && <Contact      t={t} lang={lang} />}
       </main>
       <ProjectDrawer project={activeProject} lang={lang} t={t} onClose={() => setActiveProject(null)} />
     </>
