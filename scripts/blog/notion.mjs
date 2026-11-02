@@ -5,6 +5,9 @@
 const API = process.env.NOTION_API_BASE || 'https://api.notion.com/v1'
 const VERSION = process.env.NOTION_VERSION || '2022-06-28'
 
+/** Checkbox ticked by the "Lancer publication" button: "put this article online at the next deploy". */
+export const REQUEST_PROP = 'Publication demandée'
+
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
 
 export function createClient(token) {
@@ -31,7 +34,8 @@ export function createClient(token) {
     return res.json()
   }
 
-  /** All pages of the database whose "Publié" checkbox is ticked. */
+  /** Pages to put online: "Publié" ticked, or "Publication demandée" ticked (the Notion button sets it,
+      the deploy then ticks "Publié" and clears the request, see scripts/mark-published.mjs). */
   async function queryPublished(databaseId) {
     const results = []
     let cursor
@@ -41,7 +45,12 @@ export function createClient(token) {
         body: {
           page_size: 100,
           start_cursor: cursor,
-          filter: { property: 'Publié', checkbox: { equals: true } },
+          filter: {
+            or: [
+              { property: 'Publié', checkbox: { equals: true } },
+              { property: REQUEST_PROP, checkbox: { equals: true } },
+            ],
+          },
         },
       })
       results.push(...data.results)
@@ -69,5 +78,10 @@ export function createClient(token) {
     return blocks
   }
 
-  return { queryPublished, getBlocksDeep }
+  /** Updates page properties (needs an integration with "Update content" capability). */
+  function updatePage(pageId, properties) {
+    return request(`/pages/${pageId}`, { method: 'PATCH', body: { properties } })
+  }
+
+  return { queryPublished, getBlocksDeep, updatePage }
 }

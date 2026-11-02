@@ -11,6 +11,8 @@
 //   public/blog/images/*-og.jpg -> 1200x630 link-preview version of each cover (og:image)
 //   public/rss.xml, public/en/rss.xml, public/sitemap.xml
 // Only pages with "Publié" ticked are generated; untick = gone at next deploy.
+// "Publication demandée" ticked (by the Notion button) = generated too, then scripts/mark-published.mjs
+// ticks "Publié" once the deploy succeeded. The list is handed over in .blog-publish.json.
 // Required env: NOTION_TOKEN. Optional: NOTION_DATABASE_ID, SITE_URL.
 // BLOG_MOCK=1: fake articles from scripts/dev/mock-blog.mjs instead of Notion (local UI work, refused in CI).
 
@@ -19,7 +21,7 @@ import { mkdir, readFile, rm, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import sharp from 'sharp'
-import { createClient } from './blog/notion.mjs'
+import { REQUEST_PROP, createClient } from './blog/notion.mjs'
 import { createMermaidRenderer } from './blog/mermaid.mjs'
 import { plain, renderBlocks, slugify } from './blog/render.mjs'
 import { LANGS, articlePage, indexPage, rssFeed, sitemapUrls } from './blog/templates.mjs'
@@ -34,6 +36,10 @@ const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
 
 const EXT = { 'image/png': 'png', 'image/jpeg': 'jpg', 'image/webp': 'webp', 'image/gif': 'gif', 'image/avif': 'avif', 'image/svg+xml': 'svg' }
 const skipped = []
+const PUBLISH_FILE = path.join(ROOT, '.blog-publish.json')
+/** Requested pages (button clicked, "Publié" not ticked yet): built ones and rejected ones, for mark-published.mjs. */
+const requests = { publish: [], rejected: [] }
+const TODAY = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Brussels' }).format(new Date()) // YYYY-MM-DD
 
 async function download(url) {
   const res = await fetch(url)
@@ -86,16 +92,19 @@ function toPost(page) {
   const p = page.properties
   const title = plain(p['Titre']?.title).trim()
   const slug = plain(p['Slug']?.rich_text).trim()
+  const requested = !p['Publié']?.checkbox && Boolean(p[REQUEST_PROP]?.checkbox)
   if (!title) return skip(page, 'titre vide')
   if (!slug) return skip(page, `"${title}": slug vide`)
   if (!SLUG_RE.test(slug)) return skip(page, `"${title}": slug invalide "${slug}" (minuscules, chiffres et tirets seulement)`)
   const date = (k) => p[k]?.date?.start || null
-  // Publication date = the "Date de publication" property. Never the edit date; falls back to the creation date.
-  if (!date('Date de publication')) skipped.push(`"${title}": "Date de publication" vide, date de création utilisée (${page.created_time.slice(0, 10)})`)
-  const published = new Date(date('Date de publication') || page.created_time).toISOString()
+  // Publication date = the "Date de publication" property. Never the edit date.
+  // Empty: today for a post being published now (mark-published.mjs writes it back to Notion), else the creation date.
+  const setDate = requested && !date('Date de publication') ? TODAY : null
+  if (!date('Date de publication') && !setDate) skipped.push(`"${title}": "Date de publication" vide, date de création utilisée (${page.created_time.slice(0, 10)})`)
+  const published = new Date(date('Date de publication') || setDate || page.created_time).toISOString()
   const updated = new Date([date('Dernière publication'), page.last_edited_time, published].filter(Boolean).sort().at(-1)).toISOString()
   return {
-    id: page.id, title, slug, published, updated, created: page.created_time,
+    id: page.id, title, slug, published, updated, created: page.created_time, requested, setDate,
     description: plain(p['Description SEO']?.rich_text).trim(),
     tags: (p['Mots-clés']?.multi_select || []).map((o) => o.name),
     category: p['Catégorie']?.select?.name || '',
@@ -152,6 +161,8 @@ function linkRelated(posts) {
 
 function skip(page, reason) {
   skipped.push(reason)
+  const p = page.properties || {}
+  if (!p['Publié']?.checkbox && p[REQUEST_PROP]?.checkbox) requests.rejected.push({ id: page.id, reason })
   return null
 }
 
@@ -239,7 +250,7 @@ async function main() {
       if (!post) continue
       const key = `${post.lang}/${post.slug}`
       if (seen.has(key)) {
-        skipped.push(`"${post.title}": slug en double "${post.slug}" (${post.lang.toUpperCase()})`)
+        skip(page, `"${post.title}": slug en double "${post.slug}" (${post.lang.toUpperCase()})`)
         continue
       }
       seen.add(key)
@@ -265,7 +276,13 @@ async function main() {
   const withNs = base.replace('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">')
   await writeFile(path.join(PUBLIC, 'sitemap.xml'), withNs.replace('</urlset>', `${sitemapUrls(posts)}</urlset>`))
 
+  // Hand-over to mark-published.mjs (runs after a successful deploy). No request = no file.
+  requests.publish = posts.filter((p) => p.requested).map((p) => ({ id: p.id, title: p.title, setDate: p.setDate }))
+  await rm(PUBLISH_FILE, { force: true })
+  if (requests.publish.length || requests.rejected.length) await writeFile(PUBLISH_FILE, JSON.stringify(requests, null, 2))
+
   console.log(`Blog: ${posts.length} article(s) publié(s)${posts.length ? ' -> ' + posts.map((p) => `${p.lang}:${p.slug}`).join(', ') : ''}`)
+  if (requests.publish.length) console.log(`Publication demandée: ${requests.publish.map((p) => `"${p.title}"`).join(', ')} (case Publié cochée après le déploiement)`)
   for (const s of skipped) console.warn(`  ! ${s}`)
 }
 

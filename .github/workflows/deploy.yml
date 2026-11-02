@@ -4,6 +4,7 @@ name: Deploy site
 # Triggers:
 #   - push on main (code changes)
 #   - workflow_dispatch (manual button, and the API call Make sends when a post is published/unpublished)
+#     Publishing: the Notion button ticks "Publication demandée"; this run builds those posts too, then ticks "Publié".
 #   - repository_dispatch "notion-blog-update" (alternative trigger)
 #   - nightly cron: safety net if a trigger was missed or an article was edited without a trigger
 on:
@@ -63,3 +64,10 @@ jobs:
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      # Articles requested with the Notion button ("Publication demandée") are online now:
+      # tick "Publié" and clear the request. Only runs if the deploy above succeeded.
+      - name: Mark as published in Notion
+        run: node scripts/mark-published.mjs
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
