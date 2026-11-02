@@ -10,11 +10,11 @@ const prop = (o) => o
 const page = (id, title, slug, extra = {}) => ({
   id, created_time: '2026-10-01T09:00:00.000Z', last_edited_time: '2026-10-09T09:00:00.000Z',
   properties: {
-    Titre: { title: [t(title)] }, Slug: { rich_text: [t(slug)] }, Publié: { checkbox: true },
+    Titre: { title: [t(title)] }, Slug: { rich_text: [t(slug)] }, Publié: { checkbox: extra.requested ? false : true }, 'Publication demandée': { checkbox: Boolean(extra.requested) },
     'Description SEO': { rich_text: [t(extra.desc ?? 'Une description courte.')] },
     'Mots-clés': { multi_select: [{ name: 'IA' }, { name: 'No-code' }] }, Catégorie: { select: { name: 'Tutoriel' } },
     Langue: { select: { name: extra.lang ?? 'FR' } },
-    'Version anglaise': { relation: (extra.en ?? []).map((id) => ({ id })) }, 'Articles liés': { relation: (extra.rel ?? []).map((id) => ({ id })) }, 'Version française': { relation: (extra.fr ?? []).map((id) => ({ id })) }, 'Date de publication': { date: { start: extra.date ?? '2026-10-05' } },
+    'Version anglaise': { relation: (extra.en ?? []).map((id) => ({ id })) }, 'Articles liés': { relation: (extra.rel ?? []).map((id) => ({ id })) }, 'Version française': { relation: (extra.fr ?? []).map((id) => ({ id })) }, 'Date de publication': { date: extra.date === null ? null : { start: extra.date ?? '2026-10-05' } },
     'Image de couverture': { files: extra.cover ? [{ type: 'file', file: { url: 'http://localhost:4010/img/cover.png' } }] : [] },
     'Texte alternatif couverture': { rich_text: [t('Couverture de test')] },
   },
@@ -27,6 +27,9 @@ const pages = [
   page('p4', 'Doublon', 'deuxieme-article'),
   page('p5', 'My first article', 'my-first-article', { lang: 'EN', fr: ['p1'], date: '2026-10-06' }),
   page('p6', 'English only', 'english-only', { lang: 'EN', date: '2026-10-07' }),
+  // "Lancer publication" clicked: not ticked yet, built anyway, then ticked by mark-published.mjs
+  page('p7', 'Article demandé', 'article-demande', { requested: true, date: null }),
+  page('p8', 'Demandé mais slug cassé', 'Pas Bon', { requested: true }),
 ]
 const blocks = {
   p1: [
@@ -57,6 +60,13 @@ http.createServer((req, res) => {
   if (url.pathname.startsWith('/img/')) { res.setHeader('content-type', 'image/png'); return res.end(png) }
   if (req.headers.authorization !== 'Bearer x') { res.statusCode = 401; return json({ message: 'bad token' }) }
   if (req.method === 'POST' && url.pathname.endsWith('/query')) return json({ results: pages, has_more: false })
+  const pg = url.pathname.match(/\/pages\/([^/]+)$/)
+  if (req.method === 'PATCH' && pg) {
+    let body = ''
+    req.on('data', (c) => (body += c))
+    req.on('end', () => { console.log(`PATCH ${pg[1]} ${body}`); json({ id: pg[1] }) })
+    return
+  }
   const m = url.pathname.match(/blocks\/(.+)\/children/)
   if (m) return json({ results: blocks[m[1]] || [], has_more: false })
   res.statusCode = 404; json({ message: 'nope' })

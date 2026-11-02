@@ -19,6 +19,7 @@ node_modules/
 public/blog/
 public/rss.xml
 public/sitemap.xml
+.blog-publish.json
 
 # build output
 dist/

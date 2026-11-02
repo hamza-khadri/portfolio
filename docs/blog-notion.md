@@ -1,13 +1,26 @@
 # Blog Notion -> hamzakhadri.com/blog
 
-Écris dans la base Notion **Blog HKcom**, coche **Publié**, l'article est en ligne sur
-`hamzakhadri.com/blog/<slug>` 1 à 3 minutes plus tard. Décoche : il disparaît (vraie 404).
+Écris dans la base Notion **Blog HKcom**, clique **Lancer publication** : l'article est en ligne sur
+`hamzakhadri.com/blog/<slug>` 1 à 3 minutes plus tard, et la case **Publié** se coche toute seule.
+Décoche **Publié** (puis relance un déploiement) : il disparaît (vraie 404).
 Pas de base de données côté site : chaque déploiement relit Notion et régénère des pages HTML statiques.
 
 ```
-Notion (case Publié) -> Make (webhook) -> GitHub API (workflow_dispatch)
+Notion (bouton Lancer publication: coche "Publication demandée" + webhook) -> Make -> GitHub API (workflow_dispatch)
   -> GitHub Action: npm run build (sync Notion + vite build) -> wrangler deploy -> Cloudflare
+  -> scripts/mark-published.mjs: coche "Publié", décoche "Publication demandée" dans Notion
 ```
+
+### Publier avec le bouton
+
+1. Le bouton **Lancer publication** coche **Publication demandée** puis envoie le webhook.
+2. Le build met en ligne les articles **Publié** + ceux avec **Publication demandée**.
+3. Une fois le déploiement réussi, `scripts/mark-published.mjs` coche **Publié**, décoche **Publication demandée**,
+   et remplit **Date de publication** avec la date du jour si elle était vide.
+4. Si un article demandé n'est pas publiable (slug vide ou invalide, slug en double...), les autres articles sont quand même
+   déployés, sa case reste décochée et le run GitHub passe au rouge (raison dans les logs de l'étape "Mark as published in Notion").
+
+Case **Publié** cochée = l'article est vraiment en ligne. Si le build échoue, rien n'est coché : corrige et reclique.
 
 ## Réglages à faire une fois
 
@@ -15,7 +28,7 @@ Notion (case Publié) -> Make (webhook) -> GitHub API (workflow_dispatch)
 
 | Secret | Contenu |
 |---|---|
-| `NOTION_TOKEN` | token de l'intégration Notion (lecture), base **Blog HKcom** partagée avec elle |
+| `NOTION_TOKEN` | token de l'intégration Notion, base **Blog HKcom** partagée avec elle. Capacités : **Read content** + **Update content** (pour cocher Publié) |
 | `CLOUDFLARE_API_TOKEN` | token avec droit d'éditer les Workers (template "Edit Cloudflare Workers") |
 | `CLOUDFLARE_ACCOUNT_ID` | ID du compte Cloudflare |
 
@@ -48,12 +61,14 @@ change (bouton "Mettre à jour").
 | Champ | Utilisation |
 |---|---|
 | Titre | titre + `<h1>` |
-| Publié | seul interrupteur de mise en ligne |
+| Publié | article en ligne. Cochée par le site après publication ; décoche pour retirer l'article |
+| Publication demandée | case cochée par le bouton **Lancer publication**, décochée par le site une fois l'article en ligne. Ne pas toucher à la main |
+| Lancer publication | bouton : 1) Modifier la propriété **Publication demandée** = coché, 2) Envoyer le webhook Make |
 | Slug | `[a-z0-9-]`, ne plus le changer une fois publié |
 | Description SEO | meta description (160 caractères max conseillé, sinon extrait automatique) |
 | Mots-clés, Catégorie, Langue | tags affichés, `keywords` JSON-LD, `lang` de la page |
 | Image de couverture + Texte alternatif | image de l'article, aperçu de partage (recadré en 1200×630 au build, zone centrale conservée), cartes de la liste |
-| Date de publication | date affichée, tri, sitemap |
+| Date de publication | date affichée, tri, sitemap. Vide au moment du clic : date du jour, écrite dans Notion après publication |
 | Dernière publication | `dateModified` / lastmod, sert de déclencheur "Mettre à jour" |
 
 Blocs Notion gérés : paragraphes, titres, listes (imbriquées), cases à cocher, citations, callouts, code, diagrammes Mermaid,
