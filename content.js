@@ -34,43 +34,11 @@ const CONTENT = {
       detailImage: '',
     },
     {
-      name: 'Veleo',
-      category: 'FamilyTech / Silver Economy',
-      stack: ['Lovable', 'Supabase', 'Claude ecosystem', 'User searching', 'AI Integrations'],
-      productOwner: true,
-      role: { en: 'Founder, Product Owner, Designer & Builder', fr: 'Fondateur, Product Owner, Designer & Builder' },
-      year: '2026',
-      liveUrl: 'https://veleo.be',
-      desc: {
-        en: 'Owning, designing and building a shared family dashboard to coordinate elderly parent care in Belgium.',
-        fr: "Pilotage produit, conception et production d'un tableau de bord familial partagé pour coordonner le suivi des parents âgés en Belgique.",
-      },
-      overview: {
-        en: "Veleo is a Belgian startup I'm founding and running as solo Product Owner. It's a shared family dashboard that helps families coordinate the care of an elderly parent, centralizing information, tasks, appointments, and communication in one place, with native FR/NL bilingual support and Belgian administrative localization (AVIQ, Iriscare, mutualities).",
-        fr: "Veleo est une startup belge que je fonde et que je pilote en solo Product Owner. C'est un tableau de bord familial partagé qui aide les familles à coordonner le suivi d'un parent âgé, centralisant informations, tâches, rendez-vous et communication en un seul endroit, avec un support bilingue FR/NL natif et une localisation administrative belge (AVIQ, Iriscare, mutuelles).",
-      },
-      challenge: {
-        en: "Caring for an elderly parent in Belgium involves fragmented information, multiple family members with different levels of involvement, and a complex administrative landscape that varies by region. No existing tool addresses all three at once.",
-        fr: "S'occuper d'un parent âgé en Belgique implique des informations fragmentées, plusieurs membres de la famille avec des niveaux d'implication différents, et un paysage administratif complexe qui varie selon la région. Aucun outil existant n'adresse les trois à la fois.",
-      },
-      approach: {
-        en: "I own the full product lifecycle: discovery, strategic positioning, roadmap prioritisation, UX design, and no-code build. The Belgian administrative localization (AVIQ, Iriscare, mutualities) is the core product moat, prioritised in from day one.",
-        fr: "Je pilote l'ensemble du cycle produit : discovery, positionnement stratégique, priorisation de la roadmap, conception UX et build no-code. La localisation administrative belge (AVIQ, Iriscare, mutuelles) est le différenciateur central du produit, priorisée dès le départ.",
-      },
-      results: {
-        en: "Product currently in active discovery and development. User research and roadmap iteration ongoing.",
-        fr: "Produit actuellement en discovery et développement actif. Recherche utilisateur et itération de roadmap en cours.",
-      },
-      is_visible:  true,
-      heroImage:   '/assets/projects/veleo-details.png',
-      detailImage: '',
-    },
-    {
       name: 'Gravaubel',
       category: 'ConstructionTech / Sales Automation',
       stack: ['Lovable', 'Supabase', 'AI extraction', 'AI Integrations'],
       productOwner: true,
-      role: { en: 'Product Owner & No-code Builder', fr: 'Product Owner & Builder no-code' },
+      role: { en: 'Product Designer & Builder', fr: 'Product Designer & Builder' },
       year: '2026',
       liveUrl: 'https://gravaubel-offer-craft.lovable.app/demo',
       desc: {
@@ -90,8 +58,8 @@ const CONTENT = {
         fr: "J'ai piloté la conception et le build no-code de bout en bout. Le point clé était l'automatisation email-vers-champs-de-formulaire : un pipeline IA qui analyse une demande entrante et la mappe sur la structure de l'offre, avec une étape de validation humaine avant tout envoi, gardant le commercial aux commandes.",
       },
       results: {
-        en: "Offer creation time significantly reduced, with a consistent, repeatable structure across requests. Platform delivered and in use.",
-        fr: "Temps de création des offres fortement réduit, avec une structure cohérente et reproductible d'une demande à l'autre. Plateforme livrée et en usage.",
+        en: "Platform designed, built and delivered in 1 month. Offer creation time significantly reduced, with a consistent, repeatable structure across requests. Delivered and in use.",
+        fr: "Plateforme conçue, construite et livrée en 1 mois. Temps de création des offres fortement réduit, avec une structure cohérente et reproductible d'une demande à l'autre. Livrée et en usage.",
       },
       is_visible:  true,
       heroImage:   '/assets/projects/gravaubel-details.png',
@@ -134,7 +102,7 @@ const CONTENT = {
       category: 'Sports Science / Research Tool',
       stack: ['Lovable', 'Supabase'],
       productOwner: false,
-      role: { en: 'Data Architect & Builder', fr: 'Architecte de données & Builder' },
+      role: { en: 'Builder (data architecture)', fr: 'Builder (architecture de données)' },
       year: '2026',
       liveUrl: 'https://uliege-caps.lovable.app/demo',
       desc: {
@@ -166,7 +134,7 @@ const CONTENT = {
       category: 'Community Platform',
       stack: ['Bubble.io', 'Notion', 'APIs'],
       productOwner: false,
-      role: { en: 'Lead Builder', fr: 'Builder Principal' },
+      role: { en: 'Lead Builder', fr: 'Builder principal' },
       year: '2025',
       liveUrl: 'https://reseauentreprendrebruxelles.org/',
       desc: {
@@ -195,7 +163,7 @@ const CONTENT = {
       category: 'InsurTech / AI Tooling',
       stack: ['Lovable', 'Supabase', 'AI Integrations'],
       productOwner: false,
-      role: { en: 'Lead Builder', fr: 'Builder Principal' },
+      role: { en: 'Lead Builder', fr: 'Builder principal' },
       year: '2026',
       liveUrl: 'https://ai-for-brokers.themaul.be/',
       desc: {
@@ -224,7 +192,7 @@ const CONTENT = {
       category: 'Logistics Tech / Transport Marketplace',
       stack: ['Lovable', 'Supabase', 'AI Integrations'],
       productOwner: false,
-      role: { en: 'Data Architect & Builder', fr: 'Architecte de données & Builder' },
+      role: { en: 'Builder (data architecture)', fr: 'Builder (architecture de données)' },
       year: '2025',
       liveUrl: 'https://myvelox.eu',
       desc: {
@@ -249,6 +217,38 @@ const CONTENT = {
       },
       is_visible:  true,
       heroImage:   '/assets/projects/myvelox-details.png',
+      detailImage: '',
+    },
+    {
+      name: 'Veleo',
+      category: 'FamilyTech / Silver Economy',
+      stack: ['Lovable', 'Supabase', 'Claude ecosystem', 'User searching', 'AI Integrations'],
+      productOwner: true,
+      role: { en: 'Founder, Product Owner, Designer & Builder', fr: 'Fondateur, Product Owner, Designer & Builder' },
+      year: '2026',
+      liveUrl: 'https://veleo.be',
+      desc: {
+        en: 'Owning, designing and building a shared family dashboard to coordinate elderly parent care in Belgium.',
+        fr: "Pilotage produit, conception et production d'un tableau de bord familial partagé pour coordonner le suivi des parents âgés en Belgique.",
+      },
+      overview: {
+        en: "Veleo is a Belgian startup I'm founding and running as solo Product Owner. It's a shared family dashboard that helps families coordinate the care of an elderly parent, centralizing information, tasks, appointments, and communication in one place, with native FR/NL bilingual support and Belgian administrative localization (AVIQ, Iriscare, mutualities).",
+        fr: "Veleo est une startup belge que je fonde et que je pilote en solo Product Owner. C'est un tableau de bord familial partagé qui aide les familles à coordonner le suivi d'un parent âgé, centralisant informations, tâches, rendez-vous et communication en un seul endroit, avec un support bilingue FR/NL natif et une localisation administrative belge (AVIQ, Iriscare, mutuelles).",
+      },
+      challenge: {
+        en: "Caring for an elderly parent in Belgium involves fragmented information, multiple family members with different levels of involvement, and a complex administrative landscape that varies by region. No existing tool addresses all three at once.",
+        fr: "S'occuper d'un parent âgé en Belgique implique des informations fragmentées, plusieurs membres de la famille avec des niveaux d'implication différents, et un paysage administratif complexe qui varie selon la région. Aucun outil existant n'adresse les trois à la fois.",
+      },
+      approach: {
+        en: "I own the full product lifecycle: discovery, strategic positioning, roadmap prioritisation, UX design, and no-code build. The Belgian administrative localization (AVIQ, Iriscare, mutualities) is the core product moat, prioritised in from day one.",
+        fr: "Je pilote l'ensemble du cycle produit : discovery, positionnement stratégique, priorisation de la roadmap, conception UX et build no-code. La localisation administrative belge (AVIQ, Iriscare, mutuelles) est le différenciateur central du produit, priorisée dès le départ.",
+      },
+      results: {
+        en: "Product currently in active discovery and development. User research and roadmap iteration ongoing.",
+        fr: "Produit actuellement en discovery et développement actif. Recherche utilisateur et itération de roadmap en cours.",
+      },
+      is_visible:  true,
+      heroImage:   '/assets/projects/veleo-details.png',
       detailImage: '',
     },
   ],
@@ -300,28 +300,28 @@ const CONTENT = {
   services: [
     {
       num: '01',
-      title: { en: 'Product Ownership', fr: 'Product Ownership' },
+      title: { en: 'Scope', fr: 'Cadrer' },
       body: {
-        en: "Discovery, user research, roadmap prioritisation, stakeholder alignment. I own the why and the what before the how.",
-        fr: "Discovery, recherche utilisateur, priorisation de roadmap, alignement stakeholders. Je pilote le pourquoi et le quoi avant le comment.",
+        en: "User research, user testing, prioritisation. I make sure we build the right thing before building it. Example: 17 moderated test sessions for Partenamut.",
+        fr: "Recherche et tests utilisateurs, priorisation. Je vérifie qu'on construit la bonne chose avant de la construire. Exemple : 17 sessions de tests modérés pour Partenamut.",
       },
       price: { en: '', fr: '' },
     },
     {
       num: '02',
-      title: { en: 'Product Design', fr: 'Product Design' },
+      title: { en: 'Design', fr: 'Concevoir' },
       body: {
-        en: "UX/UI, design systems, prototyping. End-to-end design that's built to ship.",
-        fr: "UX/UI, design systems, prototypage. Du design de bout en bout conçu pour être livré.",
+        en: "UX/UI, prototypes, design systems in Figma. Screens designed to be built, not just to look good.",
+        fr: "UX/UI, prototypes, design systems dans Figma. Des écrans pensés pour être construits, pas seulement pour être beaux.",
       },
       price: { en: '', fr: '' },
     },
     {
       num: '03',
-      title: { en: 'Build & AI', fr: 'Build & IA' },
+      title: { en: 'Build', fr: 'Construire' },
       body: {
-        en: 'Full product build with Bubble, Lovable, Supabase. OpenAI Assistants, automation, AI-first features. From architecture to launch.',
-        fr: "Build produit complet avec Bubble, Lovable, Supabase. OpenAI Assistants, automatisation, features IA-first. De l'architecture au lancement.",
+        en: 'From the data model to the launch, with Lovable, Bubble and Supabase. AI features and automations (OpenAI, Claude, Make, n8n). Example: Gravaubel, delivered in 1 month.',
+        fr: "Du modèle de données à la mise en ligne, avec Lovable, Bubble et Supabase. Fonctions IA et automatisations (OpenAI, Claude, Make, n8n). Exemple : Gravaubel, livré en 1 mois.",
       },
       price: { en: '', fr: '' },
     },

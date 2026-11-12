@@ -36,7 +36,9 @@ const SECTIONS = [
 
 function App() {
   const [lang, setLang] = useState(() => {
-    try { return localStorage.getItem('hk_lang') || 'en'; } catch (_) { return 'en'; }
+    /* No saved choice: follow the browser, French first for the Belgian market. */
+    const auto = () => (/^en\b/i.test(navigator.language || '') ? 'en' : 'fr');
+    try { return localStorage.getItem('hk_lang') || auto(); } catch (_) { return auto(); }
   });
   const [activeProject, setActiveProject] = useState(null);
   const [intro, setIntro] = useState(introPending);
